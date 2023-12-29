@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "Contacts (Package)": {
+        "commandName": "MsixPackage"
+      },
+      "Contacts (Unpackaged)": {
+        "commandName": "Project"
+      }
+    }
+}

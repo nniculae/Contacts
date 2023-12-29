@@ -1,0 +1,130 @@
+﻿<Page
+    x:Class="Contacts.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:collections="using:CommunityToolkit.Mvvm.Collections"
+    xmlns:Model="using: Contacts.Core.Models"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <DataTemplate x:Key="ContactListViewTemplate" x:DataType="Model:Contact">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <FontIcon
+                Grid.RowSpan="2"
+                Width="32"
+                Height="32"
+                Margin="6"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Glyph="&#xE77B;" />
+                <Ellipse
+                x:Name="Ellipse"
+                Grid.RowSpan="2"
+                Width="32"
+                Height="32"
+                Margin="6"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Fill="{ThemeResource SystemAccentColorDark3}"
+                Opacity="0.1" />
+                <TextBlock
+                Grid.Column="1"
+                Margin="12,6,0,0"
+                x:Phase="1"
+                Style="{ThemeResource BaseTextBlockStyle}"
+                Text="{x:Bind Name}" />
+                <TextBlock
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="12,0,0,6"
+                x:Phase="2"
+                Style="{ThemeResource BodyTextBlockStyle}"
+                Text="{x:Bind Phone}" />
+            </Grid>
+        </DataTemplate>
+        <CollectionViewSource
+        x:Name="ContactsCVS"
+        IsSourceGrouped="True"
+        Source="{x:Bind ViewModel.ContactsDataSource}" />
+    </Page.Resources>
+
+    <Grid x:Name="ContentArea">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <AutoSuggestBox
+        Margin="8,0"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Center"
+        QueryIcon="Find"
+        Text="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
+        TextChanged="{x:Bind ViewModel.FilterTextChangedCommand, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+        <SemanticZoom Grid.Row="1">
+            <SemanticZoom.ZoomedInView>
+                <ListView
+                ItemTemplate="{StaticResource ContactListViewTemplate}"
+                ItemsSource="{x:Bind ContactsCVS.View, Mode=OneWay}"
+                SelectionMode="Single">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsStackPanel AreStickyGroupHeadersEnabled="True" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate x:DataType="collections:IReadOnlyObservableGroup">
+                                    <Border AutomationProperties.AccessibilityView="Raw">
+                                        <TextBlock
+                                        AutomationProperties.AccessibilityView="Raw"
+                                        Foreground="{ThemeResource SystemControlHighlightAccentBrush}"
+                                        Style="{ThemeResource TitleTextBlockStyle}"
+                                        Text="{x:Bind Key}" />
+                                    </Border>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ListView.GroupStyle>
+                </ListView>
+            </SemanticZoom.ZoomedInView>
+            <SemanticZoom.ZoomedOutView>
+                <GridView
+                HorizontalAlignment="Stretch"
+                ItemsSource="{x:Bind ContactsCVS.View.CollectionGroups, Mode=OneWay}"
+                SelectionMode="Single">
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="ICollectionViewGroup">
+                            <Border Width="80" Height="80">
+                                <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="32"
+                                Foreground="{ThemeResource SystemControlHighlightAccentBrush}"
+                                Text="{x:Bind Group.(collections:IReadOnlyObservableGroup.Key)}" />
+                            </Border>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+            </SemanticZoom.ZoomedOutView>
+        </SemanticZoom>
+
+
+        <TextBlock Grid.Row="2" Text="{x:Bind ViewModel.Count, Mode=TwoWay}" />
+
+
+    </Grid>
+</Page>
