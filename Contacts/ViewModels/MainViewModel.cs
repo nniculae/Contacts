@@ -10,28 +10,20 @@ namespace Contacts.ViewModels;
 public partial class MainViewModel(IContactsService contactsService) : ObservableRecipient, INavigationAware
 {
     [ObservableProperty]
-    private string _searchText;
+    private string? _searchText;
     [ObservableProperty]
     private int _count;
+    private IList<Contact> _contacts = [];
 
-    public ObservableGroupedCollection<string, Contact> ContactsDataSource
+    public ObservableGroupedCollection<string, Contact> ContactsDataSource { get; set; } = null!; 
+
+
+    public async  void OnNavigatedTo(object parameter)
     {
-        get;
-        set;
-    }
-
-
-    public async void OnNavigatedTo(object parameter)
-    {
-        contacts = await contactsService.GetContactsAsync();
-
-        var grouped = contacts.GroupBy(GetGroupName).OrderBy(g => g.Key);
+         _contacts = await contactsService.GetContactsAsync();
+        var grouped = _contacts.GroupBy(GetGroupName).OrderBy(g => g.Key);
         ContactsDataSource = new ObservableGroupedCollection<string, Contact>(grouped);
-        Count = contacts.Count;
-
-
-
-
+        Count = _contacts.Count;
     }
     public void OnNavigatedFrom()
     {
@@ -42,17 +34,16 @@ public partial class MainViewModel(IContactsService contactsService) : Observabl
     {
         /* Perform a Linq query to find all Contact objects (from the original Contact collection)
                 that fit the criteria of the filter, save them in a new List called tempFiltered. */
-        List<Contact> tempFiltered;
-        tempFiltered = contacts.Where(contact => contact.ApplyFilter(SearchText)).ToList();
+        
+        List<Contact> tempFiltered=  _contacts.Where(contact => contact.ApplyFilter(SearchText)).ToList();
         RemoveContacts(tempFiltered);
         AddContacts(tempFiltered);
         Count = tempFiltered.Count;
 
     }
-    private IList<Contact> contacts = [];
+    
     private void AddContacts(List<Contact> tempFiltered)
     {
-
         foreach (Contact contact in tempFiltered)
         {
             string key = GetGroupName(contact);

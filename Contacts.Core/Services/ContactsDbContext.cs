@@ -3,9 +3,8 @@ using Contacts.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Contacts.Core.Services;
-public class ContactsDbContext : DbContext
+public class ContactsDbContext(DbContextOptions<ContactsDbContext> options) : DbContext(options)
 {
-    public ContactsDbContext(DbContextOptions<ContactsDbContext> options) : base(options) { }
     public DbSet<Contact> Contacts { get; set; }
     public DbSet<Address> Addresses { get; set; }
 
@@ -14,7 +13,7 @@ public class ContactsDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         ContactGenerator.Init();
-        _ = modelBuilder.Entity<Contact>().HasData(ContactGenerator.Contacts);
-        _ = modelBuilder.Entity<Address>().HasData(ContactGenerator.Addresses);
+        modelBuilder.Entity<Contact>().HasData(ContactGenerator.Contacts);
+        modelBuilder.Entity<Address>().HasData(ContactGenerator.Addresses);
     }
 }

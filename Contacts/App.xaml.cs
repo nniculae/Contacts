@@ -58,11 +58,6 @@ public partial class App : Application
             // Other Activation Handlers
 
             // Services
-
-            //var connection = GetSqliteConnection();
-            _ = services.AddDbContextFactory<ContactsDbContext>(options => options.UseSqlite(Connection.GetSqliteConnection()));
-            _ = services.AddTransient<IContactsService, ContactsService>();
-
             services.AddTransient<INavigationViewService, NavigationViewService>();
 
             services.AddSingleton<IActivationService, ActivationService>();
@@ -71,6 +66,9 @@ public partial class App : Application
 
             // Core Services
             services.AddSingleton<IFileService, FileService>();
+
+            services.AddDbContextFactory<ContactsDbContext>(options => options.UseSqlite(Connection.GetSqliteConnection()));
+            services.AddTransient<IContactsService, ContactsService>();
 
             // Views and ViewModels
             services.AddTransient<MainViewModel>();
