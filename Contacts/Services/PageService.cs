@@ -14,8 +14,8 @@ public class PageService : IPageService
 
     public PageService()
     {
-        Configure<MainViewModel, MainPage>();
-        Configure<ContactsEditViewModel, ContactsEditPage>();
+        Configure<ContactListPageViewModel, ContactListPage>();
+        Configure<ContactDetailPageViewModel, ContactDetailPage>();
     }
 
     public Type GetPageType(string key)

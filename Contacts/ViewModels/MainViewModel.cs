@@ -9,7 +9,7 @@ using Contacts.Views;
 
 namespace Contacts.ViewModels;
 
-public partial class MainViewModel(IContactsService contactsService, INavigationService navigation) : ObservableRecipient, INavigationAware
+public partial class ContactListPageViewModel(IContactService contactsService, INavigationService navigation) : ObservableRecipient, INavigationAware
 {
     [ObservableProperty]
     private string? _searchText;
@@ -35,10 +35,10 @@ public partial class MainViewModel(IContactsService contactsService, INavigation
     }
 
     [RelayCommand]
-    public void EditContactCommand()
+    public void NavigateToContactDetailPage()
     {
         if(SelectedItem != null) {
-            navigation.NavigateTo(typeof(ContactsEditViewModel).FullName!, SelectedItem);
+            navigation.NavigateTo(typeof(ContactDetailPageViewModel).FullName!, SelectedItem);
         }
     }
 

@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 namespace DesignPatternsUI.Core.Services;
 
 
-public class ContactsService(IDbContextFactory<ContactsDbContext> contextFactory) : IContactsService
+public class ContactsService(IDbContextFactory<ContactsDbContext> contextFactory) : IContactService
 {
 
     public async Task<IList<Contact>> GetContactsAsync()
     {
         using var context = contextFactory.CreateDbContext();
-        return await context.Contacts.Include( contact => contact.Address).ToListAsync();    
+        return await context.Contacts.Include( contact => contact.Address).AsNoTracking().ToListAsync();    
     }
 
 
@@ -21,26 +21,13 @@ public class ContactsService(IDbContextFactory<ContactsDbContext> contextFactory
         using var context = contextFactory.CreateDbContext();
         return  context.Contacts.GroupBy(GetGroupName).OrderBy(g => g.Key).ToList();
     }
-
-
-    public async Task<IList<Contact>> GetContactsFilteredAsync(string filter)
-    {
-        using var context = contextFactory.CreateDbContext();
-        return await context.Contacts.Where(contact => contact.ApplyFilter(filter)).ToListAsync();
-    }
-
-    public async Task AddContact(Contact contact)
-    {
-        using var context = contextFactory.CreateDbContext();
-        _ = await context.AddAsync(contact);
-        _ = await context.SaveChangesAsync();
-    }
-
-    public async Task<int> EditContact(Contact contact)
+           
+    public async Task<Contact> Upsert(Contact contact)
     {
         using var context = contextFactory.CreateDbContext();
         context.Update(contact);
-        return await context.SaveChangesAsync();
+        await context.SaveChangesAsync();
+        return contact;
     }
 
     public string GetGroupName(Contact contact) => contact.Name.First().ToString().ToUpper();

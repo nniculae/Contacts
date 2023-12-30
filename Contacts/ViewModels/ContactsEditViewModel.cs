@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 namespace Contacts.ViewModels;
 //https://learn.microsoft.com/en-us/windows/uwp/enterprise/customer-database-tutorial
 //https://learn.microsoft.com/en-us/aspnet/mvc/overview/older-versions/getting-started-with-ef-5-using-mvc-4/implementing-the-repository-and-unit-of-work-patterns-in-an-asp-net-mvc-application
-public partial class ContactsEditViewModel(IContactsService contactsService) : ObservableRecipient, INavigationAware
+public partial class ContactDetailPageViewModel(IContactService contactsService) : ObservableRecipient, INavigationAware
 {
 
     [ObservableProperty]
@@ -25,11 +25,11 @@ public partial class ContactsEditViewModel(IContactsService contactsService) : O
     }
 
     [RelayCommand]
-    public async Task Save()
+    public async Task Upsert()
     {
         if (Contact != null)
         {
-            await contactsService.EditContact(Contact);
+            await contactsService.Upsert(Contact);
         }
     }
 }

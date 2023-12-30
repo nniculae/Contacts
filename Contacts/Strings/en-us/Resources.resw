@@ -64,10 +64,10 @@
 	<data name="AppDescription" xml:space="preserve">
 		<value>Contacts</value>
   	</data>
-  <data name="Shell_Main.Content" xml:space="preserve">
-    <value>Main</value>
+  <data name="Shell_ContactList.Content" xml:space="preserve">
+    <value>Contacts</value>
   </data>
-  <data name="Shell_ContactsEdit.Content" xml:space="preserve">
-    <value>ContactsEdit</value>
+  <data name="Shell_ContactDetail.Content" xml:space="preserve">
+    <value>Contact Detail</value>
   </data>
 </root>

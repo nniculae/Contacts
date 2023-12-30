@@ -70,13 +70,13 @@ public partial class App : Application
             services.AddSingleton<IFileService, FileService>();
 
             services.AddDbContextFactory<ContactsDbContext>(options => options.UseSqlite(Connection.GetSqliteConnection()));
-            services.AddTransient<IContactsService, ContactsService>();
+            services.AddTransient<IContactService, ContactsService>();
 
             // Views and ViewModels
-            services.AddTransient<ContactsEditViewModel>();
-            services.AddTransient<ContactsEditPage>();
-            services.AddTransient<MainViewModel>();
-            services.AddTransient<MainPage>();
+            services.AddTransient<ContactDetailPageViewModel>();
+            services.AddTransient<ContactDetailPage>();
+            services.AddTransient<ContactListPageViewModel>();
+            services.AddTransient<ContactListPage>();
             services.AddTransient<ShellPage>();
             services.AddTransient<ShellViewModel>();
 

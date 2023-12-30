@@ -1,10 +1,9 @@
 ﻿using Contacts.Core.Models;
 
 namespace Contacts.Core.Contracts.Services;
-public interface IContactsService
+public interface IContactService
 {
-    Task AddContact(Contact contact);
-    Task<int> EditContact(Contact contact);
+    Task<Contact> Upsert(Contact contact);
     Task<IList<Contact>> GetContactsAsync();
     public IList<IGrouping<string, Contact>> GetContactsGrouped();
 }

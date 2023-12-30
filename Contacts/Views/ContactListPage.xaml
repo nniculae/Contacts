@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="Contacts.Views.MainPage"
+    x:Class="Contacts.Views.ContactListPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Model="using: Contacts.Core.Models"
@@ -79,7 +79,7 @@
                     ItemTemplate="{StaticResource ContactListViewTemplate}"
                     ItemsSource="{x:Bind ContactsCVS.View, Mode=OneWay}"
                     SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}" 
-                    SelectionChanged="{x:Bind ViewModel.EditContactCommand, Mode=OneWay}"
+                    SelectionChanged="{x:Bind ViewModel.NavigateToContactDetailPage, Mode=OneWay}"
                     SelectionMode="Single">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
