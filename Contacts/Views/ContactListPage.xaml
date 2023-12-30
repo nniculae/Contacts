@@ -5,6 +5,7 @@
     xmlns:Model="using: Contacts.Core.Models"
     xmlns:collections="using:CommunityToolkit.Mvvm.Collections"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:h="using: Contacts.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
@@ -16,7 +17,7 @@
                 Text="View details" />
         </MenuFlyout>
         <DataTemplate x:Key="ContactListViewTemplate" x:DataType="Model:Contact">
-            <Grid ContextFlyout="{StaticResource ListViewContextMenu }">
+            <Grid ContextFlyout="{StaticResource ListViewContextMenu}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
@@ -63,77 +64,104 @@
             IsSourceGrouped="True"
             Source="{x:Bind ViewModel.ContactsDataSource}" />
     </Page.Resources>
-
-    <Grid x:Name="ContentArea">
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
-
-        <AutoSuggestBox
-            Margin="8,0"
+    <RelativePanel>
+        <Border
+            x:Name="PageTitle"
+            Margin="8,0,0,0"
+            RelativePanel.AlignLeftWithPanel="True">
+            <TextBlock Style="{StaticResource PageTitleStyle}">
+                <Run>Contacts(</Run>
+                <Run Text="{x:Bind ViewModel.Count, Mode=OneWay}" />
+                <Run>)</Run>
+            </TextBlock>
+        </Border>
+        <CommandBar
+            x:Name="MainCommandBar"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Center"
-            QueryIcon="Find"
-            Text="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
-            TextChanged="{x:Bind ViewModel.FilterTextChangedCommand, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-        <SemanticZoom Grid.Row="1">
-            <SemanticZoom.ZoomedInView>
-                <ListView
-                    DoubleTapped="{x:Bind ViewModel.NavigateToContactDetailPage, Mode=OneWay}"
-                    ItemTemplate="{StaticResource ContactListViewTemplate}"
-                    ItemsSource="{x:Bind ContactsCVS.View, Mode=OneWay}"
-                    SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}"
-                    SelectionMode="Single"
-                    >
-                    <ListView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <ItemsStackPanel AreStickyGroupHeadersEnabled="True" />
-                        </ItemsPanelTemplate>
-                    </ListView.ItemsPanel>
-                    <ListView.GroupStyle>
-                        <GroupStyle>
-                            <GroupStyle.HeaderTemplate>
-                                <DataTemplate x:DataType="collections:IReadOnlyObservableGroup">
-                                    <Border AutomationProperties.AccessibilityView="Raw">
-                                        <TextBlock
-                                            AutomationProperties.AccessibilityView="Raw"
-                                            Foreground="{ThemeResource SystemControlHighlightAccentBrush}"
-                                            Style="{ThemeResource TitleTextBlockStyle}"
-                                            Text="{x:Bind Key}" />
-                                    </Border>
-                                </DataTemplate>
-                            </GroupStyle.HeaderTemplate>
-                        </GroupStyle>
-                    </ListView.GroupStyle>
-                </ListView>
-            </SemanticZoom.ZoomedInView>
-            <SemanticZoom.ZoomedOutView>
-                <GridView
-                    HorizontalAlignment="Stretch"
-                    ItemsSource="{x:Bind ContactsCVS.View.CollectionGroups, Mode=OneWay}"
-                    SelectionMode="Single">
-                    <GridView.ItemTemplate>
-                        <DataTemplate x:DataType="ICollectionViewGroup">
-                            <Border Width="80" Height="80">
-                                <TextBlock
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    FontSize="32"
-                                    Foreground="{ThemeResource SystemControlHighlightAccentBrush}"
-                                    Text="{x:Bind Group.(collections:IReadOnlyObservableGroup.Key)}" />
-                            </Border>
-                        </DataTemplate>
-                    </GridView.ItemTemplate>
-                </GridView>
-            </SemanticZoom.ZoomedOutView>
-        </SemanticZoom>
+            Background="Transparent"
+            DefaultLabelPosition="Right"
+            RelativePanel.AlignRightWithPanel="True">
+            <AppBarButton
+                Click="{x:Bind ViewModel.NavigateToContactDetailPage, Mode=OneWay}"
+                Icon="Contact"
+                IsEnabled="{x:Bind h:Converters.IsNotNull(ViewModel.SelectedItem), Mode=OneWay}"
+                Label="View details"
+                ToolTipService.ToolTip="View details" />
+            <AppBarSeparator />
+            <AppBarButton
+                Icon="Add"
+                Label="New"
+                ToolTipService.ToolTip="New contact" />
 
-
-        <TextBlock Grid.Row="2" Text="{x:Bind ViewModel.Count, Mode=TwoWay}" />
-
-
-    </Grid>
+        </CommandBar>
+        <Grid
+            Margin="0,12,0,0"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.Below="PageTitle">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <AutoSuggestBox
+                Margin="8,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                QueryIcon="Find"
+                Text="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
+                TextChanged="{x:Bind ViewModel.FilterTextChangedCommand, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+            <SemanticZoom Grid.Row="1">
+                <SemanticZoom.ZoomedInView>
+                    <ListView
+                        DoubleTapped="{x:Bind ViewModel.NavigateToContactDetailPage, Mode=OneWay}"
+                        ItemTemplate="{StaticResource ContactListViewTemplate}"
+                        ItemsSource="{x:Bind ContactsCVS.View, Mode=OneWay}"
+                        SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}"
+                        SelectionMode="Single">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsStackPanel AreStickyGroupHeadersEnabled="True" />
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate x:DataType="collections:IReadOnlyObservableGroup">
+                                        <Border AutomationProperties.AccessibilityView="Raw">
+                                            <TextBlock
+                                                AutomationProperties.AccessibilityView="Raw"
+                                                Foreground="{ThemeResource SystemControlHighlightAccentBrush}"
+                                                Style="{ThemeResource TitleTextBlockStyle}"
+                                                Text="{x:Bind Key}" />
+                                        </Border>
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                            </GroupStyle>
+                        </ListView.GroupStyle>
+                    </ListView>
+                </SemanticZoom.ZoomedInView>
+                <SemanticZoom.ZoomedOutView>
+                    <GridView
+                        HorizontalAlignment="Stretch"
+                        ItemsSource="{x:Bind ContactsCVS.View.CollectionGroups, Mode=OneWay}"
+                        SelectionMode="Single">
+                        <GridView.ItemTemplate>
+                            <DataTemplate x:DataType="ICollectionViewGroup">
+                                <Border Width="80" Height="80">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontSize="32"
+                                        Foreground="{ThemeResource SystemControlHighlightAccentBrush}"
+                                        Text="{x:Bind Group.(collections:IReadOnlyObservableGroup.Key)}" />
+                                </Border>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
+                </SemanticZoom.ZoomedOutView>
+            </SemanticZoom>
+            <TextBlock Grid.Row="2" Text="{x:Bind ViewModel.Count, Mode=TwoWay}" />
+        </Grid>
+    </RelativePanel>
 </Page>

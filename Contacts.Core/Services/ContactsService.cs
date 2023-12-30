@@ -12,7 +12,7 @@ public class ContactsService(IDbContextFactory<ContactsDbContext> contextFactory
     public async Task<IList<Contact>> GetContactsAsync()
     {
         using var context = contextFactory.CreateDbContext();
-        return await context.Contacts.Include( contact => contact.Address).AsNoTracking().ToListAsync();    
+        return await context.Contacts.Include(c => c.Address).OrderBy(c => c.FirstName).AsNoTracking().ToListAsync();    
     }
 
 
