@@ -5,7 +5,6 @@ using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
 using Contacts.Core.Models;
-using Contacts.Views;
 
 namespace Contacts.ViewModels;
 
@@ -27,6 +26,7 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
          _contacts = await contactsService.GetContactsAsync();
         var grouped = _contacts.GroupBy(GetGroupName).OrderBy(g => g.Key);
         ContactsDataSource = new ObservableGroupedCollection<string, Contact>(grouped);
+        EnsureItemSelected();
         Count = _contacts.Count;
     }
     public void OnNavigatedFrom()
@@ -103,5 +103,6 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
         }
     }
     private static string GetGroupName(Contact contact) => contact.Name.First().ToString().ToUpper();
+    public void EnsureItemSelected() => SelectedItem ??= _contacts.FirstOrDefault();
 
 }

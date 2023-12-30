@@ -9,8 +9,14 @@
     mc:Ignorable="d">
 
     <Page.Resources>
+        <MenuFlyout x:Key="ListViewContextMenu">
+            <MenuFlyoutItem
+                Click="{x:Bind ViewModel.NavigateToContactDetailPage, Mode=OneWay}"
+                Icon="OpenFile"
+                Text="View details" />
+        </MenuFlyout>
         <DataTemplate x:Key="ContactListViewTemplate" x:DataType="Model:Contact">
-            <Grid>
+            <Grid ContextFlyout="{StaticResource ListViewContextMenu }">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
@@ -76,11 +82,12 @@
         <SemanticZoom Grid.Row="1">
             <SemanticZoom.ZoomedInView>
                 <ListView
+                    DoubleTapped="{x:Bind ViewModel.NavigateToContactDetailPage, Mode=OneWay}"
                     ItemTemplate="{StaticResource ContactListViewTemplate}"
                     ItemsSource="{x:Bind ContactsCVS.View, Mode=OneWay}"
-                    SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}" 
-                    SelectionChanged="{x:Bind ViewModel.NavigateToContactDetailPage, Mode=OneWay}"
-                    SelectionMode="Single">
+                    SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}"
+                    SelectionMode="Single"
+                    >
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <ItemsStackPanel AreStickyGroupHeadersEnabled="True" />
