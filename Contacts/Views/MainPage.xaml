@@ -78,6 +78,8 @@
                 <ListView
                     ItemTemplate="{StaticResource ContactListViewTemplate}"
                     ItemsSource="{x:Bind ContactsCVS.View, Mode=OneWay}"
+                    SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}" 
+                    SelectionChanged="{x:Bind ViewModel.EditContactCommand, Mode=OneWay}"
                     SelectionMode="Single">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>

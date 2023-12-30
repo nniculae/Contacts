@@ -1,18 +1,22 @@
 ﻿using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
 using Contacts.Core.Models;
+using Contacts.Views;
 
 namespace Contacts.ViewModels;
 
-public partial class MainViewModel(IContactsService contactsService) : ObservableRecipient, INavigationAware
+public partial class MainViewModel(IContactsService contactsService, INavigationService navigation) : ObservableRecipient, INavigationAware
 {
     [ObservableProperty]
     private string? _searchText;
     [ObservableProperty]
     private int _count;
+    [ObservableProperty]
+    private Contact? _selectedItem;
     private IList<Contact> _contacts = [];
 
     public ObservableGroupedCollection<string, Contact> ContactsDataSource { get; set; } = null!; 
@@ -29,6 +33,15 @@ public partial class MainViewModel(IContactsService contactsService) : Observabl
     {
         // do nothing
     }
+
+    [RelayCommand]
+    public void EditContactCommand()
+    {
+        if(SelectedItem != null) {
+            navigation.NavigateTo(typeof(ContactsEditViewModel).FullName!, SelectedItem);
+        }
+    }
+
     [RelayCommand]
     public void FilterTextChangedCommand()
     {

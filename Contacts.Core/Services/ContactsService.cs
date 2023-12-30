@@ -12,7 +12,7 @@ public class ContactsService(IDbContextFactory<ContactsDbContext> contextFactory
     public async Task<IList<Contact>> GetContactsAsync()
     {
         using var context = contextFactory.CreateDbContext();
-        return await context.Contacts.ToListAsync();    
+        return await context.Contacts.Include( contact => contact.Address).ToListAsync();    
     }
 
 
@@ -34,6 +34,13 @@ public class ContactsService(IDbContextFactory<ContactsDbContext> contextFactory
         using var context = contextFactory.CreateDbContext();
         _ = await context.AddAsync(contact);
         _ = await context.SaveChangesAsync();
+    }
+
+    public async Task<int> EditContact(Contact contact)
+    {
+        using var context = contextFactory.CreateDbContext();
+        context.Update(contact);
+        return await context.SaveChangesAsync();
     }
 
     public string GetGroupName(Contact contact) => contact.Name.First().ToString().ToUpper();

@@ -6,7 +6,9 @@ using Contacts.Helpers;
 using Contacts.Services;
 using Contacts.ViewModels;
 using Contacts.Views;
+
 using DesignPatternsUI.Core.Services;
+
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -71,6 +73,8 @@ public partial class App : Application
             services.AddTransient<IContactsService, ContactsService>();
 
             // Views and ViewModels
+            services.AddTransient<ContactsEditViewModel>();
+            services.AddTransient<ContactsEditPage>();
             services.AddTransient<MainViewModel>();
             services.AddTransient<MainPage>();
             services.AddTransient<ShellPage>();
