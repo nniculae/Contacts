@@ -3,6 +3,7 @@ using Contacts.Contracts.Services;
 using Contacts.Core.Contracts.Services;
 using Contacts.Core.Services;
 using Contacts.Helpers;
+using Contacts.Models;
 using Contacts.Services;
 using Contacts.ViewModels;
 using Contacts.Views;
@@ -60,6 +61,8 @@ public partial class App : Application
             // Other Activation Handlers
 
             // Services
+            services.AddSingleton<ILocalSettingsService, LocalSettingsService>();
+            services.AddSingleton<IThemeSelectorService, ThemeSelectorService>();
             services.AddTransient<INavigationViewService, NavigationViewService>();
 
             services.AddSingleton<IActivationService, ActivationService>();
@@ -73,6 +76,8 @@ public partial class App : Application
             services.AddTransient<IContactService, ContactsService>();
 
             // Views and ViewModels
+            services.AddTransient<SettingsViewModel>();
+            services.AddTransient<SettingsPage>();
             services.AddTransient<ContactDetailPageViewModel>();
             services.AddTransient<ContactDetailPage>();
             services.AddTransient<ContactListPageViewModel>();
@@ -81,6 +86,7 @@ public partial class App : Application
             services.AddTransient<ShellViewModel>();
 
             // Configuration
+            services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
         }).
         Build();
 

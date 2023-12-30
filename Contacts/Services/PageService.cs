@@ -16,6 +16,7 @@ public class PageService : IPageService
     {
         Configure<ContactListPageViewModel, ContactListPage>();
         Configure<ContactDetailPageViewModel, ContactDetailPage>();
+        Configure<SettingsViewModel, SettingsPage>();
     }
 
     public Type GetPageType(string key)
