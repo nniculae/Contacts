@@ -1,18 +1,22 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
 using Contacts.Core.Models;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Contacts.ViewModels;
 //https://learn.microsoft.com/en-us/windows/uwp/enterprise/customer-database-tutorial
 //https://learn.microsoft.com/en-us/aspnet/mvc/overview/older-versions/getting-started-with-ef-5-using-mvc-4/implementing-the-repository-and-unit-of-work-patterns-in-an-asp-net-mvc-application
-public partial class ContactDetailPageViewModel(IContactService contactsService) : ObservableRecipient, INavigationAware
+public partial class ContactDetailPageViewModel(IContactService contactsService, INavigationService navigation) : ObservableRecipient, INavigationAware
 {
 
     [ObservableProperty]
     private Contact? _contact;
+    [ObservableProperty]
+    private bool _isInEdit = false;
+    [ObservableProperty]
+    private bool _isNewContact = false;
 
     public void OnNavigatedFrom()
     {
@@ -21,7 +25,34 @@ public partial class ContactDetailPageViewModel(IContactService contactsService)
 
     public void OnNavigatedTo(object parameter)
     {
-        _contact = parameter as Contact;
+        if(parameter is Contact contact)
+        {
+            Contact = contact;
+            IsNewContact = false;
+            IsInEdit = false;
+        }
+        else
+        {
+
+            Contact = new Contact()
+            {
+                FirstName = string.Empty,
+                Address = new Address()
+            };
+            IsNewContact = true;
+            IsInEdit = true;
+
+        }
+        
+    }
+
+    public void StartEdit()
+    {
+        IsInEdit = true;
+
+    }
+    public void CancelEditsAsync() {
+        navigation.GoBack();
     }
 
     [RelayCommand]
@@ -30,6 +61,7 @@ public partial class ContactDetailPageViewModel(IContactService contactsService)
         if (Contact != null)
         {
             await contactsService.Upsert(Contact);
+            navigation.GoBack();
         }
     }
 }

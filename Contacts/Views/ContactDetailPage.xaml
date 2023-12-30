@@ -3,21 +3,162 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:h="using:Contacts.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid x:Name="ContentArea">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="1*" />
-            
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-        </Grid.RowDefinitions>
-        <TextBox Grid.Column="0" Header="First Name" Text="{x:Bind ViewModel.Contact.FirstName , Mode=TwoWay}" />
-        <TextBox Grid.Column="1" Header="Street" Text="{x:Bind ViewModel.Contact.Address.Street, Mode=TwoWay}" />
-        <Button Grid.Row="1" Command="{x:Bind ViewModel.UpsertCommand}">Save</Button> 
-    </Grid>
+    <RelativePanel>
+        <TextBlock
+            x:Name="PageTitle"
+            Style="{StaticResource PageTitleStyle}"
+            Text="{x:Bind ViewModel.Contact.Name, Mode=OneWay}" />
+        <CommandBar
+            x:Name="MainCommandBar"
+            HorizontalAlignment="Stretch"
+            Background="Transparent"
+            DefaultLabelPosition="Right"
+            RelativePanel.AlignRightWithPanel="True">
+            <AppBarButton
+                Command="{x:Bind ViewModel.UpsertCommand}"
+                Icon="Save"
+                Label="Save"
+                Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
+            <AppBarButton
+                Click="{x:Bind ViewModel.CancelEditsAsync}"
+                Icon="Cancel"
+                Label="Cancel"
+                Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
+            <AppBarSeparator Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
+            <AppBarButton
+                Click="{x:Bind ViewModel.StartEdit}"
+                Icon="Edit"
+                IsEnabled="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
+                Label="Edit"
+                Visibility="{x:Bind h:Converters.CollapsedIf(ViewModel.IsNewContact), Mode=OneWay}" />
+        </CommandBar>
+        <ScrollViewer
+            x:Name="DetailPanel"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            RelativePanel.Below="PageTitle"
+            VerticalScrollBarVisibility="Auto"
+            VerticalScrollMode="Auto">
+
+            <StackPanel Margin="0,8,4,0">
+                <StackPanel.Resources>
+                    <Style TargetType="Expander">
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    </Style>
+                </StackPanel.Resources>
+                <Expander x:Name="GeneralExpander" IsExpanded="True">
+                    <Expander.Header>
+                        <Grid>
+                            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="General" />
+                        </Grid>
+                    </Expander.Header>
+
+                    <RelativePanel Margin="8,0,0,12">
+                        <TextBox
+                            x:Name="FirstName"
+                            MinWidth="300"
+                            Margin="0,8,16,8"
+                            Header="First name"
+                            IsReadOnly="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            Text="{x:Bind ViewModel.Contact.FirstName, Mode=TwoWay}"
+                            Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
+                        <TextBox
+                            x:Name="LastName"
+                            MinWidth="300"
+                            Margin="0,8,16,8"
+                            Header="Last name"
+                            IsReadOnly="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
+                            RelativePanel.RightOf="FirstName"
+                            Text="{x:Bind ViewModel.Contact.LastName, Mode=TwoWay}"
+                            Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
+
+                        <TextBox
+                            x:Name="PhoneNumber"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            MinWidth="300"
+                            Margin="0,8,16,0"
+                            Header="Phone"
+                            InputScope="TelephoneNumber"
+                            IsReadOnly="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.Below="FirstName"
+                            Text="{x:Bind ViewModel.Contact.Phone, Mode=TwoWay}" />
+                        <TextBox
+                            x:Name="EmailText"
+                            Grid.Column="2"
+                            MinWidth="300"
+                            Margin="0,8,16,0"
+                            Header="Email"
+                            InputScope="EmailNameOrAddress"
+                            IsReadOnly="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
+                            RelativePanel.Below="LastName"
+                            RelativePanel.RightOf="PhoneNumber"
+                            Text="{x:Bind ViewModel.Contact.Email, Mode=TwoWay}" />
+                    </RelativePanel>
+
+                </Expander>
+
+                <Expander x:Name="AddressExpander" IsExpanded="True">
+                    <Expander.Header>
+                        <Grid>
+                            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Address" />
+                        </Grid>
+                    </Expander.Header>
+
+                    <RelativePanel Margin="8,0,0,12">
+                        <TextBox
+                            x:Name="Street"
+                            MinWidth="300"
+                            Margin="0,8,16,8"
+                            Header="Street"
+                            IsReadOnly="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            Text="{x:Bind ViewModel.Contact.Address.Street, Mode=TwoWay}"
+                             />
+                        <TextBox
+                            x:Name="StreetNumber"
+                            MinWidth="300"
+                            Margin="0,8,16,8"
+                            Header="Number"
+                            IsReadOnly="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
+                            RelativePanel.RightOf="Street"
+                            Text="{x:Bind ViewModel.Contact.Address.Number, Mode=TwoWay}"
+                             />
+
+                        <TextBox
+                            x:Name="ZipCode"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            MinWidth="300"
+                            Margin="0,8,16,0"
+                            Header="ZipCode"
+                            InputScope="AlphanumericFullWidth"
+                            IsReadOnly="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
+                            RelativePanel.AlignLeftWithPanel="True"
+                            RelativePanel.Below="Street"
+                            Text="{x:Bind ViewModel.Contact.Address.ZipCode, Mode=TwoWay}" />
+                        <TextBox
+                            x:Name="City"
+                            Grid.Column="2"
+                            MinWidth="300"
+                            Margin="0,8,16,0"
+                            Header="City"
+                            InputScope="AlphanumericFullWidth"
+                            IsReadOnly="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
+                            RelativePanel.Below="Street"
+                            RelativePanel.RightOf="ZipCode"
+                            Text="{x:Bind ViewModel.Contact.Address.City, Mode=TwoWay}" />
+                    </RelativePanel>
+
+                </Expander>
+            </StackPanel>
+        </ScrollViewer>
+    </RelativePanel>
 </Page>

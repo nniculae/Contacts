@@ -41,6 +41,11 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
             navigation.NavigateTo(typeof(ContactDetailPageViewModel).FullName!, SelectedItem);
         }
     }
+    [RelayCommand]
+    public void NavigateToCreate()
+    {
+         navigation.NavigateTo(typeof(ContactDetailPageViewModel).FullName!, null);
+    }
 
     [RelayCommand]
     public void FilterTextChangedCommand()
