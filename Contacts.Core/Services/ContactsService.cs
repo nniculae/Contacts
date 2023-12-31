@@ -30,5 +30,14 @@ public class ContactsService(IDbContextFactory<ContactsDbContext> contextFactory
         return contact;
     }
 
+    public async Task<Contact> RemoveAsync(Contact contact)
+    {
+        using var context = contextFactory.CreateDbContext();
+        context.Update(contact);
+        context.Remove(contact);
+        await context.SaveChangesAsync();
+        return contact;
+    }
+
     public string GetGroupName(Contact contact) => contact.Name.First().ToString().ToUpper();
 }

@@ -35,6 +35,12 @@
                 IsEnabled="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
                 Label="Edit"
                 Visibility="{x:Bind h:Converters.CollapsedIf(ViewModel.IsNewContact), Mode=OneWay}" />
+            <AppBarButton
+                Command="{x:Bind ViewModel.RemoveCommand}"
+                Icon="Delete"
+                IsEnabled="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
+                Label="Delete"
+                Visibility="{x:Bind h:Converters.CollapsedIf(ViewModel.IsNewContact), Mode=OneWay}" />
         </CommandBar>
         <ScrollViewer
             x:Name="DetailPanel"
@@ -120,8 +126,7 @@
                             Header="Street"
                             IsReadOnly="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
                             RelativePanel.AlignLeftWithPanel="True"
-                            Text="{x:Bind ViewModel.Contact.Address.Street, Mode=TwoWay}"
-                             />
+                            Text="{x:Bind ViewModel.Contact.Address.Street, Mode=TwoWay}" />
                         <TextBox
                             x:Name="StreetNumber"
                             MinWidth="300"
@@ -129,8 +134,7 @@
                             Header="Number"
                             IsReadOnly="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
                             RelativePanel.RightOf="Street"
-                            Text="{x:Bind ViewModel.Contact.Address.Number, Mode=TwoWay}"
-                             />
+                            Text="{x:Bind ViewModel.Contact.Address.Number, Mode=TwoWay}" />
 
                         <TextBox
                             x:Name="ZipCode"

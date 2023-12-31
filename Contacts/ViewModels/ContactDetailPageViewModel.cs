@@ -64,4 +64,13 @@ public partial class ContactDetailPageViewModel(IContactService contactsService,
             navigation.GoBack();
         }
     }
+
+    [RelayCommand]
+    public async Task Remove()
+    {
+        if(Contact == null)
+            return;
+        await contactsService.RemoveAsync(Contact);
+        navigation.GoBack();
+    }
 }

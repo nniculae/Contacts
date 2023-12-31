@@ -106,10 +106,10 @@
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <AutoSuggestBox
-                PlaceholderText="Search for a first name or last name"
                 Margin="8,0"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
+                PlaceholderText="Search for a first name or last name"
                 QueryIcon="Find"
                 Text="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
                 TextChanged="{x:Bind ViewModel.FilterTextChangedCommand, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -163,7 +163,15 @@
                     </GridView>
                 </SemanticZoom.ZoomedOutView>
             </SemanticZoom>
-            <TextBlock Grid.Row="2" Text="{x:Bind ViewModel.Count, Mode=TwoWay}" />
+            <InfoBar
+                Title="Info"
+                Grid.Row="2"
+                Margin="0,8,0,4"
+                IsOpen="True"
+                Message="I have to add feedback on save and delete."
+                Severity="Success"
+                Visibility="Visible" />
+            <!--<TextBlock Grid.Row="2" Text="Hier i have to add feedback, on save and deleted" />-->
         </Grid>
     </RelativePanel>
 </Page>
