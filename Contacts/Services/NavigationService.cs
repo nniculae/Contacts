@@ -84,41 +84,41 @@ public class NavigationService : INavigationService
     {
         return NavigateToWithAnimation(pageKey, parameter, clearNavigation);
     }
+
     public bool NavigateToWithAnimation(string pageKey, object? parameter = null,
-        bool clearNavigation = false, NavigationTransitionInfo? navigationTransitionInfo = null)
+                    bool clearNavigation = false, NavigationTransitionInfo? navigationTransitionInfo = null)
     {
         var pageType = _pageService.GetPageType(pageKey);
 
-        if (_frame != null && (_frame.Content?.GetType() != pageType || (parameter != null && !parameter.Equals(_lastParameterUsed))))
+        if (_frame == null || (_frame.Content?.GetType() == pageType && (parameter == null || parameter.Equals(_lastParameterUsed))))
         {
-            _frame.Tag = clearNavigation;
-            var vmBeforeNavigation = _frame.GetPageViewModel();
-            var navigated = false;
-
-            if (navigationTransitionInfo != null)
-            {
-                navigated = _frame.Navigate(pageType, parameter, navigationTransitionInfo);
-            }
-            else
-            {
-                navigated = _frame.Navigate(pageType, parameter);
-            }
-
-            if (navigated)
-            {
-                _lastParameterUsed = parameter;
-                if (vmBeforeNavigation is INavigationAware navigationAware)
-                {
-                    navigationAware.OnNavigatedFrom();
-                }
-            }
-
-            return navigated;
+            return false;
         }
 
-        return false;
-    }
+        _frame.Tag = clearNavigation;
+        var vmBeforeNavigation = _frame.GetPageViewModel();
+        var navigated = false;
 
+        if (navigationTransitionInfo != null)
+        {
+            navigated = _frame.Navigate(pageType, parameter, navigationTransitionInfo);
+        }
+        else
+        {
+            navigated = _frame.Navigate(pageType, parameter);
+        }
+
+        if (navigated)
+        {
+            _lastParameterUsed = parameter;
+            if (vmBeforeNavigation is INavigationAware navigationAware)
+            {
+                navigationAware.OnNavigatedFrom();
+            }
+        }
+
+        return navigated;
+    }
     private void OnNavigated(object sender, NavigationEventArgs e)
     {
         if (sender is Frame frame)
