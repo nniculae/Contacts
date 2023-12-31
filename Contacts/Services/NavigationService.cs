@@ -1,11 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using Contacts.Contracts.Services;
+﻿using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Helpers;
-
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media.Animation;
 using Microsoft.UI.Xaml.Navigation;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Contacts.Services;
 
@@ -83,13 +82,28 @@ public class NavigationService : INavigationService
 
     public bool NavigateTo(string pageKey, object? parameter = null, bool clearNavigation = false)
     {
+        return NavigateToWithAnimation(pageKey, parameter, clearNavigation);
+    }
+    public bool NavigateToWithAnimation(string pageKey, object? parameter = null,
+        bool clearNavigation = false, NavigationTransitionInfo? navigationTransitionInfo = null)
+    {
         var pageType = _pageService.GetPageType(pageKey);
 
         if (_frame != null && (_frame.Content?.GetType() != pageType || (parameter != null && !parameter.Equals(_lastParameterUsed))))
         {
             _frame.Tag = clearNavigation;
             var vmBeforeNavigation = _frame.GetPageViewModel();
-            var navigated = _frame.Navigate(pageType, parameter);
+            var navigated = false;
+
+            if (navigationTransitionInfo != null)
+            {
+                navigated = _frame.Navigate(pageType, parameter, navigationTransitionInfo);
+            }
+            else
+            {
+                navigated = _frame.Navigate(pageType, parameter);
+            }
+
             if (navigated)
             {
                 _lastParameterUsed = parameter;

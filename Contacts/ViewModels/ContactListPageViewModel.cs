@@ -5,6 +5,7 @@ using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
 using Contacts.Core.Models;
+using Microsoft.UI.Xaml.Media.Animation;
 
 namespace Contacts.ViewModels;
 
@@ -18,12 +19,12 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     private Contact? _selectedItem;
     private IList<Contact> _contacts = [];
 
-    public ObservableGroupedCollection<string, Contact> ContactsDataSource { get; set; } = null!; 
+    public ObservableGroupedCollection<string, Contact> ContactsDataSource { get; set; } = null!;
 
 
-    public async  void OnNavigatedTo(object parameter)
+    public async void OnNavigatedTo(object parameter)
     {
-         _contacts = await contactsService.GetContactsAsync();
+        _contacts = await contactsService.GetContactsAsync();
         var grouped = _contacts.GroupBy(GetGroupName).OrderBy(g => g.Key);
         ContactsDataSource = new ObservableGroupedCollection<string, Contact>(grouped);
         EnsureItemSelected();
@@ -37,14 +38,16 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     [RelayCommand]
     public void NavigateToContactDetailPage()
     {
-        if(SelectedItem != null) {
-            navigation.NavigateTo(typeof(ContactDetailPageViewModel).FullName!, SelectedItem);
+        if (SelectedItem != null)
+        {
+            navigation.NavigateToWithAnimation(typeof(ContactDetailPageViewModel).FullName!,
+                SelectedItem, false, new DrillInNavigationTransitionInfo());
         }
     }
     [RelayCommand]
     public void NavigateToCreate()
     {
-         navigation.NavigateTo(typeof(ContactDetailPageViewModel).FullName!, null);
+        navigation.NavigateTo(typeof(ContactDetailPageViewModel).FullName!, null);
     }
 
     [RelayCommand]
@@ -52,14 +55,14 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     {
         /* Perform a Linq query to find all Contact objects (from the original Contact collection)
                 that fit the criteria of the filter, save them in a new List called tempFiltered. */
-        
-        List<Contact> tempFiltered=  _contacts.Where(contact => contact.ApplyFilter(SearchText)).ToList();
+
+        List<Contact> tempFiltered = _contacts.Where(contact => contact.ApplyFilter(SearchText)).ToList();
         RemoveContacts(tempFiltered);
         AddContacts(tempFiltered);
         Count = tempFiltered.Count;
 
     }
-    
+
     private void AddContacts(List<Contact> tempFiltered)
     {
         foreach (Contact contact in tempFiltered)

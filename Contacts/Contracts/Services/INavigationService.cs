@@ -1,4 +1,5 @@
 ﻿using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media.Animation;
 using Microsoft.UI.Xaml.Navigation;
 
 namespace Contacts.Contracts.Services;
@@ -18,6 +19,7 @@ public interface INavigationService
     }
 
     bool NavigateTo(string pageKey, object? parameter = null, bool clearNavigation = false);
-
+    bool NavigateToWithAnimation(string pageKey, object? parameter = null, bool clearNavigation = false, NavigationTransitionInfo? navigationTransitionInfo = null);
     bool GoBack();
+    
 }
