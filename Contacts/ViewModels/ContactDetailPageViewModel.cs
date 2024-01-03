@@ -86,7 +86,7 @@ public partial class ContactDetailPageViewModel(IContactService contactsService,
         IsInEdit = true;
 
     }
-    public void CancelEditsAsync() {
+    public void GoBack() {
         navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, Contact, true);
     }
 

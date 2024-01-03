@@ -19,13 +19,18 @@
             DefaultLabelPosition="Right"
             RelativePanel.AlignRightWithPanel="True">
             <AppBarButton
-                Command="{x:Bind ViewModel.UpsertCommand}"
+                Click="{x:Bind ViewModel.GoBack}"
+                Icon="Back"
+                Label="Back"
+                />
+            <AppBarButton
                 AllowFocusOnInteraction="True"
+                Command="{x:Bind ViewModel.UpsertCommand}"
                 Icon="Save"
                 Label="Save"
                 Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
             <AppBarButton
-                Click="{x:Bind ViewModel.CancelEditsAsync}"
+                Click="{x:Bind ViewModel.GoBack}"
                 Icon="Cancel"
                 Label="Cancel"
                 Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
