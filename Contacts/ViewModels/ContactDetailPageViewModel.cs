@@ -4,6 +4,8 @@ using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
 using Contacts.Core.Models;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 
 namespace Contacts.ViewModels;
 //https://learn.microsoft.com/en-us/windows/uwp/enterprise/customer-database-tutorial
@@ -18,14 +20,48 @@ public partial class ContactDetailPageViewModel(IContactService contactsService,
     [ObservableProperty]
     private bool _isNewContact = false;
 
+    private bool navigationModeHandled = false;
+
     public void OnNavigatedFrom()
     {
-        //throw new NotImplementedException();
+        //int i = 2;
+        //navigation.Navigated += Navigation_Navigated;
+       //navigation.Frame.Navigating -= Frame_Navigating;
+
     }
+
+    private void Frame_Navigating(object sender, Microsoft.UI.Xaml.Navigation.NavigatingCancelEventArgs e)
+    {
+        if (navigationModeHandled) return;
+
+
+        void resumeNavigation()
+        {
+            if (e.NavigationMode == NavigationMode.Back)
+            {
+                e.Cancel = true;
+                // navigation.GoBack();
+                
+                navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, Contact, true);
+                
+            }
+            else
+            {
+               navigation.Frame.Navigate(e.SourcePageType, e.Parameter, e.NavigationTransitionInfo);
+            }
+            navigationModeHandled = true; ;
+        }
+
+        resumeNavigation();
+
+    }
+   
 
     public void OnNavigatedTo(object parameter)
     {
-        if(parameter is Contact contact)
+       // navigation.Frame.Navigating += Frame_Navigating;
+
+        if (parameter is Contact contact)
         {
             Contact = contact;
             IsNewContact = false;
@@ -33,7 +69,6 @@ public partial class ContactDetailPageViewModel(IContactService contactsService,
         }
         else
         {
-
             Contact = new Contact()
             {
                 FirstName = string.Empty,
@@ -52,7 +87,7 @@ public partial class ContactDetailPageViewModel(IContactService contactsService,
 
     }
     public void CancelEditsAsync() {
-        navigation.GoBack();
+        navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, Contact, true);
     }
 
     [RelayCommand]
@@ -61,7 +96,7 @@ public partial class ContactDetailPageViewModel(IContactService contactsService,
         if (Contact != null)
         {
             await contactsService.Upsert(Contact);
-            navigation.GoBack();
+            navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, Contact, true);
         }
     }
 

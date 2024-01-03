@@ -1,7 +1,10 @@
 ﻿using Contacts.Behaviors;
+using Contacts.Core.Models;
 using Contacts.ViewModels;
 
 using Microsoft.UI.Xaml.Controls;
+using System.Runtime.InteropServices.ObjectiveC;
+using Windows.ApplicationModel.Contacts;
 
 namespace Contacts.Views;
 
@@ -18,4 +21,5 @@ public sealed partial class ContactListPage : Page
         InitializeComponent();
         NavigationViewHeaderBehavior.SetHeaderMode(this, NavigationViewHeaderMode.Never);
     }
+     
 }

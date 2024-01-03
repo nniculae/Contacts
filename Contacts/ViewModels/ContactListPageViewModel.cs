@@ -5,6 +5,7 @@ using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
 using Contacts.Core.Models;
+using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Animation;
 
 namespace Contacts.ViewModels;
@@ -17,9 +18,12 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     private int _count;
     [ObservableProperty]
     private Contact? _selectedItem;
+    
+    private bool _isBackFromDetails = false;
     private IList<Contact> _contacts = [];
 
-    public ObservableGroupedCollection<string, Contact> ContactsDataSource { get; set; } = null!;
+
+    public ObservableGroupedCollection<string, Contact> ContactsDataSource { get; set; } = [];
 
 
     public async void OnNavigatedTo(object parameter)
@@ -27,8 +31,24 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
         _contacts = await contactsService.GetContactsAsync();
         var grouped = _contacts.GroupBy(GetGroupName).OrderBy(g => g.Key);
         ContactsDataSource = new ObservableGroupedCollection<string, Contact>(grouped);
-        EnsureItemSelected();
         Count = _contacts.Count;
+
+        if (parameter is Contact contact)
+        {
+            Contact? refreshedContact = FindContact(contact.Id);
+            if (refreshedContact != null)
+            {
+                SelectedItem = refreshedContact;
+            }
+
+            _isBackFromDetails = true;
+           
+        }
+        else
+        {
+           EnsureItemSelected();
+        }
+
     }
     public void OnNavigatedFrom()
     {
@@ -110,7 +130,36 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
             }
         }
     }
+
+    public Contact? FindContact(int id)
+    {
+        foreach (ObservableGroup<string, Contact> observableGroup in ContactsDataSource)
+        {
+            foreach (Contact contact in observableGroup)
+            {
+                if (contact.Id == id)
+                {
+                    return contact;
+                }
+            }
+
+        }
+
+        return null;
+    }
+
     private static string GetGroupName(Contact contact) => contact.Name.First().ToString().ToUpper();
     public void EnsureItemSelected() => SelectedItem ??= _contacts.FirstOrDefault();
+
+    public void ContactListView_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+
+        if (_isBackFromDetails)
+        {
+            var listView = (ListView)sender;
+            listView.ScrollIntoView(listView.SelectedItem, ScrollIntoViewAlignment.Leading);
+        }
+
+    }
 
 }

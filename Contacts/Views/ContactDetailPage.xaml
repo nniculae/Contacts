@@ -20,6 +20,7 @@
             RelativePanel.AlignRightWithPanel="True">
             <AppBarButton
                 Command="{x:Bind ViewModel.UpsertCommand}"
+                AllowFocusOnInteraction="True"
                 Icon="Save"
                 Label="Save"
                 Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
