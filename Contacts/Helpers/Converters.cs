@@ -41,19 +41,11 @@ public static class Converters
     {
         int hue = GenerateHue(value);
         Color c = CommunityToolkit.WinUI.Helpers.ColorHelper.FromHsl(hue, 30, 85, 0.5);
-        SolidColorBrush b = new(c);
-        return b;
+        return new SolidColorBrush(c);
     }
 
     private static int GenerateHue(string name)
     {
-        var hash = 0;
-        foreach (char s in name)
-        {
-            hash = Math.Abs(Convert.ToInt16(s) + ((hash << 5) - hash));
-
-        }
-
-        return hash % 360;
+        return Math.Abs(name.GetHashCode()) % 360;
     }
 }
