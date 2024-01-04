@@ -10,6 +10,9 @@ using Microsoft.UI.Xaml.Navigation;
 namespace Contacts.ViewModels;
 //https://learn.microsoft.com/en-us/windows/uwp/enterprise/customer-database-tutorial
 //https://learn.microsoft.com/en-us/aspnet/mvc/overview/older-versions/getting-started-with-ef-5-using-mvc-4/implementing-the-repository-and-unit-of-work-patterns-in-an-asp-net-mvc-application
+
+
+
 public partial class ContactDetailPageViewModel(IContactService contactsService, INavigationService navigation) : ObservableRecipient, INavigationAware
 {
 
@@ -21,6 +24,10 @@ public partial class ContactDetailPageViewModel(IContactService contactsService,
     private bool _isNewContact = false;
 
     private bool navigationModeHandled = false;
+    private string FormatMessage(string operation)
+    {
+        return $"The contact {Contact?.Name} was {operation} successfully.";
+    } 
 
     public void OnNavigatedFrom()
     {
@@ -86,8 +93,14 @@ public partial class ContactDetailPageViewModel(IContactService contactsService,
         IsInEdit = true;
 
     }
-    public void GoBack() {
-        navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, Contact, true);
+    public void GoBackWithMessage(string message) {
+        var cpw =  new ContactParameterWrapper(Contact, message);
+        navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, cpw, true);
+    }
+    public void GoBack()
+    {
+        var cpw = new ContactParameterWrapper(Contact, "");
+        navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, cpw, true);
     }
 
     [RelayCommand]
@@ -96,7 +109,16 @@ public partial class ContactDetailPageViewModel(IContactService contactsService,
         if (Contact != null)
         {
             await contactsService.Upsert(Contact);
-            navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, Contact, true);
+
+            if(IsNewContact)
+            {
+                GoBackWithMessage(FormatMessage("created"));
+            }
+            else
+            {
+                GoBackWithMessage(FormatMessage("updated"));
+            }
+            
         }
     }
 
@@ -106,6 +128,6 @@ public partial class ContactDetailPageViewModel(IContactService contactsService,
         if(Contact == null)
             return;
         await contactsService.RemoveAsync(Contact);
-        navigation.GoBack();
+        GoBackWithMessage(FormatMessage("deleted"));
     }
 }

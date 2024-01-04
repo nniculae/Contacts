@@ -18,6 +18,8 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     private int _count;
     [ObservableProperty]
     private Contact? _selectedItem;
+    [ObservableProperty]
+    public string _infoBarMessage = string.Empty;
     
     private bool _isBackFromDetails = false;
     private IList<Contact> _contacts = [];
@@ -33,15 +35,17 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
         ContactsDataSource = new ObservableGroupedCollection<string, Contact>(grouped);
         Count = _contacts.Count;
 
-        if (parameter is Contact contact)
+        if (parameter is ContactParameterWrapper contactParameterWrapper)
         {
-            Contact? refreshedContact = FindContact(contact.Id);
+            Contact? refreshedContact = FindContact(contactParameterWrapper.Contact.Id);
             if (refreshedContact != null)
             {
                 SelectedItem = refreshedContact;
             }
 
             _isBackFromDetails = true;
+            // maybe raise an event, message mvvm 
+            InfoBarMessage = contactParameterWrapper.InfoBarMessage;
            
         }
         else

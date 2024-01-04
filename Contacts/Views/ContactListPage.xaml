@@ -3,9 +3,11 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Model="using:Contacts.Core.Models"
+    xmlns:behaviors="using:CommunityToolkit.WinUI.Behaviors"
     xmlns:collections="using:CommunityToolkit.Mvvm.Collections"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:h="using:Contacts.Helpers"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
@@ -26,24 +28,27 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <FontIcon
-                    Grid.RowSpan="2"
-                    Width="32"
-                    Height="32"
-                    Margin="6"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Glyph="&#xE77B;" />
+
+               <!--  https://medium.com/@pppped/compute-an-arbitrary-color-for-user-avatar-starting-from-his-username-with-javascript-cd0675943b66  -->
                 <Ellipse
-                    x:Name="Ellipse"
+                    x:Name="BgPersonPictureEllipse"
                     Grid.RowSpan="2"
                     Width="32"
                     Height="32"
                     Margin="6"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Fill="{ThemeResource SystemAccentColorDark3}"
-                    Opacity="0.1" />
+                    Fill="{x:Bind h:Converters.StringToBrush(FirstName), Mode=OneTime}"
+                    Opacity="1" />
+                <PersonPicture
+                    Grid.RowSpan="2"
+                    Width="32"
+                    Height="32"
+                    Margin="6"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="White"
+                    Initials="{x:Bind FirstLetter}" />
                 <TextBlock
                     Grid.Column="1"
                     Margin="12,6,0,0"
@@ -117,11 +122,10 @@
                 <SemanticZoom.ZoomedInView>
                     <ListView
                         x:Name="ContactListView"
-                        
-                        Loaded="{x:Bind ViewModel.ContactListView_Loaded}"
                         DoubleTapped="{x:Bind ViewModel.NavigateToContactDetailPage, Mode=OneWay}"
                         ItemTemplate="{StaticResource ContactListViewTemplate}"
                         ItemsSource="{x:Bind ContactsCVS.View, Mode=OneWay}"
+                        Loaded="{x:Bind ViewModel.ContactListView_Loaded}"
                         SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}"
                         SelectionMode="Single">
                         <ListView.ItemsPanel>
@@ -170,10 +174,15 @@
                 Title="Info"
                 Grid.Row="2"
                 Margin="0,8,0,4"
-                IsOpen="True"
-                Message="I have to add feedback on save and delete."
+                IsOpen="False"
+                Message="{x:Bind ViewModel.InfoBarMessage, Mode=OneWay}"
                 Severity="Success"
-                Visibility="Visible" />
+                Visibility="Visible">
+                <interactivity:Interaction.Behaviors>
+                    <behaviors:StackedNotificationsBehavior x:Name="InfoCrud" />
+                </interactivity:Interaction.Behaviors>
+            </InfoBar>
+
             <!--<TextBlock Grid.Row="2" Text="Hier i have to add feedback, on save and deleted" />-->
         </Grid>
     </RelativePanel>

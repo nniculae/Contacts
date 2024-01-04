@@ -1,4 +1,6 @@
 ﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Media;
+using Windows.UI;
 
 namespace Contacts.Helpers;
 
@@ -34,4 +36,24 @@ public static class Converters
     /// </summary>
     public static Visibility CollapsedIfNullOrEmpty(string value) =>
         string.IsNullOrEmpty(value) ? Visibility.Collapsed : Visibility.Visible;
+
+    public static Brush StringToBrush(string value)
+    {
+        int hue = GenerateHue(value);
+        Color c = CommunityToolkit.WinUI.Helpers.ColorHelper.FromHsl(hue, 30, 85, 0.5);
+        SolidColorBrush b = new(c);
+        return b;
+    }
+
+    private static int GenerateHue(string name)
+    {
+        var hash = 0;
+        foreach (char s in name)
+        {
+            hash = Math.Abs(Convert.ToInt16(s) + ((hash << 5) - hash));
+
+        }
+
+        return hash % 360;
+    }
 }

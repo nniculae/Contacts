@@ -9,5 +9,8 @@ public class Contact
     public string Picture { get; set; } = string.Empty;
     public Address? Address { get; set; }
     public string Name => $"{FirstName} {LastName}";
+    public string FirstLetter => FirstName[0].ToString();
     public bool ApplyFilter(string filter) => Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase);
+    
+
 }
