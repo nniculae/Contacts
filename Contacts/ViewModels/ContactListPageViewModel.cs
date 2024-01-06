@@ -34,7 +34,7 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
         _contacts = await contactsService.GetContactsAsync();
         var grouped = _contacts.GroupBy(CreateKey).OrderBy(g => g.Key);
         ContactsDataSource = new ObservableGroupedCollection<string, Contact>(grouped);
-        Count = _contacts.Count;
+        Count = ContactsDataSource.CountItems();
 
         if (parameter is ContactParameterWrapper contactParameterWrapper)
         {
@@ -80,17 +80,15 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     public void FilterTextChangedCommand()
     {
 
-        // convert to list for Count
-        List<Contact> tempFiltered = _contacts.Where(contact => contact.ApplyFilter(SearchText)).ToList();
-
-        // RemoveContacts(tempFiltered);
-        ContactsDataSource.RemoveItems(tempFiltered);
+        
+        IEnumerable<Contact> tempFiltered = _contacts.Where(contact => contact.ApplyFilter(SearchText));
+        
         var keyComparer = Comparer<string>.Default;
         var itemComparer = Comparer<Contact>.Create((left, right) =>
                     keyComparer.Compare(left.Name, right.Name));
-
-        ContactsDataSource.AddItems(tempFiltered, keyComparer, itemComparer, CreateKey);
-        Count = tempFiltered.Count;
+        
+        ContactsDataSource.FilterItems(tempFiltered, keyComparer, itemComparer, CreateKey);
+        Count = ContactsDataSource.CountItems();
 
     }
 

@@ -37,7 +37,7 @@ public static class ObservableGroupedCollectionExtensions
     /// <exception cref="ArgumentNullException">Thrown when ogc, tempFiltered, keyComparer, itemComparer, or createKey is null.</exception>
     /// <exception cref="InvalidOperationException">Thrown when an item with the same key already exists in the ObservableGroupedCollection.</exception>
     /// <exception cref="ArgumentException">Thrown when createKey returns a null value.</exception>
-    public static void AddItems<TKey, TElement>(this ObservableGroupedCollection<TKey, TElement> ogc,
+    public static void InsertItems<TKey, TElement>(this ObservableGroupedCollection<TKey, TElement> ogc,
         IEnumerable<TElement> tempFiltered, Comparer<TKey> keyComparer,
         Comparer<TElement> itemComparer, Func<TElement, TKey> createKey)
         where TKey : notnull
@@ -81,6 +81,26 @@ public static class ObservableGroupedCollectionExtensions
                 ogc.Remove(observableGroup);
             }
         }
+    }
+
+
+    public static void FilterItems<TKey, TElement>(this ObservableGroupedCollection<TKey, TElement> ogc,
+        IEnumerable<TElement> tempFiltered, Comparer<TKey> keyComparer,
+        Comparer<TElement> itemComparer, Func<TElement, TKey> createKey)
+        where TKey : notnull
+        where TElement : class, IComparable<TElement>
+
+    {
+        ogc.RemoveItems(tempFiltered);
+        ogc.InsertItems(tempFiltered,keyComparer,itemComparer,createKey);
+    }
+
+
+    public static int CountItems<TKey, TElement>(this ObservableGroupedCollection<TKey, TElement> ogc)
+        where TKey : notnull
+    {
+        var ogcAsEnumerable = (IEnumerable<ObservableGroup<TKey, TElement>>)ogc;
+        return ogcAsEnumerable.Sum(g => g.Count);
     }
 }
 
