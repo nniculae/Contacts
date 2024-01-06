@@ -21,8 +21,7 @@
             <AppBarButton
                 Click="{x:Bind ViewModel.GoBack}"
                 Icon="Back"
-                Label="Back"
-                />
+                Label="Back" />
             <AppBarButton
                 AllowFocusOnInteraction="True"
                 Command="{x:Bind ViewModel.UpsertCommand}"
