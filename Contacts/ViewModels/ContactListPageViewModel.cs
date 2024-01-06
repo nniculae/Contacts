@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.Input;
 using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
-using Contacts.Core.Models;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Animation;
 
@@ -20,7 +19,7 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     private Contact? _selectedItem;
     [ObservableProperty]
     public string _infoBarMessage = string.Empty;
-    
+
     private bool _isBackFromDetails = false;
     private IList<Contact> _contacts = [];
 
@@ -46,11 +45,11 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
             _isBackFromDetails = true;
             // maybe raise an event, message mvvm 
             InfoBarMessage = contactParameterWrapper.InfoBarMessage;
-           
+
         }
         else
         {
-           EnsureItemSelected();
+            EnsureItemSelected();
         }
 
     }
@@ -87,26 +86,56 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
 
     }
 
+    //TODO: It's not sorted correctly because some items were allready in the ContactsDataSource
+
+    /* Next, add back any Person objects that are included in tempFiltered and may 
+   not currently be in ContactsDataSource (in case of a backspace) */
+    //private void AddContacts(List<Contact> tempFiltered)
+    //{
+
+    //    foreach (Contact contact in tempFiltered)
+    //    {
+    //        string key = GetGroupName(contact);
+    //        ObservableGroup<string, Contact>? group = ContactsDataSource.FirstGroupByKeyOrDefault(key);
+
+    //        if (group != null && !group.Contains(contact))
+    //        {
+    //            ContactsDataSource.AddItem(key, contact);
+    //        }
+    //        else if (group == null)
+    //        {
+    //            ContactsDataSource.InsertItem(
+    //               key: key,
+    //               keyComparer: Comparer<string>.Default,
+    //               item: contact,
+    //               itemComparer: Comparer<Contact>.Create(
+    //                   static (left, right) => Comparer<string>.Default.Compare(left.Name, right.Name)));
+    //        }
+    //    }
+    //}
+
+    /* Next, add back any Contact objects that are included in tempFiltered and may 
+  not currently be in ContactsDataSource (in case of a backspace) */
     private void AddContacts(List<Contact> tempFiltered)
     {
+
         foreach (Contact contact in tempFiltered)
         {
-            string key = GetGroupName(contact);
-            var group = ContactsDataSource.FirstGroupByKeyOrDefault(key);
 
-            if (group != null && !group.Contains(contact))
+            if (FindContact(contact.Id) is not null)
             {
-                ContactsDataSource.AddItem(key, contact);
+                continue;
             }
-            else if (group == null)
-            {
-                ContactsDataSource.InsertItem(
-                   key: key,
-                   keyComparer: Comparer<string>.Default,
-                   item: contact,
-                   itemComparer: Comparer<Contact>.Create(
-                       static (left, right) => Comparer<string>.Default.Compare(left.ToString(), right.ToString())));
+            else { 
+
+            ContactsDataSource.InsertItem(
+               key: GetGroupName(contact),
+               keyComparer: Comparer<string>.Default,
+               item: contact,
+               itemComparer: Comparer<Contact>.Create(
+                   static (left, right) => Comparer<string>.Default.Compare(left.Name, right.Name)));
             }
+
         }
     }
 
@@ -114,7 +143,7 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     /* Go through tempFiltered and compare it with the current ContactsSource collection,
             adding and subtracting items as necessary: */
 
-    /// First, remove any Contact objects in ContactsSource that are not in tempFiltered
+    /// First, remove any Contact objects in ContactsDataSource that are not in tempFiltered
     private void RemoveContacts(List<Contact> tempFiltered)
     {
         for (int i = ContactsDataSource.Count - 1; i >= 0; i--)
