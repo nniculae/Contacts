@@ -26,5 +26,16 @@ public sealed partial class ContactListPage : Page
             return;
         InfoCrud.Show(ViewModel.InfoBarMessage, 5000);
     }
+
+    public void ContactListView_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+
+        if (ViewModel.IsBackFromDetails)
+        {
+            var listView = (ListView)sender;
+            listView.ScrollIntoView(listView.SelectedItem, ScrollIntoViewAlignment.Leading);
+        }
+
+    }
 }
 

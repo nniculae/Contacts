@@ -125,7 +125,7 @@
                         DoubleTapped="{x:Bind ViewModel.NavigateToContactDetailPage, Mode=OneWay}"
                         ItemTemplate="{StaticResource ContactListViewTemplate}"
                         ItemsSource="{x:Bind ContactsCVS.View, Mode=OneWay}"
-                        Loaded="{x:Bind ViewModel.ContactListView_Loaded}"
+                        Loaded="{x:Bind ContactListView_Loaded}"
                         SelectedItem="{x:Bind ViewModel.SelectedItem, Mode=TwoWay}"
                         SelectionMode="Single">
                         <ListView.ItemsPanel>

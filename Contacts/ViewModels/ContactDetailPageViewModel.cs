@@ -1,72 +1,35 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
-using Contacts.Core.Models;
-using Microsoft.UI.Xaml.Navigation;
 
 namespace Contacts.ViewModels;
-//https://learn.microsoft.com/en-us/windows/uwp/enterprise/customer-database-tutorial
-//https://learn.microsoft.com/en-us/aspnet/mvc/overview/older-versions/getting-started-with-ef-5-using-mvc-4/implementing-the-repository-and-unit-of-work-patterns-in-an-asp-net-mvc-application
 
-
-
-public partial class ContactDetailPageViewModel(IContactService contactsService, INavigationService navigation) : ObservableRecipient, INavigationAware
+public partial class ContactDetailPageViewModel(IContactService contactsService, INavigationService navigation) :
+    ObservableRecipient, INavigationAware
 {
-
     [ObservableProperty]
-    private Contact? _contact;
+    private Contact _contact = null!;
     [ObservableProperty]
     private bool _isInEdit = false;
     [ObservableProperty]
     private bool _isNewContact = false;
-
-    private bool navigationModeHandled = false;
-    private string FormatMessage(string operation)
-    {
-        return $"The contact {Contact?.Name} was {operation} successfully.";
-    } 
+    private Crud crud = Crud.Read;
 
     public void OnNavigatedFrom()
     {
-        //int i = 2;
-        //navigation.Navigated += Navigation_Navigated;
-       //navigation.Frame.Navigating -= Frame_Navigating;
-
+        var message = new ContactChangedMessage(Contact, CrudStringMessage.FormatMessage(Contact.Name, crud));
+        ((WeakReferenceMessenger)Messenger).Send(message);
     }
 
-    private void Frame_Navigating(object sender, Microsoft.UI.Xaml.Navigation.NavigatingCancelEventArgs e)
+    public void StartEdit()
     {
-        if (navigationModeHandled) return;
-
-
-        void resumeNavigation()
-        {
-            if (e.NavigationMode == NavigationMode.Back)
-            {
-                e.Cancel = true;
-                // navigation.GoBack();
-                
-                navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, Contact, true);
-                
-            }
-            else
-            {
-               navigation.Frame.Navigate(e.SourcePageType, e.Parameter, e.NavigationTransitionInfo);
-            }
-            navigationModeHandled = true; ;
-        }
-
-        resumeNavigation();
-
+        IsInEdit = true;
     }
-   
-
     public void OnNavigatedTo(object parameter)
     {
-       // navigation.Frame.Navigating += Frame_Navigating;
-
         if (parameter is Contact contact)
         {
             Contact = contact;
@@ -80,53 +43,40 @@ public partial class ContactDetailPageViewModel(IContactService contactsService,
                 FirstName = string.Empty,
                 Address = new Address()
             };
+
             IsNewContact = true;
             IsInEdit = true;
-
         }
-        
     }
 
-    public void StartEdit()
-    {
-        IsInEdit = true;
-
-    }
-    public void GoBackWithMessage(string message) {
-        var cpw =  new ContactParameterWrapper(Contact, message);
-        navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, cpw, true);
-    }
     public void GoBack()
     {
-        var cpw = new ContactParameterWrapper(Contact, "");
-        navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, cpw, true);
+        navigation.GoBack();
     }
 
     [RelayCommand]
     public async Task Upsert()
     {
-        if (Contact != null)
-        {
-            await contactsService.Upsert(Contact);
+        await contactsService.Upsert(Contact);
 
-            if(IsNewContact)
-            {
-                GoBackWithMessage(FormatMessage("created"));
-            }
-            else
-            {
-                GoBackWithMessage(FormatMessage("updated"));
-            }
-            
+        if (IsNewContact)
+        {
+            crud = Crud.Created;
         }
+        else
+        {
+            crud = Crud.Updated;
+        }
+
+        GoBack();
+
     }
 
     [RelayCommand]
     public async Task Remove()
     {
-        if(Contact == null)
-            return;
         await contactsService.RemoveAsync(Contact);
-        GoBackWithMessage(FormatMessage("deleted"));
+        crud = Crud.Deleted;
+        GoBack();
     }
 }
