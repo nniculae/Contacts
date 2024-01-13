@@ -10,7 +10,7 @@ public class ContactsDbContextFactory : IDesignTimeDbContextFactory<ContactsDbCo
     {
         var optionBuilder = new DbContextOptionsBuilder<ContactsDbContext>();
         optionBuilder.EnableSensitiveDataLogging();
-        optionBuilder.UseSqlite(Connection.GetSqliteConnection());
+        optionBuilder.UseSqlite(Connection.GetSqliteConnection()).EnableSensitiveDataLogging();
             //.LogTo(
             //    Console.WriteLine,
             //    new[] { DbLoggerCategory.Database.Command.Name },
