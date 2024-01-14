@@ -69,7 +69,6 @@ public partial class ContactDetailPageViewModel(IContactService contactsService,
         }
 
         GoBack();
-
     }
 
     [RelayCommand]

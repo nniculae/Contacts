@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace Contacts.Core.Helpers;
-
+#nullable disable warnings
 public static class Json
 {
     public static async Task<T> ToObjectAsync<T>(string value)

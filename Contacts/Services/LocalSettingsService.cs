@@ -10,7 +10,7 @@ using Windows.ApplicationModel;
 using Windows.Storage;
 
 namespace Contacts.Services;
-
+#nullable disable warnings
 public class LocalSettingsService : ILocalSettingsService
 {
     private const string _defaultApplicationDataFolder = "Contacts/ApplicationData";

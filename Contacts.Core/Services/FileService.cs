@@ -5,7 +5,7 @@ using Contacts.Core.Contracts.Services;
 using Newtonsoft.Json;
 
 namespace Contacts.Core.Services;
-
+#nullable disable warnings
 public class FileService : IFileService
 {
     public T Read<T>(string folderPath, string fileName)

@@ -14,7 +14,7 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     : ObservableRecipient, INavigationAware, IRecipient<ContactChangedMessage>
 {
     [ObservableProperty]
-    private string? _searchText;
+    private string _searchText = string.Empty;
     [ObservableProperty]
     private int _count;
     [ObservableProperty]
@@ -34,7 +34,6 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
         ContactsDataSource = new ObservableGroupedCollection<string, Contact>(grouped);
         Count = ContactsDataSource.CountItems();
         EnsureItemSelected();
-
     }
     public void OnNavigatedFrom()
     {
@@ -57,8 +56,6 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     [RelayCommand]
     public void FilterTextChangedCommand()
     {
-
-
         IEnumerable<Contact> tempFiltered = _contacts.Where(contact => contact.ApplyFilter(SearchText));
 
         var keyComparer = Comparer<string>.Default;
@@ -67,11 +64,10 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
 
         ContactsDataSource.FilterItems(tempFiltered, keyComparer, itemComparer, CreateKey);
         Count = ContactsDataSource.CountItems();
-
     }
     private static string CreateKey(Contact contact)
     {
-        return contact.Name.First().ToString().ToUpperInvariant();
+        return contact.Name[0].ToString().ToUpperInvariant();
     }
     private void EnsureItemSelected() => SelectedItem ??= _contacts.FirstOrDefault();
     public void Receive(ContactChangedMessage message)
