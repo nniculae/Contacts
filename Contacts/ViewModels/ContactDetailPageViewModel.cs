@@ -22,6 +22,8 @@ public partial class ContactDetailPageViewModel(IContactService contactsService,
     {
         var message = new ContactChangedMessage(Contact, CrudStringMessage.FormatMessage(Contact.Name, crud));
         ((WeakReferenceMessenger)Messenger).Send(message);
+
+        
     }
 
     public void StartEdit()

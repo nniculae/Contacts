@@ -9,10 +9,10 @@ namespace DesignPatternsUI.Core.Services;
 public class ContactsService(IDbContextFactory<ContactsDbContext> contextFactory) : IContactService
 {
 
-    public async Task<IList<Contact>> GetContactsAsync()
+    public async Task<List<Contact>> GetContactsAsync()
     {
         using var context = contextFactory.CreateDbContext();
-        return await context.Contacts.Include(c => c.Address).OrderBy(c => c.FirstName).AsNoTracking().ToListAsync();    
+        return await context.Contacts.OrderBy(c => c.FirstName).AsNoTracking().ToListAsync();    
     }
 
 
@@ -25,6 +25,7 @@ public class ContactsService(IDbContextFactory<ContactsDbContext> contextFactory
     public async Task<Contact> Upsert(Contact contact)
     {
         using var context = contextFactory.CreateDbContext();
+        
         context.Update(contact);
         await context.SaveChangesAsync();
         return contact;

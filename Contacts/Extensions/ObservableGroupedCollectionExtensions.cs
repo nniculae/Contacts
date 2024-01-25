@@ -5,7 +5,7 @@ namespace Contacts.Extensions;
 
 public static class ObservableGroupedCollectionExtensions
 {
-
+    //TODO: make it faster, use ObservableGroup.FindFirstGroup (sort of bucket)
     /// <summary>
     /// Finds an item in an ObservableGroupedCollection.
     /// </summary>

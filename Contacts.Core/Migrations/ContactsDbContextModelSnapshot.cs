@@ -42,7 +42,7 @@ namespace Contacts.Core.Migrations
                     b.HasIndex("ContactId")
                         .IsUnique();
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
 
                     b.HasData(
                         new
@@ -9071,7 +9071,7 @@ namespace Contacts.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contacts");
+                    b.ToTable("Contacts", (string)null);
 
                     b.HasData(
                         new

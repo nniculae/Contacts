@@ -72,7 +72,9 @@ public partial class App : Application
             // Core Services
             services.AddSingleton<IFileService, FileService>();
 
-            services.AddDbContextFactory<ContactsDbContext>(options => options.UseSqlite(Connection.GetSqliteConnection()).EnableSensitiveDataLogging());
+            services.AddDbContextFactory<ContactsDbContext>(options => options
+                .UseSqlite(Connection.GetSqliteConnection())
+                .EnableSensitiveDataLogging());
             services.AddTransient<IContactService, ContactsService>();
 
             // Views and ViewModels
