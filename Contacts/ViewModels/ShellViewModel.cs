@@ -1,8 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-
 using Contacts.Contracts.Services;
 using Contacts.Views;
-
 using Microsoft.UI.Xaml.Navigation;
 
 namespace Contacts.ViewModels;

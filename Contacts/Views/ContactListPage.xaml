@@ -29,7 +29,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-               <!--  https://medium.com/@pppped/compute-an-arbitrary-color-for-user-avatar-starting-from-his-username-with-javascript-cd0675943b66  -->
+                <!--  https://medium.com/@pppped/compute-an-arbitrary-color-for-user-avatar-starting-from-his-username-with-javascript-cd0675943b66  -->
                 <Ellipse
                     x:Name="BgPersonPictureEllipse"
                     Grid.RowSpan="2"
@@ -94,7 +94,7 @@
                 ToolTipService.ToolTip="View details" />
             <AppBarSeparator />
             <AppBarButton
-                Click="{x:Bind ViewModel.NavigateToCreate, Mode=OneWay}"
+                Command="{x:Bind ViewModel.NavigateToCreateCommand, Mode=OneWay}"
                 Icon="Add"
                 Label="New"
                 ToolTipService.ToolTip="New contact" />
@@ -117,7 +117,7 @@
                 PlaceholderText="Search for a first name or last name"
                 QueryIcon="Find"
                 Text="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
-                TextChanged="{x:Bind ViewModel.FilterTextChangedCommand, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                TextChanged="{x:Bind ViewModel.FilterTextChanged, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
             <SemanticZoom x:Name="ContactSemanticZoom" Grid.Row="1">
                 <SemanticZoom.ZoomedInView>
                     <ListView
@@ -182,8 +182,6 @@
                     <behaviors:StackedNotificationsBehavior x:Name="InfoCrud" />
                 </interactivity:Interaction.Behaviors>
             </InfoBar>
-
-            <!--<TextBlock Grid.Row="2" Text="Hier i have to add feedback, on save and deleted" />-->
         </Grid>
     </RelativePanel>
 </Page>

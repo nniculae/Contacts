@@ -7,7 +7,9 @@ using Contacts.Core.Contracts.Services;
 
 namespace Contacts.ViewModels;
 
-public partial class ContactDetailPageViewModel(IContactService contactsService, INavigationService navigation) :
+public partial class ContactDetailPageViewModel(
+    IContactService contactsService,
+    INavigationService navigation) :
     ObservableRecipient, INavigationAware
 {
     [ObservableProperty]
@@ -18,18 +20,6 @@ public partial class ContactDetailPageViewModel(IContactService contactsService,
     private bool _isNewContact = false;
     private Crud crud = Crud.Read;
 
-    public void OnNavigatedFrom()
-    {
-        var message = new ContactChangedMessage(Contact, CrudStringMessage.FormatMessage(Contact.Name, crud));
-        ((WeakReferenceMessenger)Messenger).Send(message);
-
-        
-    }
-
-    public void StartEdit()
-    {
-        IsInEdit = true;
-    }
     public void OnNavigatedTo(object parameter)
     {
         if (parameter is Contact contact)
@@ -50,14 +40,21 @@ public partial class ContactDetailPageViewModel(IContactService contactsService,
             IsInEdit = true;
         }
     }
-
+    public void OnNavigatedFrom()
+    {
+        var message = new ContactChangedMessage(Contact, CrudStringMessage.FormatMessage(Contact.Name, crud));
+        ((WeakReferenceMessenger)Messenger).Send(message);
+    }
     public void GoBack()
     {
         navigation.GoBack();
     }
-
+    public void StartEdit()
+    {
+        IsInEdit = true;
+    }
     [RelayCommand]
-    public async Task Upsert()
+    public async Task UpsertAsync()
     {
         await contactsService.Upsert(Contact);
 
@@ -72,9 +69,8 @@ public partial class ContactDetailPageViewModel(IContactService contactsService,
 
         GoBack();
     }
-
     [RelayCommand]
-    public async Task Remove()
+    public async Task RemoveAsync()
     {
         await contactsService.RemoveAsync(Contact);
         crud = Crud.Deleted;

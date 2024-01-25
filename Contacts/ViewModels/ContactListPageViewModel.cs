@@ -20,10 +20,8 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     [ObservableProperty]
     private Contact? _selectedItem;
     public ObservableGroupedCollection<string, Contact> ContactsDataSource { get; set; } = [];
-
     public string InfoBarMessage { get; set; } = string.Empty;
     public bool IsBackFromDetails { get; set; } = false;
-
     private IList<Contact> _contacts = [];
 
     public async void OnNavigatedTo(object parameter)
@@ -53,8 +51,7 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     {
         navigation.NavigateTo(typeof(ContactDetailPageViewModel).FullName!, null);
     }
-    [RelayCommand]
-    public void FilterTextChangedCommand()
+    public void FilterTextChanged()
     {
         IEnumerable<Contact> tempFiltered = _contacts.Where(contact => contact.ApplyFilter(SearchText));
 

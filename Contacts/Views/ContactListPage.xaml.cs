@@ -1,16 +1,11 @@
 ﻿using Contacts.Behaviors;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
 
 namespace Contacts.Views;
-
 public sealed partial class ContactListPage : Page
 {
-
-    public ContactListPageViewModel ViewModel
-    {
-        get;
-    }
-
+    public ContactListPageViewModel ViewModel { get; }
     public ContactListPage()
     {
         ViewModel = App.GetService<ContactListPageViewModel>();
@@ -18,24 +13,20 @@ public sealed partial class ContactListPage : Page
         NavigationViewHeaderBehavior.SetHeaderMode(this, NavigationViewHeaderMode.Never);
         Loaded += ContactListPage_Loaded;
     }
-
-    private void ContactListPage_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void ContactListPage_Loaded(object sender, RoutedEventArgs e)
     {
-
         if (string.IsNullOrEmpty(ViewModel.InfoBarMessage))
             return;
         InfoCrud.Show(ViewModel.InfoBarMessage, 5000);
     }
-
-    public void ContactListView_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    public void ContactListView_Loaded(object sender, RoutedEventArgs e)
     {
-
-        if (ViewModel.IsBackFromDetails)
+        if (!ViewModel.IsBackFromDetails)
         {
-            var listView = (ListView)sender;
-            listView.ScrollIntoView(listView.SelectedItem, ScrollIntoViewAlignment.Leading);
+            return;
         }
 
+        var listView = (ListView)sender;
+        listView.ScrollIntoView(listView.SelectedItem, ScrollIntoViewAlignment.Leading);
     }
 }
-
