@@ -17,9 +17,9 @@ public class ContactsDbContext(DbContextOptions<ContactsDbContext> options) : Db
 
         modelBuilder.Entity<Contact>().Navigation(c => c.Address).AutoInclude();
 
-        ContactGenerator.Init();
-        modelBuilder.Entity<Contact>().HasData(ContactGenerator.Contacts);
-        modelBuilder.Entity<Address>().HasData(ContactGenerator.Addresses);
+        //ContactGenerator.Init();
+        //modelBuilder.Entity<Contact>().HasData(ContactGenerator.Contacts);
+        //modelBuilder.Entity<Address>().HasData(ContactGenerator.Addresses);
     }
 
     public override void Dispose()

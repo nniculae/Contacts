@@ -92,8 +92,9 @@ public partial class App : Application
         }).
         Build();
 
-        var dbContext = GetService<ContactsDbContext>();
-        _ = dbContext.Database.EnsureCreated();
+        //var dbContext = GetService<ContactsDbContext>();
+        //_ = dbContext.Database.EnsureCreated();
+        //dbContext.Dispose();
 
         UnhandledException += App_UnhandledException;
     }
