@@ -5,6 +5,8 @@ public interface IContactService
 {
     Task<Contact> Upsert(Contact contact);
     Task<List<Contact>> GetContactsAsync();
-    public IList<IGrouping<string, Contact>> GetContactsGrouped();
     Task<Contact> RemoveAsync(Contact contact);
+    Task<Contact?> FindByIdAsync(int id);
+
+    //public IList<IGrouping<string, Contact>> GetContactsGrouped();
 }

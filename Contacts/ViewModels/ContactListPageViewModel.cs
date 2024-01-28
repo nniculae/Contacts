@@ -22,14 +22,18 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     public ObservableGroupedCollection<string, Contact> ContactsDataSource { get; set; } = [];
     public string InfoBarMessage { get; set; } = string.Empty;
     public bool IsBackFromDetails { get; set; } = false;
-    private IList<Contact> _contacts = [];
+    private IList<Contact> _contacts = null!;
 
     public async void OnNavigatedTo(object parameter)
     {
         IsActive = true;
         _contacts = await contactsService.GetContactsAsync();
         var grouped = _contacts.GroupBy(CreateKey).OrderBy(g => g.Key);
-        ContactsDataSource = new ObservableGroupedCollection<string, Contact>(grouped);
+        foreach (var item in grouped)
+        {
+            ContactsDataSource.AddGroup(item);
+        }
+       
         Count = ContactsDataSource.CountItems();
         EnsureItemSelected();
     }
@@ -42,8 +46,9 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     {
         if (SelectedItem != null)
         {
+            int id = SelectedItem.Id;
             navigation.NavigateToWithAnimation(typeof(ContactDetailPageViewModel).FullName!,
-                SelectedItem, false, new DrillInNavigationTransitionInfo());
+               id, false, new DrillInNavigationTransitionInfo());
         }
     }
     [RelayCommand]
@@ -71,20 +76,21 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     {
         InfoBarMessage = message.StringMessage;
 
-        Contact contact = message.Value;
-        if (message.Value != null)
-        {
-            Contact? refreshedContact = ContactsDataSource.FindItem(contact);
-            if (refreshedContact != null)
-            {
-                SelectedItem = refreshedContact;
-            }
+        int contactId = message.Value;
 
-            IsBackFromDetails = true;
+        if(contactId > 0)
+        {
+            var ogcAsEnumerable = (IEnumerable<ObservableGroup<string, Contact>>)ContactsDataSource;
+            Contact? refreshedContact = ogcAsEnumerable.SelectMany(group => group)
+                      .FirstOrDefault(contact => contact.Id == contactId);
+            SelectedItem = refreshedContact;
         }
         else
         {
             EnsureItemSelected();
         }
+
+        IsBackFromDetails = true;
+
     }
 }

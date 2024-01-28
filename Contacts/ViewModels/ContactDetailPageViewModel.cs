@@ -13,18 +13,39 @@ public partial class ContactDetailPageViewModel(
     ObservableRecipient, INavigationAware
 {
     [ObservableProperty]
-    private Contact _contact = null!;
+    private Contact? _contact;
     [ObservableProperty]
     private bool _isInEdit = false;
     [ObservableProperty]
     private bool _isNewContact = false;
     private Crud crud = Crud.Read;
 
-    public void OnNavigatedTo(object parameter)
+    //public void OnNavigatedTo(object parameter)
+    //{
+    //    if (parameter is Contact contact)
+    //    {
+    //        Contact = contact;
+    //        IsNewContact = false;
+    //        IsInEdit = false;
+    //    }
+    //    else
+    //    {
+    //        Contact = new Contact()
+    //        {
+    //            FirstName = string.Empty,
+    //            Address = new Address()
+    //        };
+
+    //        IsNewContact = true;
+    //        IsInEdit = true;
+    //    }
+    //}
+
+    public async void OnNavigatedTo(object parameter)
     {
-        if (parameter is Contact contact)
+        if (parameter is int id)
         {
-            Contact = contact;
+            Contact = await contactsService.FindByIdAsync(id);
             IsNewContact = false;
             IsInEdit = false;
         }
@@ -42,7 +63,7 @@ public partial class ContactDetailPageViewModel(
     }
     public void OnNavigatedFrom()
     {
-        var message = new ContactChangedMessage(Contact, CrudStringMessage.FormatMessage(Contact.Name, crud));
+        var message = new ContactChangedMessage(Contact!.Id, CrudStringMessage.FormatMessage(Contact.Name, crud));
         ((WeakReferenceMessenger)Messenger).Send(message);
     }
     public void GoBack()
@@ -56,7 +77,7 @@ public partial class ContactDetailPageViewModel(
     [RelayCommand]
     public async Task UpsertAsync()
     {
-        await contactsService.Upsert(Contact);
+        await contactsService.Upsert(Contact!);
 
         if (IsNewContact)
         {
@@ -72,7 +93,7 @@ public partial class ContactDetailPageViewModel(
     [RelayCommand]
     public async Task RemoveAsync()
     {
-        await contactsService.RemoveAsync(Contact);
+        await contactsService.RemoveAsync(Contact!);
         crud = Crud.Deleted;
         GoBack();
     }

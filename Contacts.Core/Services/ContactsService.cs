@@ -11,21 +11,20 @@ public class ContactsService(IDbContextFactory<ContactsDbContext> contextFactory
 
     public async Task<List<Contact>> GetContactsAsync()
     {
-        using var context = contextFactory.CreateDbContext();
-        return await context.Contacts.OrderBy(c => c.FirstName).AsNoTracking().ToListAsync();    
+        await using var context = contextFactory.CreateDbContext();
+        return await context.Contacts.OrderBy(c => c.FirstName).AsNoTracking().ToListAsync();
     }
 
-
-    public IList<IGrouping<string, Contact>> GetContactsGrouped()
+    public async Task<Contact?> FindByIdAsync(int id)
     {
-        using var context = contextFactory.CreateDbContext();
-        return  context.Contacts.GroupBy(GetGroupName).OrderBy(g => g.Key).ToList();
+        await using var context = contextFactory.CreateDbContext();
+        return await context.Contacts.FindAsync(id);
     }
-           
+
     public async Task<Contact> Upsert(Contact contact)
     {
-        using var context = contextFactory.CreateDbContext();
-        
+        await using var context = contextFactory.CreateDbContext();
+
         context.Update(contact);
         await context.SaveChangesAsync();
         return contact;
@@ -33,12 +32,18 @@ public class ContactsService(IDbContextFactory<ContactsDbContext> contextFactory
 
     public async Task<Contact> RemoveAsync(Contact contact)
     {
-        using var context = contextFactory.CreateDbContext();
+        await using var context = contextFactory.CreateDbContext();
         context.Update(contact);
         context.Remove(contact);
         await context.SaveChangesAsync();
         return contact;
     }
 
-    public string GetGroupName(Contact contact) => contact.Name.First().ToString().ToUpper();
+    //public string GetGroupName(Contact contact) => contact.Name.First().ToString().ToUpper();
+
+    //public IList<IGrouping<string, Contact>> GetContactsGrouped()
+    //{
+    //    using var context = contextFactory.CreateDbContext();
+    //    return context.Contacts.GroupBy(GetGroupName).OrderBy(g => g.Key).ToList();
+    //}
 }
