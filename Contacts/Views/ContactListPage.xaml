@@ -116,8 +116,7 @@
                 VerticalAlignment="Center"
                 PlaceholderText="Search for a first name or last name"
                 QueryIcon="Find"
-                Text="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
-                TextChanged="{x:Bind ViewModel.FilterTextChanged, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{x:Bind ViewModel.SearchText, Mode=TwoWay}" />
             <SemanticZoom x:Name="ContactSemanticZoom" Grid.Row="1">
                 <SemanticZoom.ZoomedInView>
                     <ListView

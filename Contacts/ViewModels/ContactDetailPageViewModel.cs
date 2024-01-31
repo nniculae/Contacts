@@ -20,27 +20,6 @@ public partial class ContactDetailPageViewModel(
     private bool _isNewContact = false;
     private Crud crud = Crud.Read;
 
-    //public void OnNavigatedTo(object parameter)
-    //{
-    //    if (parameter is Contact contact)
-    //    {
-    //        Contact = contact;
-    //        IsNewContact = false;
-    //        IsInEdit = false;
-    //    }
-    //    else
-    //    {
-    //        Contact = new Contact()
-    //        {
-    //            FirstName = string.Empty,
-    //            Address = new Address()
-    //        };
-
-    //        IsNewContact = true;
-    //        IsInEdit = true;
-    //    }
-    //}
-
     public async void OnNavigatedTo(object parameter)
     {
         if (parameter is int id)

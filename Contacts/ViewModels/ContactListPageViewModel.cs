@@ -56,9 +56,10 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     {
         navigation.NavigateTo(typeof(ContactDetailPageViewModel).FullName!, null);
     }
-    public void FilterTextChanged()
+    
+    partial void OnSearchTextChanged(string value)
     {
-        IEnumerable<Contact> tempFiltered = _contacts.Where(contact => contact.ApplyFilter(SearchText));
+        IEnumerable<Contact> tempFiltered = _contacts.Where(contact => contact.ApplyFilter(value));
 
         var keyComparer = Comparer<string>.Default;
         var itemComparer = Comparer<Contact>.Create((left, right) =>

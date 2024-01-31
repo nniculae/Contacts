@@ -11,19 +11,19 @@ public class ContactsService(IDbContextFactory<ContactsDbContext> contextFactory
 
     public async Task<List<Contact>> GetContactsAsync()
     {
-        await using var context = contextFactory.CreateDbContext();
+        await using var context = await contextFactory.CreateDbContextAsync();
         return await context.Contacts.OrderBy(c => c.FirstName).AsNoTracking().ToListAsync();
     }
 
     public async Task<Contact?> FindByIdAsync(int id)
     {
-        await using var context = contextFactory.CreateDbContext();
+        await using var context = await contextFactory.CreateDbContextAsync();
         return await context.Contacts.FindAsync(id);
     }
 
     public async Task<Contact> Upsert(Contact contact)
     {
-        await using var context = contextFactory.CreateDbContext();
+        await using var context = await contextFactory.CreateDbContextAsync();
 
         context.Update(contact);
         await context.SaveChangesAsync();
