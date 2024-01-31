@@ -8,7 +8,6 @@ namespace DesignPatternsUI.Core.Services;
 
 public class ContactsService(IDbContextFactory<ContactsDbContext> contextFactory) : IContactService
 {
-
     public async Task<List<Contact>> GetContactsAsync()
     {
         await using var context = await contextFactory.CreateDbContextAsync();
@@ -38,12 +37,4 @@ public class ContactsService(IDbContextFactory<ContactsDbContext> contextFactory
         await context.SaveChangesAsync();
         return contact;
     }
-
-    //public string GetGroupName(Contact contact) => contact.Name.First().ToString().ToUpper();
-
-    //public IList<IGrouping<string, Contact>> GetContactsGrouped()
-    //{
-    //    using var context = contextFactory.CreateDbContext();
-    //    return context.Contacts.GroupBy(GetGroupName).OrderBy(g => g.Key).ToList();
-    //}
 }

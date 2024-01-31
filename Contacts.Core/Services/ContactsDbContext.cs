@@ -12,7 +12,6 @@ public class ContactsDbContext(DbContextOptions<ContactsDbContext> options) : Db
         
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Contact>().Navigation(c => c.Address).AutoInclude();
@@ -21,18 +20,4 @@ public class ContactsDbContext(DbContextOptions<ContactsDbContext> options) : Db
         //modelBuilder.Entity<Contact>().HasData(ContactGenerator.Contacts);
         //modelBuilder.Entity<Address>().HasData(ContactGenerator.Addresses);
     }
-
-    public override void Dispose()
-    {
-        Debug.WriteLine(nameof(Dispose) + " called");
-        base.Dispose();
-    }
-
-    public override ValueTask DisposeAsync()
-    {
-        Debug.WriteLine(nameof(DisposeAsync) + "called");
-        return base.DisposeAsync();
-    }
-
-
 }

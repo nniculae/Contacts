@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 
 namespace Contacts.Core.Services;
-public class Connection
+public static class Connection
 {
     public static SqliteConnection GetSqliteConnection()
     {
@@ -13,7 +13,6 @@ public class Connection
             DataSource = db
         }
          .ToString();
-
 
         return new SqliteConnection(connectionStringBuilder);
     }
