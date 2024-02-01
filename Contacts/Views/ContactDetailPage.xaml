@@ -26,6 +26,7 @@
                 AllowFocusOnInteraction="True"
                 Command="{x:Bind ViewModel.UpsertCommand}"
                 Icon="Save"
+                IsEnabled="{x:Bind h:Converters.Not(ViewModel.ContactValidator.HasErrors), Mode=OneWay}"
                 Label="Save"
                 Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
             <AppBarButton
@@ -70,15 +71,28 @@
                     </Expander.Header>
 
                     <RelativePanel Margin="8,0,0,12">
-                        <TextBox
+                        <StackPanel
                             x:Name="FirstName"
-                            MinWidth="300"
-                            Margin="0,8,16,8"
-                            Header="First name"
-                            IsReadOnly="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
-                            RelativePanel.AlignLeftWithPanel="True"
-                            Text="{x:Bind ViewModel.Contact.FirstName, Mode=TwoWay}"
-                            Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
+                            Orientation="Vertical"
+                            RelativePanel.AlignLeftWithPanel="True">
+                            <TextBox
+                                MinWidth="300"
+                                Margin="0,8,16,8"
+                                Header="First name"
+                                IsReadOnly="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
+                                Text="{x:Bind ViewModel.ContactValidator.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
+                            <StackPanel
+                                Margin="0,4,0,0"
+                                Orientation="Horizontal"
+                                Visibility="{x:Bind h:Converters.CollapsedIfNullOrEmpty(ViewModel.ContactValidator.FirstNameErrors), Mode=OneWay}">
+                                <FontIcon
+                                    Margin="0,0,4,0"
+                                    Foreground="Red"
+                                    Glyph="&#xE783;" />
+                                <TextBlock Foreground="Red" Text="{x:Bind ViewModel.ContactValidator.FirstNameErrors, Mode=OneWay}" />
+                            </StackPanel>
+                        </StackPanel>
                         <TextBox
                             x:Name="LastName"
                             MinWidth="300"
@@ -91,8 +105,6 @@
 
                         <TextBox
                             x:Name="PhoneNumber"
-                            Grid.Row="1"
-                            Grid.Column="1"
                             MinWidth="300"
                             Margin="0,8,16,0"
                             Header="Phone"
@@ -101,17 +113,29 @@
                             RelativePanel.AlignLeftWithPanel="True"
                             RelativePanel.Below="FirstName"
                             Text="{x:Bind ViewModel.Contact.Phone, Mode=TwoWay}" />
-                        <TextBox
+                        <StackPanel
                             x:Name="EmailText"
-                            Grid.Column="2"
-                            MinWidth="300"
-                            Margin="0,8,16,0"
-                            Header="Email"
-                            InputScope="EmailNameOrAddress"
-                            IsReadOnly="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
+                            Orientation="Vertical"
                             RelativePanel.Below="LastName"
-                            RelativePanel.RightOf="PhoneNumber"
-                            Text="{x:Bind ViewModel.Contact.Email, Mode=TwoWay}" />
+                            RelativePanel.RightOf="PhoneNumber">
+                            <TextBox
+                                MinWidth="300"
+                                Margin="0,8,16,0"
+                                Header="Email"
+                                InputScope="EmailNameOrAddress"
+                                IsReadOnly="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
+                                Text="{x:Bind ViewModel.ContactValidator.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <StackPanel
+                                Margin="0,4,0,0"
+                                Orientation="Horizontal"
+                                Visibility="{x:Bind h:Converters.CollapsedIfNullOrEmpty(ViewModel.ContactValidator.EmailErrors), Mode=OneWay}">
+                                <FontIcon
+                                    Margin="0,0,4,0"
+                                    Foreground="Red"
+                                    Glyph="&#xE783;" />
+                                <TextBlock Foreground="Red" Text="{x:Bind ViewModel.ContactValidator.EmailErrors, Mode=OneWay}" />
+                            </StackPanel>
+                        </StackPanel>
                     </RelativePanel>
 
                 </Expander>

@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
+using Contacts.Validators;
 
 namespace Contacts.ViewModels;
 
@@ -19,7 +20,7 @@ public partial class ContactDetailPageViewModel(
     [ObservableProperty]
     private bool _isNewContact = false;
     private Crud crud = Crud.Read;
-
+    public ContactValidator ContactValidator { get; set; }
     public async void OnNavigatedTo(object parameter)
     {
         if (parameter is int id)
@@ -39,6 +40,8 @@ public partial class ContactDetailPageViewModel(
             IsNewContact = true;
             IsInEdit = true;
         }
+        ContactValidator = new ContactValidator(Contact!);
+        
     }
     public void OnNavigatedFrom()
     {
@@ -56,6 +59,7 @@ public partial class ContactDetailPageViewModel(
     [RelayCommand]
     public async Task UpsertAsync()
     {
+        
         await contactsService.Upsert(Contact!);
 
         if (IsNewContact)

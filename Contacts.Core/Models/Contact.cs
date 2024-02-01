@@ -9,7 +9,7 @@ public class Contact : IComparable<Contact>
     public string? Picture { get; set; }
     public Address? Address { get; set; }
     public string Name => $"{FirstName} {LastName}";
-    public string FirstLetter => FirstName[0].ToString();
+    public string FirstLetter => !string.IsNullOrEmpty(FirstName) ? FirstName[0].ToString() : "A";
     public bool ApplyFilter(string filter) => Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase);
 
     public int CompareTo(Contact? other)
