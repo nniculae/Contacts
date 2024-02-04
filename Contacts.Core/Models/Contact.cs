@@ -8,6 +8,9 @@ public class Contact : IComparable<Contact>
     public string? Phone { get; set; }
     public string? Picture { get; set; }
     public Address? Address { get; set; }
+    public List<Label> Labels { get; } = [];
+    public List<ContactLabel> ContactLabels { get; } = [];
+
     public string Name => $"{FirstName} {LastName}";
     public string FirstLetter => !string.IsNullOrEmpty(FirstName) ? FirstName[0].ToString() : "A";
     public bool ApplyFilter(string filter) => Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase);
