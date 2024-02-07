@@ -8,7 +8,7 @@ public class Contact : IComparable<Contact>
     public string? Phone { get; set; }
     public string? Picture { get; set; }
     public Address? Address { get; set; }
-    public List<Label> Labels { get; } = [];
+    public List<Label> Labels { get; set; } = [];
     public List<ContactLabel> ContactLabels { get; } = [];
 
     public string Name => $"{FirstName} {LastName}";

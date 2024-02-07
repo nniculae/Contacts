@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.WinUI;
 using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
@@ -21,6 +20,8 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     private int _count;
     [ObservableProperty]
     private Contact? _selectedItem;
+    [ObservableProperty]
+    private Label _selectedLabel;
     public ObservableGroupedCollection<string, Contact> ContactsDataSource { get; set; } = [];
     public string InfoBarMessage { get; set; } = string.Empty;
     public bool IsBackFromDetails { get; set; } = false;
@@ -29,14 +30,26 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
 
     public async void OnNavigatedTo(object parameter)
     {
-        await dispatcherQueue.EnqueueAsync(() =>
+        await dispatcherQueue.EnqueueCustomAsync(() =>
         {
             IsActive = true;
             ContactsDataSource.Clear();
         });
+
         _contacts = await contactsService.GetContactsAsync();
-        await dispatcherQueue.EnqueueAsync (() =>
+        
+        await dispatcherQueue.EnqueueCustomAsync(() =>
         {
+
+
+
+            //foreach (var contact in _contacts)
+            //{
+            //    contact.Labels.OrderBy(l => l.Name);
+                
+            //}
+
+
             var groupings = _contacts.GroupBy(CreateKey).OrderBy(g => g.Key);
             foreach (var item in groupings)
             {
@@ -66,10 +79,14 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     {
         navigation.NavigateTo(typeof(ContactDetailPageViewModel).FullName!, null);
     }
-    
+
+    partial void OnSelectedLabelChanged(Label value)
+    {
+        NavigateToCreate();
+    }
     async partial void OnSearchTextChanged(string value)
     {
-        await dispatcherQueue.EnqueueAsync(() =>
+        await dispatcherQueue.EnqueueCustomAsync(() =>
         {
             IEnumerable<Contact> tempFiltered = _contacts.Where(contact => contact.ApplyFilter(value));
 
@@ -80,7 +97,7 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
             ContactsDataSource.FilterItems(tempFiltered, keyComparer, itemComparer, CreateKey);
             Count = ContactsDataSource.CountItems();
         });
-        
+
     }
     private static string CreateKey(Contact contact)
     {
@@ -89,7 +106,7 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     private void EnsureItemSelected() => SelectedItem ??= _contacts.FirstOrDefault();
     public async void Receive(ContactChangedMessage message)
     {
-        await dispatcherQueue.EnqueueAsync(() =>
+        await dispatcherQueue.EnqueueCustomAsync(() =>
         {
             InfoBarMessage = message.StringMessage;
 
@@ -109,6 +126,6 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
 
             IsBackFromDetails = true;
         });
-        
+
     }
 }

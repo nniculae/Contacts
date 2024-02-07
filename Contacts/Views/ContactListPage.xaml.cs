@@ -29,4 +29,7 @@ public sealed partial class ContactListPage : Page
         var listView = (ListView)sender;
         listView.ScrollIntoView(listView.SelectedItem, ScrollIntoViewAlignment.Leading);
     }
+
+    
+
 }

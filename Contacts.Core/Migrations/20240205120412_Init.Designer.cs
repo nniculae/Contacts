@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Contacts.Core.Migrations
 {
     [DbContext(typeof(ContactsDbContext))]
-    [Migration("20240204000935_SeedLabels")]
-    partial class SeedLabels
+    [Migration("20240205120412_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -3497,52 +3497,52 @@ namespace Contacts.Core.Migrations
                         new
                         {
                             ContactId = 50,
-                            LabelId = 3
+                            LabelId = 1
                         },
                         new
                         {
                             ContactId = 155,
-                            LabelId = 9
+                            LabelId = 3
                         },
                         new
                         {
                             ContactId = 59,
-                            LabelId = 14
-                        },
-                        new
-                        {
-                            ContactId = 164,
-                            LabelId = 20
-                        },
-                        new
-                        {
-                            ContactId = 68,
-                            LabelId = 6
-                        },
-                        new
-                        {
-                            ContactId = 173,
-                            LabelId = 12
-                        },
-                        new
-                        {
-                            ContactId = 77,
-                            LabelId = 18
-                        },
-                        new
-                        {
-                            ContactId = 182,
                             LabelId = 4
                         },
                         new
                         {
+                            ContactId = 164,
+                            LabelId = 5
+                        },
+                        new
+                        {
+                            ContactId = 68,
+                            LabelId = 2
+                        },
+                        new
+                        {
+                            ContactId = 173,
+                            LabelId = 3
+                        },
+                        new
+                        {
+                            ContactId = 77,
+                            LabelId = 5
+                        },
+                        new
+                        {
+                            ContactId = 182,
+                            LabelId = 1
+                        },
+                        new
+                        {
                             ContactId = 86,
-                            LabelId = 10
+                            LabelId = 3
                         },
                         new
                         {
                             ContactId = 191,
-                            LabelId = 16
+                            LabelId = 4
                         },
                         new
                         {
@@ -3552,82 +3552,82 @@ namespace Contacts.Core.Migrations
                         new
                         {
                             ContactId = 200,
-                            LabelId = 7
-                        },
-                        new
-                        {
-                            ContactId = 104,
-                            LabelId = 13
-                        },
-                        new
-                        {
-                            ContactId = 9,
-                            LabelId = 19
-                        },
-                        new
-                        {
-                            ContactId = 113,
-                            LabelId = 5
-                        },
-                        new
-                        {
-                            ContactId = 18,
-                            LabelId = 11
-                        },
-                        new
-                        {
-                            ContactId = 122,
-                            LabelId = 17
-                        },
-                        new
-                        {
-                            ContactId = 26,
                             LabelId = 2
                         },
                         new
                         {
-                            ContactId = 131,
-                            LabelId = 8
-                        },
-                        new
-                        {
-                            ContactId = 35,
-                            LabelId = 14
-                        },
-                        new
-                        {
-                            ContactId = 140,
-                            LabelId = 20
-                        },
-                        new
-                        {
-                            ContactId = 44,
-                            LabelId = 6
-                        },
-                        new
-                        {
-                            ContactId = 149,
-                            LabelId = 12
-                        },
-                        new
-                        {
-                            ContactId = 53,
-                            LabelId = 18
-                        },
-                        new
-                        {
-                            ContactId = 158,
+                            ContactId = 104,
                             LabelId = 4
                         },
                         new
                         {
+                            ContactId = 9,
+                            LabelId = 5
+                        },
+                        new
+                        {
+                            ContactId = 113,
+                            LabelId = 2
+                        },
+                        new
+                        {
+                            ContactId = 18,
+                            LabelId = 3
+                        },
+                        new
+                        {
+                            ContactId = 122,
+                            LabelId = 5
+                        },
+                        new
+                        {
+                            ContactId = 26,
+                            LabelId = 1
+                        },
+                        new
+                        {
+                            ContactId = 131,
+                            LabelId = 2
+                        },
+                        new
+                        {
+                            ContactId = 35,
+                            LabelId = 4
+                        },
+                        new
+                        {
+                            ContactId = 140,
+                            LabelId = 5
+                        },
+                        new
+                        {
+                            ContactId = 44,
+                            LabelId = 2
+                        },
+                        new
+                        {
+                            ContactId = 149,
+                            LabelId = 3
+                        },
+                        new
+                        {
+                            ContactId = 53,
+                            LabelId = 5
+                        },
+                        new
+                        {
+                            ContactId = 158,
+                            LabelId = 1
+                        },
+                        new
+                        {
                             ContactId = 62,
-                            LabelId = 9
+                            LabelId = 3
                         },
                         new
                         {
                             ContactId = 167,
-                            LabelId = 15
+                            LabelId = 4
                         },
                         new
                         {
@@ -3637,82 +3637,82 @@ namespace Contacts.Core.Migrations
                         new
                         {
                             ContactId = 176,
-                            LabelId = 7
-                        },
-                        new
-                        {
-                            ContactId = 80,
-                            LabelId = 13
-                        },
-                        new
-                        {
-                            ContactId = 185,
-                            LabelId = 19
-                        },
-                        new
-                        {
-                            ContactId = 89,
-                            LabelId = 5
-                        },
-                        new
-                        {
-                            ContactId = 194,
-                            LabelId = 11
-                        },
-                        new
-                        {
-                            ContactId = 98,
-                            LabelId = 16
-                        },
-                        new
-                        {
-                            ContactId = 3,
                             LabelId = 2
                         },
                         new
                         {
-                            ContactId = 107,
-                            LabelId = 8
+                            ContactId = 80,
+                            LabelId = 4
                         },
                         new
                         {
-                            ContactId = 12,
-                            LabelId = 14
+                            ContactId = 185,
+                            LabelId = 5
                         },
                         new
                         {
-                            ContactId = 116,
-                            LabelId = 20
+                            ContactId = 89,
+                            LabelId = 2
                         },
                         new
                         {
-                            ContactId = 21,
-                            LabelId = 6
-                        },
-                        new
-                        {
-                            ContactId = 125,
-                            LabelId = 12
-                        },
-                        new
-                        {
-                            ContactId = 30,
-                            LabelId = 17
-                        },
-                        new
-                        {
-                            ContactId = 134,
+                            ContactId = 194,
                             LabelId = 3
                         },
                         new
                         {
+                            ContactId = 98,
+                            LabelId = 4
+                        },
+                        new
+                        {
+                            ContactId = 3,
+                            LabelId = 1
+                        },
+                        new
+                        {
+                            ContactId = 107,
+                            LabelId = 2
+                        },
+                        new
+                        {
+                            ContactId = 12,
+                            LabelId = 4
+                        },
+                        new
+                        {
+                            ContactId = 116,
+                            LabelId = 5
+                        },
+                        new
+                        {
+                            ContactId = 21,
+                            LabelId = 2
+                        },
+                        new
+                        {
+                            ContactId = 125,
+                            LabelId = 3
+                        },
+                        new
+                        {
+                            ContactId = 30,
+                            LabelId = 5
+                        },
+                        new
+                        {
+                            ContactId = 134,
+                            LabelId = 1
+                        },
+                        new
+                        {
                             ContactId = 39,
-                            LabelId = 9
+                            LabelId = 3
                         },
                         new
                         {
                             ContactId = 143,
-                            LabelId = 15
+                            LabelId = 4
                         },
                         new
                         {
@@ -3722,82 +3722,82 @@ namespace Contacts.Core.Migrations
                         new
                         {
                             ContactId = 152,
-                            LabelId = 7
-                        },
-                        new
-                        {
-                            ContactId = 57,
-                            LabelId = 13
-                        },
-                        new
-                        {
-                            ContactId = 161,
-                            LabelId = 19
-                        },
-                        new
-                        {
-                            ContactId = 66,
-                            LabelId = 4
-                        },
-                        new
-                        {
-                            ContactId = 170,
-                            LabelId = 10
-                        },
-                        new
-                        {
-                            ContactId = 74,
-                            LabelId = 16
-                        },
-                        new
-                        {
-                            ContactId = 179,
                             LabelId = 2
                         },
                         new
                         {
-                            ContactId = 83,
-                            LabelId = 8
+                            ContactId = 57,
+                            LabelId = 4
                         },
                         new
                         {
-                            ContactId = 188,
-                            LabelId = 14
-                        },
-                        new
-                        {
-                            ContactId = 92,
-                            LabelId = 20
-                        },
-                        new
-                        {
-                            ContactId = 197,
+                            ContactId = 161,
                             LabelId = 5
                         },
                         new
                         {
-                            ContactId = 101,
-                            LabelId = 11
+                            ContactId = 66,
+                            LabelId = 1
                         },
                         new
                         {
-                            ContactId = 6,
-                            LabelId = 17
-                        },
-                        new
-                        {
-                            ContactId = 110,
+                            ContactId = 170,
                             LabelId = 3
                         },
                         new
                         {
+                            ContactId = 74,
+                            LabelId = 4
+                        },
+                        new
+                        {
+                            ContactId = 179,
+                            LabelId = 1
+                        },
+                        new
+                        {
+                            ContactId = 83,
+                            LabelId = 2
+                        },
+                        new
+                        {
+                            ContactId = 188,
+                            LabelId = 4
+                        },
+                        new
+                        {
+                            ContactId = 92,
+                            LabelId = 5
+                        },
+                        new
+                        {
+                            ContactId = 197,
+                            LabelId = 2
+                        },
+                        new
+                        {
+                            ContactId = 101,
+                            LabelId = 3
+                        },
+                        new
+                        {
+                            ContactId = 6,
+                            LabelId = 5
+                        },
+                        new
+                        {
+                            ContactId = 110,
+                            LabelId = 1
+                        },
+                        new
+                        {
                             ContactId = 15,
-                            LabelId = 9
+                            LabelId = 3
                         },
                         new
                         {
                             ContactId = 119,
-                            LabelId = 15
+                            LabelId = 4
                         },
                         new
                         {
@@ -3807,192 +3807,192 @@ namespace Contacts.Core.Migrations
                         new
                         {
                             ContactId = 128,
-                            LabelId = 7
+                            LabelId = 2
                         },
                         new
                         {
                             ContactId = 33,
-                            LabelId = 12
+                            LabelId = 3
                         },
                         new
                         {
                             ContactId = 137,
-                            LabelId = 18
+                            LabelId = 5
                         },
                         new
                         {
                             ContactId = 42,
-                            LabelId = 4
+                            LabelId = 1
                         },
                         new
                         {
                             ContactId = 146,
-                            LabelId = 10
+                            LabelId = 3
                         },
                         new
                         {
                             ContactId = 51,
-                            LabelId = 16
+                            LabelId = 4
                         },
                         new
                         {
                             ContactId = 155,
-                            LabelId = 2
+                            LabelId = 1
                         },
                         new
                         {
                             ContactId = 60,
-                            LabelId = 8
-                        },
-                        new
-                        {
-                            ContactId = 164,
-                            LabelId = 14
-                        },
-                        new
-                        {
-                            ContactId = 69,
-                            LabelId = 19
-                        },
-                        new
-                        {
-                            ContactId = 173,
-                            LabelId = 5
-                        },
-                        new
-                        {
-                            ContactId = 78,
-                            LabelId = 11
-                        },
-                        new
-                        {
-                            ContactId = 182,
-                            LabelId = 17
-                        },
-                        new
-                        {
-                            ContactId = 87,
-                            LabelId = 3
-                        },
-                        new
-                        {
-                            ContactId = 191,
-                            LabelId = 9
-                        },
-                        new
-                        {
-                            ContactId = 96,
-                            LabelId = 15
-                        },
-                        new
-                        {
-                            ContactId = 200,
-                            LabelId = 20
-                        },
-                        new
-                        {
-                            ContactId = 105,
-                            LabelId = 6
-                        },
-                        new
-                        {
-                            ContactId = 9,
-                            LabelId = 12
-                        },
-                        new
-                        {
-                            ContactId = 114,
-                            LabelId = 18
-                        },
-                        new
-                        {
-                            ContactId = 18,
-                            LabelId = 4
-                        },
-                        new
-                        {
-                            ContactId = 122,
-                            LabelId = 10
-                        },
-                        new
-                        {
-                            ContactId = 27,
-                            LabelId = 16
-                        },
-                        new
-                        {
-                            ContactId = 131,
                             LabelId = 2
                         },
                         new
                         {
-                            ContactId = 36,
-                            LabelId = 7
+                            ContactId = 164,
+                            LabelId = 4
                         },
                         new
                         {
-                            ContactId = 140,
-                            LabelId = 13
-                        },
-                        new
-                        {
-                            ContactId = 45,
-                            LabelId = 19
-                        },
-                        new
-                        {
-                            ContactId = 149,
+                            ContactId = 69,
                             LabelId = 5
                         },
                         new
                         {
-                            ContactId = 54,
-                            LabelId = 11
+                            ContactId = 173,
+                            LabelId = 2
                         },
                         new
                         {
-                            ContactId = 158,
-                            LabelId = 17
-                        },
-                        new
-                        {
-                            ContactId = 63,
+                            ContactId = 78,
                             LabelId = 3
                         },
                         new
                         {
+                            ContactId = 182,
+                            LabelId = 5
+                        },
+                        new
+                        {
+                            ContactId = 87,
+                            LabelId = 1
+                        },
+                        new
+                        {
+                            ContactId = 191,
+                            LabelId = 3
+                        },
+                        new
+                        {
+                            ContactId = 96,
+                            LabelId = 4
+                        },
+                        new
+                        {
+                            ContactId = 200,
+                            LabelId = 5
+                        },
+                        new
+                        {
+                            ContactId = 105,
+                            LabelId = 2
+                        },
+                        new
+                        {
+                            ContactId = 9,
+                            LabelId = 3
+                        },
+                        new
+                        {
+                            ContactId = 114,
+                            LabelId = 5
+                        },
+                        new
+                        {
+                            ContactId = 18,
+                            LabelId = 1
+                        },
+                        new
+                        {
+                            ContactId = 122,
+                            LabelId = 3
+                        },
+                        new
+                        {
+                            ContactId = 27,
+                            LabelId = 4
+                        },
+                        new
+                        {
+                            ContactId = 131,
+                            LabelId = 1
+                        },
+                        new
+                        {
+                            ContactId = 36,
+                            LabelId = 2
+                        },
+                        new
+                        {
+                            ContactId = 140,
+                            LabelId = 4
+                        },
+                        new
+                        {
+                            ContactId = 45,
+                            LabelId = 5
+                        },
+                        new
+                        {
+                            ContactId = 149,
+                            LabelId = 2
+                        },
+                        new
+                        {
+                            ContactId = 54,
+                            LabelId = 3
+                        },
+                        new
+                        {
+                            ContactId = 158,
+                            LabelId = 5
+                        },
+                        new
+                        {
+                            ContactId = 63,
+                            LabelId = 1
+                        },
+                        new
+                        {
                             ContactId = 167,
-                            LabelId = 8
+                            LabelId = 2
                         },
                         new
                         {
                             ContactId = 72,
-                            LabelId = 14
+                            LabelId = 4
                         },
                         new
                         {
                             ContactId = 176,
-                            LabelId = 20
+                            LabelId = 5
                         },
                         new
                         {
                             ContactId = 81,
-                            LabelId = 6
+                            LabelId = 2
                         },
                         new
                         {
                             ContactId = 185,
-                            LabelId = 12
+                            LabelId = 3
                         },
                         new
                         {
                             ContactId = 90,
-                            LabelId = 18
+                            LabelId = 5
                         },
                         new
                         {
                             ContactId = 194,
-                            LabelId = 4
+                            LabelId = 1
                         });
                 });
 
@@ -4014,102 +4014,27 @@ namespace Contacts.Core.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Electronic"
+                            Name = "Work"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Reggae"
+                            Name = "Friend"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Electronic"
+                            Name = "VIP"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "Country"
+                            Name = "Client"
                         },
                         new
                         {
                             Id = 5,
-                            Name = "Stage And Screen"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Rap"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Classical"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Latin"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Latin"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Country"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Country"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Name = "Latin"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Name = "Electronic"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Name = "Funk"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Name = "Rap"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Name = "Metal"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Name = "Rap"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Name = "Non Music"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Name = "Pop"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Name = "Jazz"
+                            Name = "General"
                         });
                 });
 

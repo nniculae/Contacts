@@ -44,22 +44,16 @@ public static class ContactGenerator
                 ;
         Addresses = AddressFaker.Generate(numOfSeeds);
 
-
-        var labelId = 1;
-        LabelFaker
-            .UseSeed(6666)
-            .RuleFor(l => l.Id, _ => labelId++)
-            .RuleFor(l => l.Name, f => f.Music.Genre()
-            );
-
-        Labels = LabelFaker.Generate(20);
-
+        Labels =
+        [
+            new Label(){Id = 1, Name="Work"},
+            new Label(){Id = 2, Name="Friend"},
+            new Label(){Id = 3, Name="VIP"},
+            new Label(){Id = 4, Name="Client"},
+            new Label(){Id = 5, Name="General"},
+        ];
 
         ContactLabels = GenerateContactLabels(100, Contacts, Labels);
-
-
-
-
     }
 
     private static List<ContactLabel> GenerateContactLabels(

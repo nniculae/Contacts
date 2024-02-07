@@ -5,10 +5,12 @@
     xmlns:Model="using:Contacts.Core.Models"
     xmlns:behaviors="using:CommunityToolkit.WinUI.Behaviors"
     xmlns:collections="using:CommunityToolkit.Mvvm.Collections"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:h="using:Contacts.Helpers"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="ThisPage"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -22,17 +24,18 @@
             <Grid ContextFlyout="{StaticResource ListViewContextMenu}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <!--  https://medium.com/@pppped/compute-an-arbitrary-color-for-user-avatar-starting-from-his-username-with-javascript-cd0675943b66  -->
                 <Ellipse
                     x:Name="BgPersonPictureEllipse"
-                    Grid.RowSpan="2"
+                    Grid.Column="0"
                     Width="32"
                     Height="32"
                     Margin="6"
@@ -41,7 +44,7 @@
                     Fill="{x:Bind h:Converters.StringToBrush(FirstName), Mode=OneTime}"
                     Opacity="1" />
                 <PersonPicture
-                    Grid.RowSpan="2"
+                    Grid.Column="0"
                     Width="32"
                     Height="32"
                     Margin="6"
@@ -51,17 +54,45 @@
                     Initials="{x:Bind FirstLetter}" />
                 <TextBlock
                     Grid.Column="1"
-                    Margin="12,6,0,0"
+                    Margin="8,0,0,0"
+                    VerticalAlignment="Center"
                     x:Phase="1"
                     Style="{ThemeResource BaseTextBlockStyle}"
                     Text="{x:Bind Name}" />
                 <TextBlock
                     Grid.Row="1"
-                    Grid.Column="1"
-                    Margin="12,0,0,6"
+                    Grid.Column="2"
+                    Margin="12,0,0,0"
+                    VerticalAlignment="Center"
+                    x:Phase="2"
+                    Style="{ThemeResource BodyTextBlockStyle}"
+                    Text="{x:Bind Email}" />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    Margin="12,0,0,0"
+                    VerticalAlignment="Center"
                     x:Phase="2"
                     Style="{ThemeResource BodyTextBlockStyle}"
                     Text="{x:Bind Phone}" />
+                <ListBox
+                    x:Name="LabelsListBox"
+                    Grid.Column="4"
+                    ItemsSource="{x:Bind Labels}"
+                    SelectedItem="{Binding ElementName=ThisPage, Path=ViewModel.SelectedLabel, Mode=TwoWay}"
+                    SelectionMode="Single">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="Model:Label">
+                            <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{x:Bind Name}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <controls:WrapPanel x:Name="WrapPanelControl" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+                <!--  https://learn.microsoft.com/en-us/answers/questions/972618/winui-3-listview-selecteditems-in-mvvm  -->
             </Grid>
         </DataTemplate>
         <CollectionViewSource

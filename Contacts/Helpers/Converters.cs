@@ -25,6 +25,8 @@ public static class Converters
     public static Visibility CollapsedIf(bool value) =>
         value ? Visibility.Collapsed : Visibility.Visible;
 
+    public static Visibility ToggleVisibility(Visibility visibility) =>
+        visibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
     /// <summary>
     /// Returns Visibility.Collapsed if the specified value is null; otherwise, returns Visibility.Visible.
     /// </summary>

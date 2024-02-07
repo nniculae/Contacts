@@ -30,6 +30,19 @@ namespace Contacts.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Labels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Labels", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Addresses",
                 columns: table => new
                 {
@@ -48,6 +61,30 @@ namespace Contacts.Core.Migrations
                         name: "FK_Addresses_Contacts_ContactId",
                         column: x => x.ContactId,
                         principalTable: "Contacts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ContactLabel",
+                columns: table => new
+                {
+                    ContactId = table.Column<int>(type: "INTEGER", nullable: false),
+                    LabelId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContactLabel", x => new { x.ContactId, x.LabelId });
+                    table.ForeignKey(
+                        name: "FK_ContactLabel_Contacts_ContactId",
+                        column: x => x.ContactId,
+                        principalTable: "Contacts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ContactLabel_Labels_LabelId",
+                        column: x => x.LabelId,
+                        principalTable: "Labels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -260,6 +297,18 @@ namespace Contacts.Core.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Labels",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Work" },
+                    { 2, "Friend" },
+                    { 3, "VIP" },
+                    { 4, "Client" },
+                    { 5, "General" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Addresses",
                 columns: new[] { "Id", "City", "ContactId", "Number", "Street", "ZipCode" },
                 values: new object[,]
@@ -466,11 +515,123 @@ namespace Contacts.Core.Migrations
                     { 200, "Lake Theresiafort", 200, "879", "Deckow Streets", "17382" }
                 });
 
+            migrationBuilder.InsertData(
+                table: "ContactLabel",
+                columns: new[] { "ContactId", "LabelId" },
+                values: new object[,]
+                {
+                    { 3, 1 },
+                    { 6, 5 },
+                    { 9, 3 },
+                    { 9, 5 },
+                    { 12, 4 },
+                    { 15, 3 },
+                    { 18, 1 },
+                    { 18, 3 },
+                    { 21, 2 },
+                    { 24, 1 },
+                    { 26, 1 },
+                    { 27, 4 },
+                    { 30, 5 },
+                    { 33, 3 },
+                    { 35, 4 },
+                    { 36, 2 },
+                    { 39, 3 },
+                    { 42, 1 },
+                    { 44, 2 },
+                    { 45, 5 },
+                    { 48, 1 },
+                    { 50, 1 },
+                    { 51, 4 },
+                    { 53, 5 },
+                    { 54, 3 },
+                    { 57, 4 },
+                    { 59, 4 },
+                    { 60, 2 },
+                    { 62, 3 },
+                    { 63, 1 },
+                    { 66, 1 },
+                    { 68, 2 },
+                    { 69, 5 },
+                    { 71, 1 },
+                    { 72, 4 },
+                    { 74, 4 },
+                    { 77, 5 },
+                    { 78, 3 },
+                    { 80, 4 },
+                    { 81, 2 },
+                    { 83, 2 },
+                    { 86, 3 },
+                    { 87, 1 },
+                    { 89, 2 },
+                    { 90, 5 },
+                    { 92, 5 },
+                    { 95, 1 },
+                    { 96, 4 },
+                    { 98, 4 },
+                    { 101, 3 },
+                    { 104, 4 },
+                    { 105, 2 },
+                    { 107, 2 },
+                    { 110, 1 },
+                    { 113, 2 },
+                    { 114, 5 },
+                    { 116, 5 },
+                    { 119, 4 },
+                    { 122, 3 },
+                    { 122, 5 },
+                    { 125, 3 },
+                    { 128, 2 },
+                    { 131, 1 },
+                    { 131, 2 },
+                    { 134, 1 },
+                    { 137, 5 },
+                    { 140, 4 },
+                    { 140, 5 },
+                    { 143, 4 },
+                    { 146, 3 },
+                    { 149, 2 },
+                    { 149, 3 },
+                    { 152, 2 },
+                    { 155, 1 },
+                    { 155, 3 },
+                    { 158, 1 },
+                    { 158, 5 },
+                    { 161, 5 },
+                    { 164, 4 },
+                    { 164, 5 },
+                    { 167, 2 },
+                    { 167, 4 },
+                    { 170, 3 },
+                    { 173, 2 },
+                    { 173, 3 },
+                    { 176, 2 },
+                    { 176, 5 },
+                    { 179, 1 },
+                    { 182, 1 },
+                    { 182, 5 },
+                    { 185, 3 },
+                    { 185, 5 },
+                    { 188, 4 },
+                    { 191, 3 },
+                    { 191, 4 },
+                    { 194, 1 },
+                    { 194, 3 },
+                    { 197, 2 },
+                    { 200, 2 },
+                    { 200, 5 }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_ContactId",
                 table: "Addresses",
                 column: "ContactId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContactLabel_LabelId",
+                table: "ContactLabel",
+                column: "LabelId");
         }
 
         /// <inheritdoc />
@@ -480,7 +641,13 @@ namespace Contacts.Core.Migrations
                 name: "Addresses");
 
             migrationBuilder.DropTable(
+                name: "ContactLabel");
+
+            migrationBuilder.DropTable(
                 name: "Contacts");
+
+            migrationBuilder.DropTable(
+                name: "Labels");
         }
     }
 }

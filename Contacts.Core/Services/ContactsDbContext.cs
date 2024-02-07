@@ -1,8 +1,7 @@
-﻿using Contacts.Core.Fakes;
+﻿using Bogus;
+using Contacts.Core.Fakes;
 using Contacts.Core.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System.Diagnostics;
 
 namespace Contacts.Core.Services;
 public class ContactsDbContext(DbContextOptions<ContactsDbContext> options) : DbContext(options)
@@ -11,7 +10,7 @@ public class ContactsDbContext(DbContextOptions<ContactsDbContext> options) : Db
     public DbSet<Address> Addresses { get; set; }
     public DbSet<Label> Labels { get; set; }
 
-        
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -22,6 +21,7 @@ public class ContactsDbContext(DbContextOptions<ContactsDbContext> options) : Db
        .UsingEntity<ContactLabel>();
 
         modelBuilder.Entity<Contact>().Navigation(c => c.Address).AutoInclude();
+        modelBuilder.Entity<Contact>().Navigation(c => c.Labels).AutoInclude();
 
         ContactGenerator.Init();
         modelBuilder.Entity<Contact>().HasData(ContactGenerator.Contacts);
