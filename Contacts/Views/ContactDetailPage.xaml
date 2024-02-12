@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:h="using:Contacts.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="using:System"
     mc:Ignorable="d">
 
     <RelativePanel>
@@ -37,16 +38,22 @@
                 Label="Cancel"
                 Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
             <AppBarSeparator Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
-            <AppBarButton
+            <!--<AppBarButton
                 Click="{x:Bind ViewModel.StartEdit}"
                 Icon="Edit"
                 IsEnabled="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
+                Label="Edit"
+                Visibility="{x:Bind h:Converters.CollapsedIf(ViewModel.IsNewContact), Mode=OneWay}" />-->
+            <AppBarButton
+                Click="{x:Bind ViewModel.StartEdit}"
+                Icon="Edit"
+                IsEnabled="{x:Bind ViewModel.IsInEdit.Equals(x:False), Mode=OneWay}"
                 Label="Edit"
                 Visibility="{x:Bind h:Converters.CollapsedIf(ViewModel.IsNewContact), Mode=OneWay}" />
             <AppBarButton
                 Command="{x:Bind ViewModel.RemoveCommand}"
                 Icon="Delete"
-                IsEnabled="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
+                IsEnabled="{x:Bind ViewModel.IsInEdit.Equals(x:False), Mode=OneWay}"
                 Label="Delete"
                 Visibility="{x:Bind h:Converters.CollapsedIf(ViewModel.IsNewContact), Mode=OneWay}" />
         </CommandBar>

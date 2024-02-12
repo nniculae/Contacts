@@ -1,0 +1,6 @@
+@startuml
+actor User
+rectangle "Management Contacts App" {
+  User --> (Create Contact)
+}
+@enduml
