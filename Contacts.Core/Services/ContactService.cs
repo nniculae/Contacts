@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DesignPatternsUI.Core.Services;
 
 
-public class ContactsService(IDbContextFactory<ContactsDbContext> contextFactory) : IContactService
+public class ContactService(IDbContextFactory<ContactsDbContext> contextFactory) : IContactService
 {
     public async Task<List<Contact>> GetContactsAsync()
     {
@@ -34,33 +34,7 @@ public class ContactsService(IDbContextFactory<ContactsDbContext> contextFactory
         await context.SaveChangesAsync();
         return contact;
     }
-/*
-    public async Task<Contact> UpsertLabels2(Contact contact)
-    {
-        await using var context = await contextFactory.CreateDbContextAsync();
-        var dbContact = await context.Contacts.FindAsync(contact.Id);
 
-
-        for (int i = dbContact.Labels.Count -1; i >=0 ; i--) {
-            Label? label = dbContact.Labels[i];
-            if(!contact.Labels.Exists( l => l.Id  == label.Id))
-            {
-                dbContact.Labels.Remove(label);
-            }
-        }
-
-        foreach (var label in contact.Labels)
-        {
-            if(! dbContact.Labels.Exists(l  => l.Id == label.Id))
-            {
-                dbContact.Labels.Add(label);    
-            }
-        }
-
-        await context.SaveChangesAsync();
-        return contact;
-    }
-*/
     public async Task<Contact> UpsertLabels(Contact contact)
     {
         await using var context = await contextFactory.CreateDbContextAsync();

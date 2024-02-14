@@ -1,5 +1,7 @@
 ﻿using Contacts.Behaviors;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Contacts.Services;
 
 namespace Contacts.Views;
 public sealed partial class ContactDetailPage : Page
@@ -45,7 +47,14 @@ public sealed partial class ContactDetailPage : Page
     private async void createLabelButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         ContactLabelFlyout.Hide();
-        await ViewModel.CreateLabelAsync();
+        var element = (FrameworkElement)App.MainWindow.Content;
+        var labelName = await element.InputStringDialogAsync(
+                "Create new label",
+                "");
+        if (string.IsNullOrEmpty(labelName))
+            return;
+
+        await ViewModel.CreateLabelAsync(labelName);
         
     }
 }

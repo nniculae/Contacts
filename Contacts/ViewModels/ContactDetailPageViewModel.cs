@@ -4,15 +4,14 @@ using CommunityToolkit.Mvvm.Messaging;
 using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
-using Contacts.Services;
 using Contacts.Validators;
-using Microsoft.UI.Xaml;
 using System.Collections.ObjectModel;
 
 namespace Contacts.ViewModels;
 
 public partial class ContactDetailPageViewModel(
-    IContactService contactsService,
+    IContactService contactService,
+    ILabelService labelService,
     INavigationService navigation) :
     ObservableRecipient, INavigationAware
 {
@@ -34,7 +33,7 @@ public partial class ContactDetailPageViewModel(
     [RelayCommand]
     public async Task GetAllLabelsAsync()
     {
-        var labels = await contactsService.GetLabelsAsync();
+        var labels = await labelService.GetAllLabelsAsync();
         AllLabels.Clear();
         foreach (var label in labels)
         {
@@ -46,7 +45,7 @@ public partial class ContactDetailPageViewModel(
     {
         if (parameter is int id)
         {
-            Contact = await contactsService.FindByIdAsync(id);
+            Contact = await contactService.FindByIdAsync(id);
             IsNewContact = false;
             IsInEdit = false;
         }
@@ -66,7 +65,7 @@ public partial class ContactDetailPageViewModel(
         {
             ThisContactLabels.Add(label);
         }
-        
+
         ContactValidator = new ContactValidator(Contact!);
 
     }
@@ -88,7 +87,8 @@ public partial class ContactDetailPageViewModel(
     public async Task UpsertAsync()
     {
 
-        await contactsService.Upsert(Contact);
+
+        await contactService.Upsert(Contact);
 
         if (IsNewContact)
         {
@@ -104,37 +104,20 @@ public partial class ContactDetailPageViewModel(
     [RelayCommand]
     public async Task RemoveAsync()
     {
-        await contactsService.RemoveAsync(Contact!);
+        await contactService.RemoveAsync(Contact!);
         crud = Crud.Deleted;
         GoBack();
     }
-
+        
     [RelayCommand]
-    public async Task CreateLabelAsync()
+    public async Task CreateLabelAsync(string labelName)
     {
-        var element = (FrameworkElement)App.MainWindow.Content;
-        var labelName = await element.InputStringDialogAsync(
-                "Create new label",
-                "");
-        if (string.IsNullOrEmpty(labelName))
-            return;
-
         Label newLabel = new() { Name = labelName };
-        Contact.Labels.Add(newLabel);
-
-        Contact = await contactsService.Upsert(Contact!);
-        // maye add direct aan Labels
+        // The Label is not associated with Contact
+        await labelService.Upsert(newLabel);
         await GetAllLabelsAsync();
         ThisContactLabels.Add(newLabel);
 
-        //if (IsNewContact)
-        //{
-        //    crud = Crud.Created;
-        //}
-        //else
-        //{
-        //    crud = Crud.Updated;
-        //}
     }
     [RelayCommand]
     public async Task UpdateContactLabelsAsync()
@@ -144,7 +127,7 @@ public partial class ContactDetailPageViewModel(
         {
             Contact.Labels.Add(label);
         }
-        await contactsService.UpsertLabels(Contact);
+        await contactService.UpsertLabels(Contact);
         GoBack();
     }
 }

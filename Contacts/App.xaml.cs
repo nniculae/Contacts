@@ -75,7 +75,8 @@ public partial class App : Application
             services.AddDbContextFactory<ContactsDbContext>(options => options
                 .UseSqlite(Connection.GetSqliteConnection())
                 .EnableSensitiveDataLogging());
-            services.AddTransient<IContactService, ContactsService>();
+            services.AddTransient<IContactService, ContactService>();
+            services.AddTransient<ILabelService, LabelService>();
 
             // Views and ViewModels
             services.AddTransient<SettingsViewModel>();

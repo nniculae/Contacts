@@ -38,12 +38,6 @@
                 Label="Cancel"
                 Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
             <AppBarSeparator Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
-            <!--<AppBarButton
-                Click="{x:Bind ViewModel.StartEdit}"
-                Icon="Edit"
-                IsEnabled="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
-                Label="Edit"
-                Visibility="{x:Bind h:Converters.CollapsedIf(ViewModel.IsNewContact), Mode=OneWay}" />-->
             <AppBarButton
                 Click="{x:Bind ViewModel.StartEdit}"
                 Icon="Edit"
