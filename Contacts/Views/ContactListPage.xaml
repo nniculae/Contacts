@@ -91,6 +91,12 @@
                             <controls:WrapPanel x:Name="WrapPanelControl" />
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Margin" Value="0,0,4,4" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+
                 </ListBox>
                 <!--  https://learn.microsoft.com/en-us/answers/questions/972618/winui-3-listview-selecteditems-in-mvvm  -->
             </Grid>

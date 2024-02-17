@@ -122,6 +122,8 @@ public partial class ContactDetailPageViewModel(
     [RelayCommand]
     public async Task UpdateContactLabelsAsync()
     {
+        // raise an event;
+
         Contact.Labels.Clear();
         foreach (var label in SelectedLabels)
         {

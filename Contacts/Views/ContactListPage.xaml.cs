@@ -1,6 +1,6 @@
 ﻿using Contacts.Behaviors;
-using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Contacts.Views;
 public sealed partial class ContactListPage : Page
@@ -21,15 +21,14 @@ public sealed partial class ContactListPage : Page
     }
     public void ContactListView_Loaded(object sender, RoutedEventArgs e)
     {
-        if (!ViewModel.IsBackFromDetails)
-        {
-            return;
-        }
-
+        if (!ViewModel.IsBackFromDetails) return;
+       
         var listView = (ListView)sender;
+        if (listView.SelectedItem == null) return;
+
         listView.ScrollIntoView(listView.SelectedItem, ScrollIntoViewAlignment.Leading);
     }
 
-    
+
 
 }

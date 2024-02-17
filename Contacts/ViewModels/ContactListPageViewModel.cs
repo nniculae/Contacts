@@ -30,25 +30,26 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
 
     public async void OnNavigatedTo(object parameter)
     {
+        
         await dispatcherQueue.EnqueueCustomAsync(() =>
         {
             IsActive = true;
             ContactsDataSource.Clear();
         });
 
-        _contacts = await contactsService.GetContactsAsync();
+        if(parameter is int labelid)
+        {
+            _contacts = await contactsService.GetContactsByLabelIdAsync(labelid);
+        }
+        else
+        {
+            _contacts = await contactsService.GetContactsAsync();
+        }
+
+        
         
         await dispatcherQueue.EnqueueCustomAsync(() =>
         {
-
-
-
-            //foreach (var contact in _contacts)
-            //{
-            //    contact.Labels.OrderBy(l => l.Name);
-                
-            //}
-
 
             var groupings = _contacts.GroupBy(CreateKey).OrderBy(g => g.Key);
             foreach (var item in groupings)
@@ -82,7 +83,11 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
 
     partial void OnSelectedLabelChanged(Label value)
     {
-        NavigateToCreate();
+        // nu e bine stop bubbling, use an event, studiza problema
+        // nici linkurile nu-s bune, se vede tooltip, 
+        if (value == null) return;
+        navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, value.Id );
+        
     }
     async partial void OnSearchTextChanged(string value)
     {

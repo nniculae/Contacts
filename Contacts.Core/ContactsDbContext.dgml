@@ -1,98 +1,71 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <DirectedGraph GraphDirection="LeftToRight" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
   <Nodes>
-    <Node Id="Address" Category="EntityType" Annotations="Relational:TableName: Addresses RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" BaseClass="" Bounds="24.7966666666666,40,313.413333333333,197.88" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot" Group="Expanded" IsAbstract="False" Label="Address" Name="Address" />
-    <Node Id="Address.City" Category="Property Required" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" BeforeSaveBehavior="PropertySaveBehavior.Save" Bounds="237.376666666667,80,80.8333333333333,25.96" Field="" IsAlternateKey="False" IsConcurrencyToken="False" IsForeignKey="False" IsIndexed="False" IsPrimaryKey="False" IsRequired="True" IsShadow="False" IsUnicode="True" Label="City (string)" MaxLength="None" Name="City" PropertyAccessMode="PropertyAccessMode.Default" Type="string" ValueGenerated="None" />
-    <Node Id="Address.Contact" Category="Navigation Property" Bounds="129.346666666667,80,78.03,25.96" Dependent="" Field="" Inverse="Address" Label="Contact (1)" Name="Contact" Principal="Contact" PropertyAccessMode="PropertyAccessMode.Default" Type="Contact" />
-    <Node Id="Address.ContactId" Category="Property Foreign" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" BeforeSaveBehavior="PropertySaveBehavior.Save" Bounds="166.266666666667,135.96,95.5833333333334,25.96" Field="" IsAlternateKey="False" IsConcurrencyToken="False" IsForeignKey="True" IsIndexed="True" IsPrimaryKey="False" IsRequired="True" IsShadow="False" IsUnicode="True" Label="ContactId (int)" MaxLength="None" Name="ContactId" PropertyAccessMode="PropertyAccessMode.Default" Type="int" ValueGenerated="None" />
-    <Node Id="Address.Id" Category="Property Primary" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" BeforeSaveBehavior="PropertySaveBehavior.Save" Bounds="44.7966666666666,80,54.55,25.96" Field="" IsAlternateKey="False" IsConcurrencyToken="False" IsForeignKey="False" IsIndexed="False" IsPrimaryKey="True" IsRequired="True" IsShadow="False" IsUnicode="True" Label="Id (int)" MaxLength="None" Name="Id" PropertyAccessMode="PropertyAccessMode.Default" Type="int" ValueGenerated="ValueGenerated.OnAdd" />
-    <Node Id="Address.Number" Category="Property Required" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" BeforeSaveBehavior="PropertySaveBehavior.Save" Bounds="44.7966666666666,191.92,104.23,25.96" Field="" IsAlternateKey="False" IsConcurrencyToken="False" IsForeignKey="False" IsIndexed="False" IsPrimaryKey="False" IsRequired="True" IsShadow="False" IsUnicode="True" Label="Number (string)" MaxLength="None" Name="Number" PropertyAccessMode="PropertyAccessMode.Default" Type="string" ValueGenerated="None" />
-    <Node Id="Address.Street" Category="Property Required" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" BeforeSaveBehavior="PropertySaveBehavior.Save" Bounds="44.7966666666666,135.96,91.47,25.96" Field="" IsAlternateKey="False" IsConcurrencyToken="False" IsForeignKey="False" IsIndexed="False" IsPrimaryKey="False" IsRequired="True" IsShadow="False" IsUnicode="True" Label="Street (string)" MaxLength="None" Name="Street" PropertyAccessMode="PropertyAccessMode.Default" Type="string" ValueGenerated="None" />
-    <Node Id="Address.ZipCode" Category="Property Required" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" BeforeSaveBehavior="PropertySaveBehavior.Save" Bounds="179.026666666667,191.92,105.23,25.96" Field="" IsAlternateKey="False" IsConcurrencyToken="False" IsForeignKey="False" IsIndexed="False" IsPrimaryKey="False" IsRequired="True" IsShadow="False" IsUnicode="True" Label="ZipCode (string)" MaxLength="None" Name="ZipCode" PropertyAccessMode="PropertyAccessMode.Default" Type="string" ValueGenerated="None" />
-    <Node Id="Contact" Category="EntityType" Annotations="" BaseClass="" Bounds="20,283.84,323.006666666667,197.88" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot" Group="Expanded" IsAbstract="False" Label="Contact" Name="Contact" />
-    <Node Id="Contact.Address" Category="Navigation Property" Bounds="124.55,323.84,79.5066666666667,25.96" Dependent="Address" Field="" Inverse="Contact" Label="Address (1)" Name="Address" Principal="" PropertyAccessMode="PropertyAccessMode.Default" Type="Address" />
-    <Node Id="Contact.Email" Category="Property Required" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" BeforeSaveBehavior="PropertySaveBehavior.Save" Bounds="234.056666666667,323.84,88.95,25.96" Field="" IsAlternateKey="False" IsConcurrencyToken="False" IsForeignKey="False" IsIndexed="False" IsPrimaryKey="False" IsRequired="True" IsShadow="False" IsUnicode="True" Label="Email (string)" MaxLength="None" Name="Email" PropertyAccessMode="PropertyAccessMode.Default" Type="string" ValueGenerated="None" />
-    <Node Id="Contact.FirstName" Category="Property Required" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" BeforeSaveBehavior="PropertySaveBehavior.Save" Bounds="183.236666666667,435.76,114.42,25.96" Field="" IsAlternateKey="False" IsConcurrencyToken="False" IsForeignKey="False" IsIndexed="False" IsPrimaryKey="False" IsRequired="True" IsShadow="False" IsUnicode="True" Label="FirstName (string)" MaxLength="None" Name="FirstName" PropertyAccessMode="PropertyAccessMode.Default" Type="string" ValueGenerated="None" />
-    <Node Id="Contact.Id" Category="Property Primary" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" BeforeSaveBehavior="PropertySaveBehavior.Save" Bounds="40,323.84,54.55,25.96" Field="" IsAlternateKey="False" IsConcurrencyToken="False" IsForeignKey="False" IsIndexed="False" IsPrimaryKey="True" IsRequired="True" IsShadow="False" IsUnicode="True" Label="Id (int)" MaxLength="None" Name="Id" PropertyAccessMode="PropertyAccessMode.Default" Type="int" ValueGenerated="ValueGenerated.OnAdd" />
-    <Node Id="Contact.LastName" Category="Property Required" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" BeforeSaveBehavior="PropertySaveBehavior.Save" Bounds="40,435.76,113.236666666667,25.96" Field="" IsAlternateKey="False" IsConcurrencyToken="False" IsForeignKey="False" IsIndexed="False" IsPrimaryKey="False" IsRequired="True" IsShadow="False" IsUnicode="True" Label="LastName (string)" MaxLength="None" Name="LastName" PropertyAccessMode="PropertyAccessMode.Default" Type="string" ValueGenerated="None" />
-    <Node Id="Contact.Phone" Category="Property Required" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" BeforeSaveBehavior="PropertySaveBehavior.Save" Bounds="40,379.8,94.23,25.96" Field="" IsAlternateKey="False" IsConcurrencyToken="False" IsForeignKey="False" IsIndexed="False" IsPrimaryKey="False" IsRequired="True" IsShadow="False" IsUnicode="True" Label="Phone (string)" MaxLength="None" Name="Phone" PropertyAccessMode="PropertyAccessMode.Default" Type="string" ValueGenerated="None" />
-    <Node Id="Contact.Picture" Category="Property Required" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" BeforeSaveBehavior="PropertySaveBehavior.Save" Bounds="164.23,379.8,97.1,25.96" Field="" IsAlternateKey="False" IsConcurrencyToken="False" IsForeignKey="False" IsIndexed="False" IsPrimaryKey="False" IsRequired="True" IsShadow="False" IsUnicode="True" Label="Picture (string)" MaxLength="None" Name="Picture" PropertyAccessMode="PropertyAccessMode.Default" Type="string" ValueGenerated="None" />
-    <Node Id="IModel" Category="Model" Annotations="BaseTypeDiscoveryConvention:DerivedTypes: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.List`1[Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType]] RelationshipDiscoveryConvention:InverseNavigationCandidates: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.SortedSet`1[System.Type]]" Bounds="0,0,363.006666666667,501.72" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot" Group="Expanded" Label="ContactsDbContext" ProductVersion="8.0.0" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id="IModel" Label="ContactsDbContext" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot" PropertyAccessMode="PropertyAccessMode.Default" ProductVersion="8.0.1" Annotations="BaseTypeDiscoveryConvention:DerivedTypes: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.List`1[Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType]]
+RelationshipDiscoveryConvention:InverseNavigationCandidates: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.SortedSet`1[System.Type]]" Category="Model" Group="Expanded" />
+<Node Id = "Address" Label="Address" Name="Address" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: Addresses
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Contact" Label="Contact" Name="Contact" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: Contacts
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Address.Id" Label="Id (int)" Name="Id" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Address.Contact" Label="Contact (1)" Name="Contact" Category="Navigation Property" Type="Contact"  Field="" Dependent="" Principal="Contact" Inverse="Address" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Address.City" Label="City (string)" Name="City" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Address.ContactId" Label="ContactId (int)" Name="ContactId" Category="Property Foreign" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="True" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Address.Number" Label="Number (string)" Name="Number" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Address.Street" Label="Street (string)" Name="Street" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Address.ZipCode" Label="ZipCode (string)" Name="ZipCode" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "ContactLabel" Label="ContactLabel" Name="ContactLabel" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Contact.Id" Label="Id (int)" Name="Id" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Contact.Address" Label="Address (1)" Name="Address" Category="Navigation Property" Type="Address"  Field="" Dependent="Address" Principal="" Inverse="Contact" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Contact.ContactLabels" Label="ContactLabels (*)" Name="ContactLabels" Category="Navigation Collection" Type="List&lt;ContactLabel&gt;"  Field="" Dependent="ContactLabel" Principal="" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Contact.Labels" Label="Labels (1)" Name="Labels" Category="Navigation Property" Type="List&lt;Label&gt;"  Field="" Dependent="" Principal="" Inverse="Contacts" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Contact.Email" Label="Email (string)" Name="Email" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Contact.FirstName" Label="FirstName (string)" Name="FirstName" Category="Property Required" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Contact.LastName" Label="LastName (string)" Name="LastName" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Contact.Phone" Label="Phone (string)" Name="Phone" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Contact.Picture" Label="Picture (string)" Name="Picture" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Label" Label="Label" Name="Label" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: Labels
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "ContactLabel.ContactId" Label="ContactId (int)" Name="ContactId" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="True" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "ContactLabel.LabelId" Label="LabelId (int)" Name="LabelId" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="True" IsRequired="True" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Label" Label="Label" Name="Label" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="" Category="EntityType" Group="Expanded" />
+<Node Id = "Label.Id" Label="Id (int)" Name="Id" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Label.ContactLabels" Label="ContactLabels (*)" Name="ContactLabels" Category="Navigation Collection" Type="List&lt;ContactLabel&gt;"  Field="" Dependent="ContactLabel" Principal="" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Label.Contacts" Label="Contacts (1)" Name="Contacts" Category="Navigation Property" Type="List&lt;Contact&gt;"  Field="" Dependent="" Principal="" Inverse="Labels" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Label.Name" Label="Name (string)" Name="Name" Category="Property Required" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
   </Nodes>
   <Links>
-    <Link Source="Address" Target="Address.City" Category="Contains" />
-    <Link Source="Address" Target="Address.Contact" Category="Contains" />
-    <Link Source="Address" Target="Address.ContactId" Category="Contains" />
-    <Link Source="Address" Target="Address.Id" Category="Contains" />
-    <Link Source="Address" Target="Address.Number" Category="Contains" />
-    <Link Source="Address" Target="Address.Street" Category="Contains" />
-    <Link Source="Address" Target="Address.ZipCode" Category="Contains" />
-    <Link Source="Address" Target="Contact" Category="Foreign Key" Annotations="" Bounds="181.503326416016,237.880004882813,0,36.9599914550781" From="Address.ContactId" IsUnique="True" Label="1:1" LabelBounds="165.963333333333,252.88,15.54,15.96" Name="Address -&gt; Contact" To="Contact.Id" />
-    <Link Source="Contact" Target="Contact.Address" Category="Contains" />
-    <Link Source="Contact" Target="Contact.Email" Category="Contains" />
-    <Link Source="Contact" Target="Contact.FirstName" Category="Contains" />
-    <Link Source="Contact" Target="Contact.Id" Category="Contains" />
-    <Link Source="Contact" Target="Contact.LastName" Category="Contains" />
-    <Link Source="Contact" Target="Contact.Phone" Category="Contains" />
-    <Link Source="Contact" Target="Contact.Picture" Category="Contains" />
-    <Link Source="IModel" Target="Address" Category="Contains" />
-    <Link Source="IModel" Target="Contact" Category="Contains" />
+<Link Source = "IModel" Target="Address" Category="Contains" />
+<Link Source = "IModel" Target="Contact" Category="Contains" />
+<Link Source = "Address" Target="Address.Contact" Category="Contains" />
+<Link Source = "Address" Target="Address.Id" Category="Contains" />
+<Link Source="Address" Target="Contact" From="Address.ContactId" To="Contact.Id" Name="Address -> Contact" Annotations="" IsUnique="True" Label="1:1" Category="Foreign Key" />
+<Link Source = "Address" Target="Address.City" Category="Contains" />
+<Link Source = "Address" Target="Address.ContactId" Category="Contains" />
+<Link Source = "Address" Target="Address.Number" Category="Contains" />
+<Link Source = "Address" Target="Address.Street" Category="Contains" />
+<Link Source = "Address" Target="Address.ZipCode" Category="Contains" />
+<Link Source = "IModel" Target="ContactLabel" Category="Contains" />
+<Link Source = "Contact" Target="Contact.Address" Category="Contains" />
+<Link Source = "Contact" Target="Contact.ContactLabels" Category="Contains" />
+<Link Source = "Contact" Target="Contact.Labels" Category="Contains" />
+<Link Source = "Contact" Target="Contact.Id" Category="Contains" />
+<Link Source = "Contact" Target="Contact.Email" Category="Contains" />
+<Link Source = "Contact" Target="Contact.FirstName" Category="Contains" />
+<Link Source = "Contact" Target="Contact.LastName" Category="Contains" />
+<Link Source = "Contact" Target="Contact.Phone" Category="Contains" />
+<Link Source = "Contact" Target="Contact.Picture" Category="Contains" />
+<Link Source = "IModel" Target="Label" Category="Contains" />
+<Link Source = "ContactLabel" Target="ContactLabel.ContactId" Category="Contains" />
+<Link Source="ContactLabel" Target="Contact" From="ContactLabel.ContactId" To="Contact.Id" Name="ContactLabel -> Contact" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="ContactLabel" Target="Label" From="ContactLabel.LabelId" To="Label.Id" Name="ContactLabel -> Label" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "ContactLabel" Target="ContactLabel.LabelId" Category="Contains" />
+<Link Source = "IModel" Target="Label" Category="Contains" />
+<Link Source = "Label" Target="Label.ContactLabels" Category="Contains" />
+<Link Source = "Label" Target="Label.Contacts" Category="Contains" />
+<Link Source = "Label" Target="Label.Id" Category="Contains" />
+<Link Source = "Label" Target="Label.Name" Category="Contains" />
   </Links>
-  <Categories>
-    <Category Id="Contains" Label="Contains" Description="Whether the source of the link contains the target object" CanBeDataDriven="False" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="Contained By" IsContainment="True" OutgoingActionLabel="Contains" />
-    <Category Id="EntityType" />
-    <Category Id="Foreign Key" />
-    <Category Id="Model" />
-    <Category Id="Navigation Property" />
-    <Category Id="Property Foreign" />
-    <Category Id="Property Primary" />
-    <Category Id="Property Required" />
-  </Categories>
-  <Properties>
-    <Property Id="AfterSaveBehavior" Group="Property Flags" DataType="System.String" />
-    <Property Id="Annotations" Description="Annotations" Group="Model Properties" DataType="System.String" />
-    <Property Id="BaseClass" Description="Base class" Group="Model Properties" DataType="System.String" />
-    <Property Id="BeforeSaveBehavior" Group="Property Flags" DataType="System.String" />
-    <Property Id="Bounds" DataType="System.Windows.Rect" />
-    <Property Id="CanBeDataDriven" Label="CanBeDataDriven" Description="CanBeDataDriven" DataType="System.Boolean" />
-    <Property Id="CanLinkedNodesBeDataDriven" Label="CanLinkedNodesBeDataDriven" Description="CanLinkedNodesBeDataDriven" DataType="System.Boolean" />
-    <Property Id="ChangeTrackingStrategy" Description="Change tracking strategy" Group="Model Properties" DataType="System.String" />
-    <Property Id="Dependent" Description="Dependent entity" Group="Model Properties" DataType="System.String" />
-    <Property Id="Expression" DataType="System.String" />
-    <Property Id="Field" Description="Backing field" Group="Model Properties" DataType="System.String" />
-    <Property Id="From" Description="Target property" Group="Model Properties" DataType="System.String" />
-    <Property Id="GraphDirection" DataType="Microsoft.VisualStudio.Diagrams.Layout.LayoutOrientation" />
-    <Property Id="Group" Label="Group" Description="Display the node as a group" DataType="Microsoft.VisualStudio.GraphModel.GraphGroupStyle" />
-    <Property Id="GroupLabel" DataType="System.String" />
-    <Property Id="IncomingActionLabel" Label="IncomingActionLabel" Description="IncomingActionLabel" DataType="System.String" />
-    <Property Id="Inverse" Description="Inverse entity" Group="Model Properties" DataType="System.String" />
-    <Property Id="IsAbstract" Label="IsAbstract" Description="IsAbstract" Group="Model Properties" DataType="System.Boolean" />
-    <Property Id="IsAlternateKey" Group="Property Flags" DataType="System.Boolean" />
-    <Property Id="IsConcurrencyToken" Group="Property Flags" DataType="System.Boolean" />
-    <Property Id="IsContainment" DataType="System.Boolean" />
-    <Property Id="IsEnabled" DataType="System.Boolean" />
-    <Property Id="IsForeignKey" Group="Property Flags" DataType="System.Boolean" />
-    <Property Id="IsIndexed" Group="Property Flags" DataType="System.Boolean" />
-    <Property Id="IsPrimaryKey" Group="Property Flags" DataType="System.Boolean" />
-    <Property Id="IsRequired" Group="Property Flags" DataType="System.Boolean" />
-    <Property Id="IsShadow" Group="Property Flags" DataType="System.Boolean" />
-    <Property Id="IsUnicode" Group="Property Flags" DataType="System.Boolean" />
-    <Property Id="IsUnique" Group="Model Properties" DataType="System.Boolean" />
-    <Property Id="Label" Label="Label" Description="Displayable label of an Annotatable object" DataType="System.String" />
-    <Property Id="LabelBounds" DataType="System.Windows.Rect" />
-    <Property Id="MaxLength" DataType="System.String" />
-    <Property Id="Name" Group="Model Properties" DataType="System.String" />
-    <Property Id="OutgoingActionLabel" Label="OutgoingActionLabel" Description="OutgoingActionLabel" DataType="System.String" />
-    <Property Id="Principal" Description="Principal entity" Group="Model Properties" DataType="System.String" />
-    <Property Id="ProductVersion" Label="Product Version" Description="EF Core product version" Group="Model Properties" DataType="System.String" />
-    <Property Id="PropertyAccessMode" Group="Property Flags" DataType="System.String" />
-    <Property Id="TargetType" DataType="System.Type" />
-    <Property Id="To" Description="Source property" Group="Model Properties" DataType="System.String" />
-    <Property Id="Type" Description="CLR data type" Group="Model Properties" DataType="System.String" />
-    <Property Id="Value" DataType="System.String" />
-    <Property Id="ValueGenerated" Group="Property Flags" DataType="System.String" />
-    <Property Id="ValueLabel" DataType="System.String" />
-  </Properties>
   <Styles>
     <Style TargetType="Node" GroupLabel="EntityType" ValueLabel="True">
       <Condition Expression="HasCategory('EntityType')" />
@@ -127,4 +100,33 @@
       <Setter Property="Background" Value="#FFFFFFFF" />
     </Style>
   </Styles>
+  <Properties>
+    <Property Id="Name" Group="Model Properties" DataType="System.String" />
+    <Property Id="Field"  Description="Backing field" Group="Model Properties" DataType="System.String" />
+    <Property Id="Type"  Description="CLR data type" Group="Model Properties" DataType="System.String" />
+    <Property Id="To" Description="Source property" Group="Model Properties" DataType="System.String" />
+    <Property Id="From" Description="Target property" Group="Model Properties" DataType="System.String" />
+    <Property Id="Dependent" Description="Dependent entity" Group="Model Properties" DataType="System.String" />
+    <Property Id="Inverse" Description="Inverse entity" Group="Model Properties" DataType="System.String" />
+    <Property Id="Principal" Description="Principal entity" Group="Model Properties" DataType="System.String" />    
+    <Property Id="Annotations" Description="Annotations" Group="Model Properties" DataType="System.String" />
+    <Property Id="BaseClass"  Description="Base class" Group="Model Properties" DataType="System.String" />
+    <Property Id="ChangeTrackingStrategy" Description="Change tracking strategy" Group="Model Properties" DataType="System.String" />
+    <Property Id="IsUnique" Group="Model Properties" DataType="System.Boolean" />
+    <Property Id="IsAbstract" Group="Model Properties" DataType="System.Boolean" />
+    <Property Id="ProductVersion" Label="Product Version" Description="EF Core product version" Group="Model Properties" DataType="System.String" />
+    <Property Id="IsIndexed" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsRequired" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsPrimaryKey" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsForeignKey" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsShadow" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsAlternateKey" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsConcurrencyToken" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsIndexed" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsUnicode" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="ValueGenerated" Group="Property Flags" DataType="System.String" />
+    <Property Id="BeforeSaveBehavior" Group="Property Flags" DataType="System.String" />
+    <Property Id="AfterSaveBehavior" Group="Property Flags" DataType="System.String" />
+    <Property Id="PropertyAccessMode" Group="Property Flags" DataType="System.String" />
+  </Properties>
 </DirectedGraph>

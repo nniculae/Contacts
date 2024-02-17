@@ -1,12 +1,10 @@
 ﻿using Contacts.Contracts.Services;
 using Contacts.Helpers;
-using Contacts.ViewModels;
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-
+using System.Collections.ObjectModel;
 using Windows.System;
 
 namespace Contacts.Views;
@@ -81,5 +79,19 @@ public sealed partial class ShellPage : Page
         var result = navigationService.GoBack();
 
         args.Handled = result;
+    }
+    // https://learn.microsoft.com/en-us/windows/winui/api/microsoft.ui.xaml.controls.navigationviewitem.menuitemssource?view=winui-2.8
+    private void NavigationViewControl_Loaded(object sender, RoutedEventArgs e)
+    {
+        EnsureSelected();
+    }
+
+    private void EnsureSelected()
+    {
+        if (NavigationViewControl.SelectedItem == null)
+        {
+            var items = NavigationViewControl.MenuItemsSource as ObservableCollection<NavigationViewItemBase>;
+            NavigationViewControl.SelectedItem = items?.FirstOrDefault();
+        }
     }
 }

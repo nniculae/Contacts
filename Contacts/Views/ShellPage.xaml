@@ -10,6 +10,12 @@
     Loaded="OnLoaded">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <!--  TitleBar  -->
+            <RowDefinition Height="*" />
+            <!--  NavView  -->
+        </Grid.RowDefinitions>
         <Grid
             x:Name="AppTitleBar"
             Height="{Binding ElementName=NavigationViewControl, Path=CompactPaneLength}"
@@ -30,6 +36,7 @@
         </Grid>
         <NavigationView
             x:Name="NavigationViewControl"
+            Grid.Row="1"
             Canvas.ZIndex="0"
             DisplayModeChanged="NavigationViewControl_DisplayModeChanged"
             ExpandedModeThresholdWidth="1280"
@@ -37,15 +44,21 @@
             IsBackButtonVisible="Visible"
             IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
             IsSettingsVisible="True"
+            Loaded="NavigationViewControl_Loaded"
+            MenuItemsSource="{x:Bind ViewModel.MenuItems, Mode=OneTime}"
             SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}">
 
-            <NavigationView.MenuItems>
-                <NavigationViewItem x:Uid="Shell_ContactList" helpers:NavigationHelper.NavigateTo="Contacts.ViewModels.ContactListPageViewModel">
+            <!--<NavigationView.MenuItems>
+                <NavigationViewItem
+                    x:Uid="Shell_ContactList"
+                    helpers:NavigationHelper.NavigateTo="Contacts.ViewModels.ContactListPageViewModel"
+                    Tag="ListContactsInit">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE779;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-            </NavigationView.MenuItems>
+                <NavigationViewItemHeader x:Name="Labels_ItemHeader" Content="Labels" />
+            </NavigationView.MenuItems>-->
             <NavigationView.HeaderTemplate>
                 <DataTemplate>
                     <Grid>

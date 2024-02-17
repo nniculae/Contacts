@@ -14,6 +14,12 @@ public class ContactService(IDbContextFactory<ContactsDbContext> contextFactory)
         return await context.Contacts.OrderBy(c => c.FirstName).AsNoTracking().ToListAsync();
     }
 
+    public async Task<List<Contact>> GetContactsByLabelIdAsync(int labelId)
+    {
+        await using var context = await contextFactory.CreateDbContextAsync();
+        return await context.Contacts.Where(c => c.Labels.FirstOrDefault(l => l.Id == labelId) != null).OrderBy(c => c.FirstName).AsNoTracking().ToListAsync();
+    }
+
     public async Task<List<Label>> GetLabelsAsync()
     {
         await using var context = await contextFactory.CreateDbContextAsync();
