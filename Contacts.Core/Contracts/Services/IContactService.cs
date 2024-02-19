@@ -8,7 +8,7 @@ public interface IContactService
     Task<Contact> RemoveAsync(Contact contact);
     Task<Contact?> FindByIdAsync(int id);
     Task<List<Label>> GetLabelsAsync();
-    Task<Contact> UpsertLabels(Contact contact);
+    Task<Contact> UpsertLabels(Contact contact, bool isNew = false);
     Task<List<Contact>> GetContactsByLabelIdAsync(int labelId);
 
     //public IList<IGrouping<string, Contact>> GetContactsGrouped();

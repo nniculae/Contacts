@@ -48,17 +48,6 @@
             MenuItemsSource="{x:Bind ViewModel.MenuItems, Mode=OneTime}"
             SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}">
 
-            <!--<NavigationView.MenuItems>
-                <NavigationViewItem
-                    x:Uid="Shell_ContactList"
-                    helpers:NavigationHelper.NavigateTo="Contacts.ViewModels.ContactListPageViewModel"
-                    Tag="ListContactsInit">
-                    <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE779;" />
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItemHeader x:Name="Labels_ItemHeader" Content="Labels" />
-            </NavigationView.MenuItems>-->
             <NavigationView.HeaderTemplate>
                 <DataTemplate>
                     <Grid>
@@ -66,6 +55,7 @@
                     </Grid>
                 </DataTemplate>
             </NavigationView.HeaderTemplate>
+
             <i:Interaction.Behaviors>
                 <behaviors:NavigationViewHeaderBehavior DefaultHeader="{x:Bind ((ContentControl)ViewModel.Selected).Content, Mode=OneWay}">
                     <behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
@@ -77,6 +67,7 @@
                     </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
                 </behaviors:NavigationViewHeaderBehavior>
             </i:Interaction.Behaviors>
+
             <Grid Margin="{StaticResource NavigationViewPageContentMargin}">
                 <Frame x:Name="NavigationFrame" />
             </Grid>

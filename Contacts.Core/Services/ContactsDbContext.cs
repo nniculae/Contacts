@@ -20,8 +20,9 @@ public class ContactsDbContext(DbContextOptions<ContactsDbContext> options) : Db
        .WithMany(e => e.Contacts)
        .UsingEntity<ContactLabel>();
 
-        modelBuilder.Entity<Contact>().Navigation(c => c.Address).AutoInclude();
-        modelBuilder.Entity<Contact>().Navigation(c => c.Labels).AutoInclude();
+        // maybe this is not needed, i used it for autoinclude
+        //modelBuilder.Entity<Contact>().Navigation(c => c.Address);
+        //modelBuilder.Entity<Contact>().Navigation(c => c.Labels);
 
         ContactGenerator.Init();
         modelBuilder.Entity<Contact>().HasData(ContactGenerator.Contacts);

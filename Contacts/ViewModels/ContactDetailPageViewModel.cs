@@ -6,6 +6,7 @@ using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
 using Contacts.Validators;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace Contacts.ViewModels;
 
@@ -21,10 +22,12 @@ public partial class ContactDetailPageViewModel(
     private bool _isInEdit = false;
     [ObservableProperty]
     private bool _isNewContact = false;
-
     [ObservableProperty]
     public bool _areSelectedLabelsDifferent = false;
+
+    // The labels in the flyout
     public ObservableCollection<Label> AllLabels = [];
+    // The labels associated temporarily with current Contact
     public ObservableCollection<Label> ThisContactLabels = [];
     public List<Label> SelectedLabels = [];
     private Crud crud = Crud.Read;
@@ -87,7 +90,6 @@ public partial class ContactDetailPageViewModel(
     public async Task UpsertAsync()
     {
 
-
         await contactService.Upsert(Contact);
 
         if (IsNewContact)
@@ -110,26 +112,53 @@ public partial class ContactDetailPageViewModel(
     }
         
     [RelayCommand]
-    public async Task CreateLabelAsync(string labelName)
+    public async Task<Label> CreateLabelAsync(string labelName)
     {
         Label newLabel = new() { Name = labelName };
         // The Label is not associated with Contact
-        await labelService.Upsert(newLabel);
-        await GetAllLabelsAsync();
-        ThisContactLabels.Add(newLabel);
+         await labelService.Upsert(newLabel);
+         await GetAllLabelsAsync();
+         ThisContactLabels.Add(newLabel);
+        Contact.Labels.Add(newLabel);
+
+        return newLabel;
 
     }
     [RelayCommand]
     public async Task UpdateContactLabelsAsync()
     {
         // raise an event;
+        UpdateLabelListsInMemory();
 
+        try
+        {
+            if(IsNewContact)
+            {
+                await contactService.UpsertLabels(Contact, true);
+            }
+            else
+            {
+                await contactService.UpsertLabels(Contact);
+            }
+           
+
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+        GoBack();
+    }
+
+    [RelayCommand]
+    public void UpdateLabelListsInMemory()
+    {
         Contact.Labels.Clear();
+        ThisContactLabels.Clear();
         foreach (var label in SelectedLabels)
         {
             Contact.Labels.Add(label);
+            ThisContactLabels.Add(label);
         }
-        await contactService.UpsertLabels(Contact);
-        GoBack();
     }
 }

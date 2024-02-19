@@ -1,5 +1,5 @@
-﻿using Contacts.Core.Models;
-using Contacts.Core.Services;
+﻿using Contacts.Core.Dto;
+using Contacts.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +11,6 @@ public interface ILabelService
 {
     Task<List<Label>> GetAllLabelsAsync();
     Task<List<LabelsWithContactsCountDto>> GetLabelsWithContactsCountAsync();
+    Task<Label> RemoveAsync(Label label);
     Task<Label> Upsert(Label label);
 }

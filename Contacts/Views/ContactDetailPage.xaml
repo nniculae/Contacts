@@ -26,8 +26,9 @@
                 Icon="Back"
                 Label="Back" />
             <AppBarButton
+                x:Name="SaveButton"
                 AllowFocusOnInteraction="True"
-                Command="{x:Bind ViewModel.UpsertCommand}"
+                Command="{x:Bind ViewModel.UpdateContactLabelsCommand}"
                 Icon="Save"
                 IsEnabled="{x:Bind h:Converters.Not(ViewModel.ContactValidator.HasErrors), Mode=OneWay}"
                 Label="Save"
@@ -198,6 +199,7 @@
                             <Button
                                 Margin="8,0,0,0"
                                 Command="{x:Bind ViewModel.GetAllLabelsCommand}"
+                                IsEnabled="{x:Bind ViewModel.IsInEdit, Mode=OneWay}"
                                 ToolTipService.ToolTip="Manage labels">
                                 <Button.Content>
                                     <FontIcon Glyph="&#xEB7E;" />
@@ -219,7 +221,7 @@
                                             <ListView
                                                 x:Name="AllLabelsListView"
                                                 Grid.Row="1"
-                                                ItemsSource="{x:Bind ViewModel.AllLabels}"
+                                                ItemsSource="{x:Bind ViewModel.AllLabels, Mode=OneWay}"
                                                 Loaded="AllLabelsListView_Loaded"
                                                 SelectionChanged="AllLabelsListView_SelectionChanged"
                                                 SelectionMode="Multiple">
@@ -231,7 +233,7 @@
                                             </ListView>
                                             <Button
                                                 Grid.Row="2"
-                                                Command="{x:Bind ViewModel.UpdateContactLabelsCommand}"
+                                                Click="ApplyLabelChanges_Click"
                                                 Visibility="{x:Bind h:Converters.ToggleVisibility(createLabelButton.Visibility), Mode=OneWay}">
                                                 Apply changes
                                             </Button>

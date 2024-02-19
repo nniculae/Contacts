@@ -14,7 +14,8 @@ public sealed partial class ContactDetailPage : Page
         NavigationViewHeaderBehavior.SetHeaderMode(this, NavigationViewHeaderMode.Never);
     }
 
-    private void AllLabelsListView_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    // it is raise when i click the manage(edit) button
+    private void AllLabelsListView_Loaded(object sender, RoutedEventArgs e)
     {
         foreach (var label in ViewModel.Contact.Labels)
         {
@@ -54,7 +55,15 @@ public sealed partial class ContactDetailPage : Page
         if (string.IsNullOrEmpty(labelName))
             return;
 
-        await ViewModel.CreateLabelAsync(labelName);
-        
+        Label l =  await ViewModel.CreateLabelAsync(labelName);
+        //var si = AllLabelsListView.Items;
+        //AllLabelsListView.Items.Fin
+        //var selectedItems = AllLabelsListView.SelectedItems;
+         // AllLabelsListView.SelectedItems.Add(l);
+    }
+    public void ApplyLabelChanges_Click(object sender, RoutedEventArgs e)
+    {
+        ViewModel.UpdateLabelListsInMemory();
+        ContactLabelFlyout.Hide();
     }
 }
