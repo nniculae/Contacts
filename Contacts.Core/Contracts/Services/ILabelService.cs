@@ -10,6 +10,7 @@ namespace Contacts.Core.Contracts.Services;
 public interface ILabelService
 {
     Task<List<Label>> GetAllLabelsAsync();
+    Task<List<Label>> GetLabelsByContactId(int contactId);
     Task<List<LabelsWithContactsCountDto>> GetLabelsWithContactsCountAsync();
     Task<Label> RemoveAsync(Label label);
     Task<Label> Upsert(Label label);

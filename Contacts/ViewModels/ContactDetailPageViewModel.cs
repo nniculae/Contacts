@@ -28,22 +28,12 @@ public partial class ContactDetailPageViewModel(
     // The labels in the flyout
     public ObservableCollection<Label> AllLabels = [];
     // The labels associated temporarily with current Contact
-    public ObservableCollection<Label> ThisContactLabels = [];
-    public List<Label> SelectedLabels = [];
+    public ObservableCollection<Label> ContactLabels = [];
+
     private Crud crud = Crud.Read;
     public ContactValidator ContactValidator { get; set; } = null!;
 
-    [RelayCommand]
-    public async Task GetAllLabelsAsync()
-    {
-        var labels = await labelService.GetAllLabelsAsync();
-        AllLabels.Clear();
-        foreach (var label in labels)
-        {
-            AllLabels.Add(label);
-        }
 
-    }
     public async void OnNavigatedTo(object parameter)
     {
         if (parameter is int id)
@@ -63,18 +53,42 @@ public partial class ContactDetailPageViewModel(
             IsNewContact = true;
             IsInEdit = true;
         }
-        ThisContactLabels.Clear();
-        foreach (var label in Contact.Labels)
-        {
-            ThisContactLabels.Add(label);
-        }
+
+        await SetContactLabels();
+        await SetAllLabelsAsync();
 
         ContactValidator = new ContactValidator(Contact!);
 
     }
 
+    private async Task SetContactLabels()
+    {
+        ContactLabels.Clear();
+        var contactLabels = await labelService.GetLabelsByContactId(Contact.Id);
+
+        foreach (var label in contactLabels)
+        {
+            ContactLabels.Add(label);
+
+        }
+
+    }
+
+    [RelayCommand]
+    public async Task SetAllLabelsAsync()
+    {
+        var labels = await labelService.GetAllLabelsAsync();
+        AllLabels.Clear();
+        foreach (var label in labels)
+        {
+            AllLabels.Add(label);
+        }
+
+    }
+
     public void OnNavigatedFrom()
     {
+        contactService.Dispose();
         var message = new ContactChangedMessage(Contact!.Id, CrudStringMessage.FormatMessage(Contact.Name, crud));
         ((WeakReferenceMessenger)Messenger).Send(message);
     }
@@ -86,23 +100,7 @@ public partial class ContactDetailPageViewModel(
     {
         IsInEdit = true;
     }
-    [RelayCommand]
-    public async Task UpsertAsync()
-    {
 
-        await contactService.Upsert(Contact);
-
-        if (IsNewContact)
-        {
-            crud = Crud.Created;
-        }
-        else
-        {
-            crud = Crud.Updated;
-        }
-
-        GoBack();
-    }
     [RelayCommand]
     public async Task RemoveAsync()
     {
@@ -110,16 +108,13 @@ public partial class ContactDetailPageViewModel(
         crud = Crud.Deleted;
         GoBack();
     }
-        
-    [RelayCommand]
-    public async Task<Label> CreateLabelAsync(string labelName)
+
+
+    public Label CreateLabelInMemory(string labelName)
     {
         Label newLabel = new() { Name = labelName };
-        // The Label is not associated with Contact
-         await labelService.Upsert(newLabel);
-         await GetAllLabelsAsync();
-         ThisContactLabels.Add(newLabel);
-        Contact.Labels.Add(newLabel);
+        ContactLabels.Add(newLabel);
+        AllLabels.Add(newLabel);
 
         return newLabel;
 
@@ -127,38 +122,57 @@ public partial class ContactDetailPageViewModel(
     [RelayCommand]
     public async Task UpdateContactLabelsAsync()
     {
-        // raise an event;
-        UpdateLabelListsInMemory();
+
+        // remove
+        for (int i = Contact.Labels.Count - 1; i >= 0; i--)
+        {
+            if (!ContactLabels.Contains(Contact.Labels[i], EqualityComparer<Label>.Create(
+                    (left, right) => left.Id.CompareTo(right.Id) == 0
+                )))
+            {
+
+                Contact.Labels.Remove(Contact.Labels[i]);
+            }
+        }
+        // add 
+        foreach (var item in ContactLabels)
+        {
+
+            if (!Contact.Labels.Contains(item, EqualityComparer<Label>.Create(
+                (left, right) => left.Id.CompareTo(right.Id) == 0
+                )))
+            {
+                Contact.Labels.Add(item);
+            }
+        }
+
+
+
+        //foreach (var label in ContactLabels)
+        //{
+
+
+        //    Contact.Labels.Add(label);
+        //}
 
         try
         {
-            if(IsNewContact)
-            {
-                await contactService.UpsertLabels(Contact, true);
-            }
-            else
-            {
-                await contactService.UpsertLabels(Contact);
-            }
-           
-
+            await contactService.SaveAsync();
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex);
+            //https://www.youtube.com/watch?v=A99OyThMaW8&ab_channel=DeepDiveDotnet
+            // https://learn.microsoft.com/en-us/ef/core/change-tracking/identity-resolution
+            Debug.WriteLine(ex.Message);
+
         }
+        finally
+        {
+            contactService.Dispose();
+        }
+
         GoBack();
     }
 
-    [RelayCommand]
-    public void UpdateLabelListsInMemory()
-    {
-        Contact.Labels.Clear();
-        ThisContactLabels.Clear();
-        foreach (var label in SelectedLabels)
-        {
-            Contact.Labels.Add(label);
-            ThisContactLabels.Add(label);
-        }
-    }
+
 }

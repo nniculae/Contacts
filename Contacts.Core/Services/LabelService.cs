@@ -48,4 +48,17 @@ public class LabelService(IDbContextFactory<ContactsDbContext> contextFactory) :
         return label;
     }
 
+    public async Task<List<Label>> GetLabelsByContactId(int contactId)
+    {
+        await using var context = contextFactory.CreateDbContext();
+       
+        return await context
+            .Labels
+            .Where(l => l.Contacts.FirstOrDefault(c => c.Id == contactId) != null)
+            .OrderBy(l => l.Name)
+            .AsNoTracking()
+            .ToListAsync();
+            
+    }
+
 }

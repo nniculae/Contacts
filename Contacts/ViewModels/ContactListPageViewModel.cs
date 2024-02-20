@@ -63,6 +63,7 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     }
     public void OnNavigatedFrom()
     {
+        contactsService.Dispose();
         IsActive = false;
     }
     [RelayCommand]

@@ -17,7 +17,13 @@ public sealed partial class ContactDetailPage : Page
     // it is raise when i click the manage(edit) button
     private void AllLabelsListView_Loaded(object sender, RoutedEventArgs e)
     {
-        foreach (var label in ViewModel.Contact.Labels)
+        SelectItems();
+    }
+
+    private void SelectItems()
+    {
+        
+        foreach (var label in ViewModel.ContactLabels)
         {
             foreach (var label2 in AllLabelsListView.Items)
             {
@@ -31,18 +37,18 @@ public sealed partial class ContactDetailPage : Page
 
     private void AllLabelsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        
+
         var allLabels = AllLabelsListView.SelectedItems.Cast<Label>().ToList();
 
         bool areEquivalent = allLabels.OrderBy(x => x.Id)
             .SequenceEqual(
-                ViewModel.Contact.Labels.OrderBy(x => x.Id),
+                ViewModel.ContactLabels.OrderBy(x => x.Id),
                 EqualityComparer<Label>.Create(
                     (x, y) => x.Id.CompareTo(y.Id) == 0)
                 );
-
-      ViewModel.AreSelectedLabelsDifferent = !areEquivalent;
-      ViewModel.SelectedLabels = allLabels;  
+        
+      ViewModel.AreSelectedLabelsDifferent = !areEquivalent ;
+      
     }
 
     private async void createLabelButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -55,15 +61,22 @@ public sealed partial class ContactDetailPage : Page
         if (string.IsNullOrEmpty(labelName))
             return;
 
-        Label l =  await ViewModel.CreateLabelAsync(labelName);
-        //var si = AllLabelsListView.Items;
-        //AllLabelsListView.Items.Fin
-        //var selectedItems = AllLabelsListView.SelectedItems;
-         // AllLabelsListView.SelectedItems.Add(l);
+        Label l =   ViewModel.CreateLabelInMemory(labelName);
+        AllLabelsListView.SelectedItems.Add(l);
+
+
+
     }
     public void ApplyLabelChanges_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel.UpdateLabelListsInMemory();
+        
+        ViewModel.ContactLabels.Clear();
+
+        foreach (var item in AllLabelsListView.SelectedItems)
+        {
+            ViewModel.ContactLabels.Add((Label)item);
+        }
+       
         ContactLabelFlyout.Hide();
     }
 }
