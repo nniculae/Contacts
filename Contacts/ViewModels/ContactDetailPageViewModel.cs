@@ -22,8 +22,11 @@ public partial class ContactDetailPageViewModel(
     private bool _isInEdit = false;
     [ObservableProperty]
     private bool _isNewContact = false;
+   
     [ObservableProperty]
-    public bool _areSelectedLabelsDifferent = false;
+    [NotifyPropertyChangedFor(nameof(IsCreateLabelButtonVisible))]
+    public bool _isApplyChangesButtonVisible = false;
+    public bool IsCreateLabelButtonVisible => !IsApplyChangesButtonVisible;
 
     // The labels in the flyout
     public ObservableCollection<Label> AllLabels = [];
@@ -123,37 +126,21 @@ public partial class ContactDetailPageViewModel(
     public async Task UpdateContactLabelsAsync()
     {
 
-        // remove
-        for (int i = Contact.Labels.Count - 1; i >= 0; i--)
-        {
-            if (!ContactLabels.Contains(Contact.Labels[i], EqualityComparer<Label>.Create(
-                    (left, right) => left.Id.CompareTo(right.Id) == 0
-                )))
-            {
+        var labelsToRemove = Contact.Labels.Where(label => !ContactLabels.Contains(label, EqualityComparer<Label>.Create(
+        (left, right) => left.Id.CompareTo(right.Id) == 0))).ToList();
 
-                Contact.Labels.Remove(Contact.Labels[i]);
-            }
-        }
-        // add 
-        foreach (var item in ContactLabels)
-        {
+        var labelsToAdd = ContactLabels.Where(label => !Contact.Labels.Contains(label, EqualityComparer<Label>.Create(
+            (left, right) => left.Id.CompareTo(right.Id) == 0))).ToList();
 
-            if (!Contact.Labels.Contains(item, EqualityComparer<Label>.Create(
-                (left, right) => left.Id.CompareTo(right.Id) == 0
-                )))
-            {
-                Contact.Labels.Add(item);
-            }
+
+        foreach (var label in labelsToRemove)
+        {
+            Contact.Labels.Remove(label);
         }
 
+        Contact.Labels.AddRange(labelsToAdd);
 
 
-        //foreach (var label in ContactLabels)
-        //{
-
-
-        //    Contact.Labels.Add(label);
-        //}
 
         try
         {

@@ -51,7 +51,7 @@ public class ContactService : IContactService
     //        .AsNoTracking()
     //        .ToListAsync();
     //}
-    public async Task<Contact?> FindByIdAsync(int id)
+    public async Task<Contact> FindByIdAsync(int id)
     {
         //await using var context = await contextFactory.CreateDbContextAsync();
         return await _context

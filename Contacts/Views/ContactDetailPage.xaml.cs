@@ -2,6 +2,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Contacts.Services;
+using System.Diagnostics;
 
 namespace Contacts.Views;
 public sealed partial class ContactDetailPage : Page
@@ -38,17 +39,8 @@ public sealed partial class ContactDetailPage : Page
     private void AllLabelsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
 
-        var allLabels = AllLabelsListView.SelectedItems.Cast<Label>().ToList();
+        ToggleCreateAndApplyButtons();
 
-        bool areEquivalent = allLabels.OrderBy(x => x.Id)
-            .SequenceEqual(
-                ViewModel.ContactLabels.OrderBy(x => x.Id),
-                EqualityComparer<Label>.Create(
-                    (x, y) => x.Id.CompareTo(y.Id) == 0)
-                );
-        
-      ViewModel.AreSelectedLabelsDifferent = !areEquivalent ;
-      
     }
 
     private async void createLabelButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -64,6 +56,8 @@ public sealed partial class ContactDetailPage : Page
         Label l =   ViewModel.CreateLabelInMemory(labelName);
         AllLabelsListView.SelectedItems.Add(l);
 
+        ToggleCreateAndApplyButtons();
+
 
 
     }
@@ -76,7 +70,25 @@ public sealed partial class ContactDetailPage : Page
         {
             ViewModel.ContactLabels.Add((Label)item);
         }
-       
+
         ContactLabelFlyout.Hide();
+
+        ToggleCreateAndApplyButtons();
+    }
+
+    private void ToggleCreateAndApplyButtons()
+    {
+        var allLabels = AllLabelsListView.SelectedItems.Cast<Label>().ToList();
+
+        bool areEquivalent = allLabels.OrderBy(x => x.Id)
+            .SequenceEqual(
+                ViewModel.ContactLabels.OrderBy(x => x.Id),
+                EqualityComparer<Label>.Create(
+                    (x, y) => x.Id.CompareTo(y.Id) == 0)
+                );
+
+
+        ViewModel.IsApplyChangesButtonVisible = !areEquivalent;
+
     }
 }

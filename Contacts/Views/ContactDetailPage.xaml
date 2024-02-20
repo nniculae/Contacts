@@ -198,7 +198,6 @@
                             <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Labels" />
                             <Button
                                 Margin="8,0,0,0"
-                                
                                 IsEnabled="{x:Bind ViewModel.IsInEdit, Mode=OneWay}"
                                 ToolTipService.ToolTip="Manage labels">
                                 <Button.Content>
@@ -232,16 +231,17 @@
                                                 </ListView.ItemTemplate>
                                             </ListView>
                                             <Button
+                                                x:Name="ApplyChangesButton"
                                                 Grid.Row="2"
                                                 Click="ApplyLabelChanges_Click"
-                                                Visibility="{x:Bind h:Converters.ToggleVisibility(createLabelButton.Visibility), Mode=OneWay}">
+                                                Visibility="{x:Bind ViewModel.IsApplyChangesButtonVisible, Mode=OneWay}">
                                                 Apply changes
                                             </Button>
                                             <Button
                                                 x:Name="createLabelButton"
                                                 Grid.Row="2"
                                                 Click="createLabelButton_Click"
-                                                Visibility="{x:Bind h:Converters.CollapsedIf(ViewModel.AreSelectedLabelsDifferent), Mode=OneWay}">
+                                                Visibility="{x:Bind ViewModel.IsCreateLabelButtonVisible, Mode=OneWay}">
                                                 <Button.Content>
                                                     <StackPanel Orientation="Horizontal">
                                                         <FontIcon Margin="0,0,12,0" Glyph="&#xE710;" />
