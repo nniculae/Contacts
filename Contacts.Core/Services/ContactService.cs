@@ -63,7 +63,7 @@ public class ContactService : IContactService
             .FirstAsync(c => c.Id == id);
     }
 
-    public async Task<Contact> Upsert(Contact contact)
+    public async Task<Contact> AddAsync(Contact contact)
     {
         //await using var context = await contextFactory.CreateDbContextAsync();
 

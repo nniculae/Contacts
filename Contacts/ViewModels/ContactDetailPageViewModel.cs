@@ -61,7 +61,6 @@ public partial class ContactDetailPageViewModel(
         await SetAllLabelsAsync();
 
         ContactValidator = new ContactValidator(Contact!);
-
     }
 
     private async Task SetContactLabels()
@@ -97,7 +96,7 @@ public partial class ContactDetailPageViewModel(
     }
     public void GoBack()
     {
-        navigation.GoBack();
+        navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
     }
     public void StartEdit()
     {
@@ -126,6 +125,9 @@ public partial class ContactDetailPageViewModel(
     public async Task UpdateContactLabelsAsync()
     {
 
+        // https://www.youtube.com/watch?v=A99OyThMaW8&ab_channel=DeepDiveDotnet
+        //  https://learn.microsoft.com/en-us/ef/core/change-tracking/identity-resolution
+
         var labelsToRemove = Contact.Labels.Where(label => !ContactLabels.Contains(label, EqualityComparer<Label>.Create(
         (left, right) => left.Id.CompareTo(right.Id) == 0))).ToList();
 
@@ -140,25 +142,19 @@ public partial class ContactDetailPageViewModel(
 
         Contact.Labels.AddRange(labelsToAdd);
 
+        if(IsNewContact)
+        {
+            await contactService.AddAsync(Contact);
+            crud = Crud.Created;
 
-
-        try
+        }
+        else
         {
             await contactService.SaveAsync();
+            crud = Crud.Updated;
         }
-        catch (Exception ex)
-        {
-            //https://www.youtube.com/watch?v=A99OyThMaW8&ab_channel=DeepDiveDotnet
-            // https://learn.microsoft.com/en-us/ef/core/change-tracking/identity-resolution
-            Debug.WriteLine(ex.Message);
-
-        }
-        finally
-        {
-            contactService.Dispose();
-        }
-
-        GoBack();
+               
+        GoBack() ;
     }
 
 

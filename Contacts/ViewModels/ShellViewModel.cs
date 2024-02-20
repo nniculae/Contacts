@@ -22,17 +22,11 @@ public partial class ShellViewModel : ObservableRecipient
     private object? selected;
     private readonly ILabelService labelService;
 
-    public INavigationService NavigationService
-    {
-        get;
-    }
-
-    public INavigationViewService NavigationViewService
-    {
-        get;
-    }
+    public INavigationService NavigationService { get; }
+    public INavigationViewService NavigationViewService { get; }
 
     public ObservableCollection<NavigationViewItemBase> MenuItems { get; set; } = [];
+
     public ShellViewModel(INavigationService navigationService,
         INavigationViewService navigationViewService, ILabelService _labelService)
     {
@@ -45,7 +39,8 @@ public partial class ShellViewModel : ObservableRecipient
     private async void OnNavigated(object sender, NavigationEventArgs e)
     {
         var labelsFromDb = await labelService.GetLabelsWithContactsCountAsync();
-        SetMenuItems(labelsFromDb);
+        List<Label> labelsNotAssociated = await labelService.GetNotAssociatedLabels();
+        SetMenuItems(labelsFromDb, labelsNotAssociated);
 
         IsBackEnabled = NavigationService.CanGoBack;
 
@@ -62,12 +57,12 @@ public partial class ShellViewModel : ObservableRecipient
         }
     }
 
-    private void SetMenuItems(List<LabelsWithContactsCountDto> labelsFromDb)
+    private void SetMenuItems(List<LabelsWithContactsCountDto> labelsFromDb, List<Label> notAssociatedLabels)
     {
         MenuItems.Clear();
         var contactsMenuItem = new NavigationViewItem()
         {
-            Content = "Contacts",
+            Content = "All Contacts",
             Tag = "ListContactsInit",
             Icon = new SymbolIcon((Symbol)0xE779)
         };
@@ -75,21 +70,14 @@ public partial class ShellViewModel : ObservableRecipient
 
         MenuItems.Add(contactsMenuItem);
 
-
         // Header labels
         var labelHeader = new NavigationViewItemHeader() { Content = "Labels" };
-
-
-
-
         MenuItems.Add(labelHeader);
-
-
 
 
         foreach (var labelWithContactCount in labelsFromDb)
         {
-          
+
             var item = new NavigationViewItem
             {
                 Content = labelWithContactCount.Label.Name,
@@ -109,6 +97,40 @@ public partial class ShellViewModel : ObservableRecipient
             MenuItems.Add(item);
         }
 
+        // separator
+        MenuItems.Add(new NavigationViewItemSeparator());
+
+        // empty contact labels
+        foreach (var label in notAssociatedLabels)
+        {
+
+            var item = new NavigationViewItem
+            {
+                Content = label.Name,
+                Tag = label.Id,
+                Icon = new SymbolIcon((Symbol)0xE8EC), // Do not extract local variable beacause an expetion will be raised
+                InfoBadge = new InfoBadge() { Value = 0 },
+                //IsEnabled = false,
+                Opacity = 0.7
+
+            };
+
+
+
+
+            MenuFlyout mf = new MenuFlyout();
+
+            mf.Items.Add(new MenuFlyoutItem() { Text = "Change label name", Icon = new SymbolIcon((Symbol)0xE70F), Command = UpdateLabelCommand, CommandParameter = label });
+            mf.Items.Add(new MenuFlyoutItem() { Text = "Remove label", Icon = new SymbolIcon((Symbol)0xE74D), Command = RemoveLabelCommand, CommandParameter = label });
+            item.ContextFlyout = mf;
+
+
+
+
+            MenuItems.Add(item);
+        }
+
+
     }
 
     [RelayCommand]
@@ -124,8 +146,7 @@ public partial class ShellViewModel : ObservableRecipient
         label.Name = labelName;
         await labelService.Upsert(label);
 
-        
-        
+
         NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, Guid.NewGuid());
     }
 

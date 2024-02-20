@@ -29,6 +29,17 @@ public class LabelService(IDbContextFactory<ContactsDbContext> contextFactory) :
             .ToListAsync();
     }
 
+    public async Task<List<Label>> GetNotAssociatedLabels()
+    {
+        await using var context = await contextFactory.CreateDbContextAsync();
+
+        return await context.Labels.Where(l => l.Contacts.Count == 0)
+            .OrderBy(l => l.Name)
+            .Select(l => l)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
     public async Task<Label> Upsert(Label label)
     {
         await using var context = await contextFactory.CreateDbContextAsync();

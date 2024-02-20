@@ -3,7 +3,7 @@
 namespace Contacts.Core.Contracts.Services;
 public interface IContactService:IDisposable
 {
-    Task<Contact> Upsert(Contact contact);
+    Task<Contact> AddAsync(Contact contact);
     Task<List<Contact>> GetContactsAsync();
     Task<Contact> RemoveAsync(Contact contact);
     Task<Contact> FindByIdAsync(int id);
