@@ -6,6 +6,7 @@ using Contacts.Core.Dto;
 using Contacts.Helpers;
 using Contacts.Services;
 using Contacts.Views;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
@@ -146,8 +147,8 @@ public partial class ShellViewModel : ObservableRecipient
         label.Name = labelName;
         await labelService.Upsert(label);
 
-
-        NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, Guid.NewGuid());
+        NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
+       // NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, Guid.NewGuid());
     }
 
     [RelayCommand]
@@ -161,6 +162,7 @@ public partial class ShellViewModel : ObservableRecipient
         var label = (Label)labelObj;
         await labelService.RemoveAsync(label);
 
-        NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, Guid.NewGuid());
+        NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
+       // NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, Guid.NewGuid());
     }
 }

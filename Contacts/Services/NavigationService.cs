@@ -90,10 +90,14 @@ public class NavigationService : INavigationService
     {
         var pageType = _pageService.GetPageType(pageKey);
 
-        if (_frame == null || (_frame.Content?.GetType() == pageType && (parameter == null || parameter.Equals(_lastParameterUsed))))
+        if(_frame == null)
         {
             return false;
         }
+        //if (_frame == null || (_frame.Content?.GetType() == pageType && (parameter == null || parameter.Equals(_lastParameterUsed))))
+        //{
+        //    return false;
+        //}
 
         _frame.Tag = clearNavigation;
         var vmBeforeNavigation = _frame.GetPageViewModel();
