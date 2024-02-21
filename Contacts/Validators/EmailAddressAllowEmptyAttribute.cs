@@ -2,12 +2,10 @@
 
 namespace Contacts.Validators;
 
-[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter,
-        AllowMultiple = false)]
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
 public sealed class EmailAddressAllowEmptyAttribute : DataTypeAttribute
 {
-    public EmailAddressAllowEmptyAttribute()
-           : base(DataType.EmailAddress)
+    public EmailAddressAllowEmptyAttribute() : base(DataType.EmailAddress)
     {
     }
 

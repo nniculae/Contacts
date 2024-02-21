@@ -5,7 +5,7 @@ namespace Contacts.Extensions;
 public static class DispatcherQueueExtensions
 {
     private static readonly bool IsHasThreadAccessPropertyAvailable = true;
-    // Temporarily use this extension copied from  CommunityToolkit.WinUI because of namespaces confilicts 
+    // Temporarily use this extension copied from  CommunityToolkit.WinUI because of namespaces conflicts 
     public static Task EnqueueCustomAsync(this DispatcherQueue dispatcher, Action function, DispatcherQueuePriority priority = DispatcherQueuePriority.Normal)
     {
         if (IsHasThreadAccessPropertyAvailable && dispatcher.HasThreadAccess)

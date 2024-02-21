@@ -6,7 +6,7 @@ namespace Contacts.Validators
 {
     public class ContactValidator : ObservableValidator
     {
-        private  Contact _contact;
+        private Contact _contact = null!;
 
         public ContactValidator(Contact contact)
         {
@@ -15,6 +15,7 @@ namespace Contacts.Validators
             // To change the state of the button
             ValidateAllProperties();
         }
+
         ~ContactValidator()
         {
             ErrorsChanged -= ContactValidator_ErrorsChanged;
@@ -34,13 +35,8 @@ namespace Contacts.Validators
         [EmailAddressAllowEmpty]
         public string Email
         {
-            get => _contact.Email;
-            set => SetProperty(
-                _contact.Email,
-                value,
-                _contact,
-                (contact, email) => contact.Email = email,
-                true);
+            get => _contact.Email ??= string.Empty;
+            set => SetProperty(_contact.Email, value, _contact, (contact, email) => contact.Email = email, true);
         }
         public string FirstNameErrors => GetPropertyErrors(nameof(FirstName));
         public string EmailErrors => GetPropertyErrors(nameof(Email));
@@ -56,6 +52,5 @@ namespace Contacts.Validators
             OnPropertyChanged(nameof(FirstNameErrors));
             OnPropertyChanged(nameof(EmailErrors));
         }
-
     }
 }

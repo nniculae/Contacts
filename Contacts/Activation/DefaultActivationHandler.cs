@@ -1,5 +1,4 @@
 ﻿using Contacts.Contracts.Services;
-using Contacts.ViewModels;
 
 using Microsoft.UI.Xaml;
 

@@ -8,8 +8,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Contacts.Services;
 
-// For more information on navigation between pages see
-// https://github.com/microsoft/TemplateStudio/blob/main/docs/WinUI/navigation.md
 public class NavigationService : INavigationService
 {
     private readonly IPageService _pageService;
@@ -94,11 +92,7 @@ public class NavigationService : INavigationService
         {
             return false;
         }
-        //if (_frame == null || (_frame.Content?.GetType() == pageType && (parameter == null || parameter.Equals(_lastParameterUsed))))
-        //{
-        //    return false;
-        //}
-
+       
         _frame.Tag = clearNavigation;
         var vmBeforeNavigation = _frame.GetPageViewModel();
         var navigated = false;

@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 using Contacts.Contracts.Services;
-using Contacts.ViewModels;
 using Contacts.Views;
 
 using Microsoft.UI.Xaml.Controls;
@@ -10,7 +9,7 @@ namespace Contacts.Services;
 
 public class PageService : IPageService
 {
-    private readonly Dictionary<string, Type> _pages = new();
+    private readonly Dictionary<string, Type> _pages = [];
 
     public PageService()
     {

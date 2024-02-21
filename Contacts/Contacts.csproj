@@ -46,10 +46,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Contacts.Core\Contacts.Core.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Navigation\" />
-  </ItemGroup>
   
   <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>

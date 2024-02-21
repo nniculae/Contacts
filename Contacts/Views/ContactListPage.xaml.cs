@@ -22,13 +22,10 @@ public sealed partial class ContactListPage : Page
     public void ContactListView_Loaded(object sender, RoutedEventArgs e)
     {
         if (!ViewModel.IsBackFromDetails) return;
-       
+
         var listView = (ListView)sender;
         if (listView.SelectedItem == null) return;
 
         listView.ScrollIntoView(listView.SelectedItem, ScrollIntoViewAlignment.Leading);
     }
-
-
-
 }

@@ -21,23 +21,23 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     [ObservableProperty]
     private Contact? _selectedItem;
     [ObservableProperty]
-    private Label _selectedLabel;
+    private Label _selectedLabel = null!;
     public ObservableGroupedCollection<string, Contact> ContactsDataSource { get; set; } = [];
     public string InfoBarMessage { get; set; } = string.Empty;
     public bool IsBackFromDetails { get; set; } = false;
-    private IList<Contact> _contacts = null!;
+    private IList<Contact> _contacts = [];
     private readonly DispatcherQueue dispatcherQueue = DispatcherQueue.GetForCurrentThread();
 
     public async void OnNavigatedTo(object parameter)
     {
-        
+
         await dispatcherQueue.EnqueueCustomAsync(() =>
         {
             IsActive = true;
             ContactsDataSource.Clear();
         });
 
-        if(parameter is int labelid)
+        if (parameter is int labelid)
         {
             _contacts = await contactsService.GetContactsByLabelIdAsync(labelid);
         }
@@ -46,11 +46,8 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
             _contacts = await contactsService.GetContactsAsync();
         }
 
-        
-        
         await dispatcherQueue.EnqueueCustomAsync(() =>
         {
-
             var groupings = _contacts.GroupBy(CreateKey).OrderBy(g => g.Key);
             foreach (var item in groupings)
             {
@@ -61,11 +58,13 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
             EnsureItemSelected();
         });
     }
+
     public void OnNavigatedFrom()
     {
         contactsService.Dispose();
         IsActive = false;
     }
+
     [RelayCommand]
     public void NavigateToContactDetailPage()
     {
@@ -87,8 +86,8 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
         // nu e bine stop bubbling, use an event, studiza problema
         // nici linkurile nu-s bune, se vede tooltip, 
         if (value == null) return;
-        navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, value.Id );
-        
+        navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, value.Id);
+
     }
     async partial void OnSearchTextChanged(string value)
     {
@@ -105,11 +104,14 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
         });
 
     }
+
     private static string CreateKey(Contact contact)
     {
         return contact.Name[0].ToString().ToUpperInvariant();
     }
+
     private void EnsureItemSelected() => SelectedItem ??= _contacts.FirstOrDefault();
+
     public async void Receive(ContactChangedMessage message)
     {
         await dispatcherQueue.EnqueueCustomAsync(() =>
@@ -132,6 +134,5 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
 
             IsBackFromDetails = true;
         });
-
     }
 }

@@ -240,7 +240,7 @@
                                             <Button
                                                 x:Name="createLabelButton"
                                                 Grid.Row="2"
-                                                Click="createLabelButton_Click"
+                                                Click="CreateLabelButton_Click"
                                                 Visibility="{x:Bind ViewModel.IsCreateLabelButtonVisible, Mode=OneWay}">
                                                 <Button.Content>
                                                     <StackPanel Orientation="Horizontal">

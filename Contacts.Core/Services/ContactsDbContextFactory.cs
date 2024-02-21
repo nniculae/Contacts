@@ -1,7 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Logging;
 
 namespace Contacts.Core.Services;
 public class ContactsDbContextFactory : IDesignTimeDbContextFactory<ContactsDbContext>
@@ -11,13 +9,7 @@ public class ContactsDbContextFactory : IDesignTimeDbContextFactory<ContactsDbCo
         var optionBuilder = new DbContextOptionsBuilder<ContactsDbContext>();
         optionBuilder.EnableSensitiveDataLogging();
         optionBuilder.UseSqlite(Connection.GetSqliteConnection()).EnableSensitiveDataLogging();
-            //.LogTo(
-            //    Console.WriteLine,
-            //    new[] { DbLoggerCategory.Database.Command.Name },
-            //    LogLevel.Information)
-            //;
 
         return new ContactsDbContext(optionBuilder.Options);
-
     }
 }

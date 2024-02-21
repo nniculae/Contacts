@@ -10,7 +10,6 @@ public class ContactsDbContext(DbContextOptions<ContactsDbContext> options) : Db
     public DbSet<Address> Addresses { get; set; }
     public DbSet<Label> Labels { get; set; }
 
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

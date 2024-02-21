@@ -1,8 +1,7 @@
 ﻿using Contacts.Behaviors;
+using Contacts.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Contacts.Services;
-using System.Diagnostics;
 
 namespace Contacts.Views;
 public sealed partial class ContactDetailPage : Page
@@ -15,7 +14,7 @@ public sealed partial class ContactDetailPage : Page
         NavigationViewHeaderBehavior.SetHeaderMode(this, NavigationViewHeaderMode.Never);
     }
 
-    // it is raise when i click the manage(edit) button
+    // it is raiseD when i click the manage(edit) button
     private void AllLabelsListView_Loaded(object sender, RoutedEventArgs e)
     {
         SelectItems();
@@ -23,7 +22,7 @@ public sealed partial class ContactDetailPage : Page
 
     private void SelectItems()
     {
-        
+
         foreach (var label in ViewModel.ContactLabels)
         {
             foreach (var label2 in AllLabelsListView.Items)
@@ -38,12 +37,10 @@ public sealed partial class ContactDetailPage : Page
 
     private void AllLabelsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-
         ToggleCreateAndApplyButtons();
-
     }
 
-    private async void createLabelButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private async void CreateLabelButton_Click(object sender, RoutedEventArgs e)
     {
         ContactLabelFlyout.Hide();
         var element = (FrameworkElement)App.MainWindow.Content;
@@ -53,17 +50,13 @@ public sealed partial class ContactDetailPage : Page
         if (string.IsNullOrEmpty(labelName))
             return;
 
-        Label l =   ViewModel.CreateLabelInMemory(labelName);
+        Label l = ViewModel.CreateLabelInMemory(labelName);
         AllLabelsListView.SelectedItems.Add(l);
 
         ToggleCreateAndApplyButtons();
-
-
-
     }
     public void ApplyLabelChanges_Click(object sender, RoutedEventArgs e)
     {
-        
         ViewModel.ContactLabels.Clear();
 
         foreach (var item in AllLabelsListView.SelectedItems)
@@ -84,11 +77,9 @@ public sealed partial class ContactDetailPage : Page
             .SequenceEqual(
                 ViewModel.ContactLabels.OrderBy(x => x.Id),
                 EqualityComparer<Label>.Create(
-                    (x, y) => x.Id.CompareTo(y.Id) == 0)
+                    (x, y) => x!.Id.CompareTo(y!.Id) == 0)
                 );
 
-
         ViewModel.IsApplyChangesButtonVisible = !areEquivalent;
-
     }
 }

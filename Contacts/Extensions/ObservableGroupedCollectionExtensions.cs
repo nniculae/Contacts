@@ -2,10 +2,10 @@
 
 namespace Contacts.Extensions;
 
-
 public static class ObservableGroupedCollectionExtensions
 {
-    //TODO: make it faster, use ObservableGroup.FindFirstGroup (sort of bucket)
+    // TODO: make it faster, use ObservableGroup.FindFirstGroup (sort of bucket)
+
     /// <summary>
     /// Finds an item in an ObservableGroupedCollection.
     /// </summary>
@@ -73,7 +73,6 @@ public static class ObservableGroupedCollectionExtensions
                 if (!tempFiltered.Contains(contact))
                 {
                     observableGroup.Remove(contact);
-
                 }
             }
             if (observableGroup.Count == 0)
@@ -82,7 +81,6 @@ public static class ObservableGroupedCollectionExtensions
             }
         }
     }
-
 
     public static void FilterItems<TKey, TElement>(this ObservableGroupedCollection<TKey, TElement> ogc,
         IEnumerable<TElement> tempFiltered, Comparer<TKey> keyComparer,
@@ -95,7 +93,6 @@ public static class ObservableGroupedCollectionExtensions
         ogc.InsertItems(tempFiltered,keyComparer,itemComparer,createKey);
     }
 
-
     public static int CountItems<TKey, TElement>(this ObservableGroupedCollection<TKey, TElement> ogc)
         where TKey : notnull
     {
@@ -103,4 +100,3 @@ public static class ObservableGroupedCollectionExtensions
         return ogcAsEnumerable.Sum(g => g.Count);
     }
 }
-

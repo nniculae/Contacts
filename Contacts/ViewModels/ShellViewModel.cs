@@ -6,7 +6,6 @@ using Contacts.Core.Dto;
 using Contacts.Helpers;
 using Contacts.Services;
 using Contacts.Views;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
@@ -98,26 +97,20 @@ public partial class ShellViewModel : ObservableRecipient
             MenuItems.Add(item);
         }
 
-        // separator
+        // Separator
         MenuItems.Add(new NavigationViewItemSeparator());
 
-        // empty contact labels
+        // Empty contact labels
         foreach (var label in notAssociatedLabels)
         {
-
             var item = new NavigationViewItem
             {
                 Content = label.Name,
                 Tag = label.Id,
                 Icon = new SymbolIcon((Symbol)0xE8EC), // Do not extract local variable beacause an expetion will be raised
                 InfoBadge = new InfoBadge() { Value = 0 },
-                //IsEnabled = false,
                 Opacity = 0.7
-
             };
-
-
-
 
             MenuFlyout mf = new MenuFlyout();
 
@@ -125,13 +118,8 @@ public partial class ShellViewModel : ObservableRecipient
             mf.Items.Add(new MenuFlyoutItem() { Text = "Remove label", Icon = new SymbolIcon((Symbol)0xE74D), Command = RemoveLabelCommand, CommandParameter = label });
             item.ContextFlyout = mf;
 
-
-
-
             MenuItems.Add(item);
         }
-
-
     }
 
     [RelayCommand]
@@ -148,13 +136,11 @@ public partial class ShellViewModel : ObservableRecipient
         await labelService.Upsert(label);
 
         NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
-       // NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, Guid.NewGuid());
     }
 
     [RelayCommand]
     public async Task RemoveLabelAsync(object labelObj)
     {
-
         var element = (FrameworkElement)App.MainWindow.Content;
         bool? ok = await element.ConfirmationDialogAsync("Are you sure?");
         if (ok == null) return;
@@ -163,6 +149,5 @@ public partial class ShellViewModel : ObservableRecipient
         await labelService.RemoveAsync(label);
 
         NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
-       // NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, Guid.NewGuid());
     }
 }

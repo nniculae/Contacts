@@ -6,15 +6,13 @@ using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
 using Contacts.Validators;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace Contacts.ViewModels;
 
 public partial class ContactDetailPageViewModel(
     IContactService contactService,
     ILabelService labelService,
-    INavigationService navigation) :
-    ObservableRecipient, INavigationAware
+    INavigationService navigation) : ObservableRecipient, INavigationAware
 {
     [ObservableProperty]
     private Contact _contact = null!;
@@ -22,7 +20,6 @@ public partial class ContactDetailPageViewModel(
     private bool _isInEdit = false;
     [ObservableProperty]
     private bool _isNewContact = false;
-   
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsCreateLabelButtonVisible))]
     public bool _isApplyChangesButtonVisible = false;
@@ -32,10 +29,8 @@ public partial class ContactDetailPageViewModel(
     public ObservableCollection<Label> AllLabels = [];
     // The labels associated temporarily with current Contact
     public ObservableCollection<Label> ContactLabels = [];
-
     private Crud crud = Crud.Read;
     public ContactValidator ContactValidator { get; set; } = null!;
-
 
     public async void OnNavigatedTo(object parameter)
     {
@@ -71,9 +66,7 @@ public partial class ContactDetailPageViewModel(
         foreach (var label in contactLabels)
         {
             ContactLabels.Add(label);
-
         }
-
     }
 
     [RelayCommand]
@@ -85,7 +78,6 @@ public partial class ContactDetailPageViewModel(
         {
             AllLabels.Add(label);
         }
-
     }
 
     public void OnNavigatedFrom()
@@ -94,10 +86,12 @@ public partial class ContactDetailPageViewModel(
         var message = new ContactChangedMessage(Contact!.Id, CrudStringMessage.FormatMessage(Contact.Name, crud));
         ((WeakReferenceMessenger)Messenger).Send(message);
     }
+
     public void GoBack()
     {
         navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
     }
+
     public void StartEdit()
     {
         IsInEdit = true;
@@ -111,7 +105,6 @@ public partial class ContactDetailPageViewModel(
         GoBack();
     }
 
-
     public Label CreateLabelInMemory(string labelName)
     {
         Label newLabel = new() { Name = labelName };
@@ -119,20 +112,15 @@ public partial class ContactDetailPageViewModel(
         AllLabels.Add(newLabel);
 
         return newLabel;
-
     }
     [RelayCommand]
     public async Task UpdateContactLabelsAsync()
     {
-
-        // https://www.youtube.com/watch?v=A99OyThMaW8&ab_channel=DeepDiveDotnet
-        //  https://learn.microsoft.com/en-us/ef/core/change-tracking/identity-resolution
-
         var labelsToRemove = Contact.Labels.Where(label => !ContactLabels.Contains(label, EqualityComparer<Label>.Create(
-        (left, right) => left.Id.CompareTo(right.Id) == 0))).ToList();
+        (left, right) => left!.Id.CompareTo(right!.Id) == 0))).ToList();
 
         var labelsToAdd = ContactLabels.Where(label => !Contact.Labels.Contains(label, EqualityComparer<Label>.Create(
-            (left, right) => left.Id.CompareTo(right.Id) == 0))).ToList();
+            (left, right) => left!.Id.CompareTo(right!.Id) == 0))).ToList();
 
 
         foreach (var label in labelsToRemove)
@@ -142,20 +130,17 @@ public partial class ContactDetailPageViewModel(
 
         Contact.Labels.AddRange(labelsToAdd);
 
-        if(IsNewContact)
+        if (IsNewContact)
         {
             await contactService.AddAsync(Contact);
             crud = Crud.Created;
-
         }
         else
         {
             await contactService.SaveAsync();
             crud = Crud.Updated;
         }
-               
-        GoBack() ;
+
+        GoBack();
     }
-
-
 }

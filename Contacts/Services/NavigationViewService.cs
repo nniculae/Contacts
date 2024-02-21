@@ -1,11 +1,8 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
-
-using Contacts.Contracts.Services;
+﻿using Contacts.Contracts.Services;
 using Contacts.Helpers;
-using Contacts.ViewModels;
-
 using Microsoft.UI.Xaml.Controls;
+using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Contacts.Services;
 
@@ -46,31 +43,15 @@ public class NavigationViewService : INavigationViewService
 
     public NavigationViewItem? GetSelectedItem(Type pageType, object? parameter = null)
     {
-
-        // https://stackoverflow.com/questions/64806837/uwp-navigationview-menuitems-results-empty-if-populated-programmatically
-        // https://github.com/microsoft/TemplateStudio/issues/4616
-
         if (_navigationView != null)
         {
-            var items = _navigationView.MenuItemsSource as ObservableCollection<NavigationViewItemBase>;
-            if (items == null) return null;
-            
+            if (_navigationView.MenuItemsSource is not ObservableCollection<NavigationViewItemBase> items) return null;
+
             return GetSelectedItem(items, pageType, parameter) ?? GetSelectedItem(_navigationView.FooterMenuItems, pageType);
         }
 
         return null;
     }
-
-    //public NavigationViewItem? GetSelectedItem(Type pageType)
-    //{
-
-    //    if (_navigationView != null)
-    //    {
-    //        return GetSelectedItem(_navigationView.MenuItems, pageType) ?? GetSelectedItem(_navigationView.FooterMenuItems, pageType);
-    //    }
-
-    //    return null;
-    //}
 
     private void OnBackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args) => _navigationService.GoBack();
 
@@ -91,7 +72,7 @@ public class NavigationViewService : INavigationViewService
         }
     }
 
-    private NavigationViewItem? GetSelectedItem(IEnumerable<object> menuItems, Type pageType, object? parameter =null)
+    private NavigationViewItem? GetSelectedItem(IEnumerable<object> menuItems, Type pageType, object? parameter = null)
     {
         foreach (var item in menuItems.OfType<NavigationViewItem>())
         {
@@ -99,12 +80,6 @@ public class NavigationViewService : INavigationViewService
             {
                 return item;
             }
-
-            //var selectedChild = GetSelectedItem(item.MenuItems, pageType);
-            //if (selectedChild != null)
-            //{
-            //    return selectedChild;
-            //}
         }
 
         return null;
@@ -112,7 +87,7 @@ public class NavigationViewService : INavigationViewService
 
     private bool IsMenuItemForPageType(NavigationViewItem menuItem, Type sourcePageType, object? parameter = null)
     {
-        
+
         bool result = false;
 
         if (menuItem.GetValue(NavigationHelper.NavigateToProperty) is string pageKey)
@@ -121,33 +96,12 @@ public class NavigationViewService : INavigationViewService
             {
                 result = (_pageService.GetPageType(pageKey) == sourcePageType) && (p == t);
             }
-            else if (parameter is string s &&  menuItem.Tag is string)
+            else if (parameter is string s && menuItem.Tag is string)
             {
                 result = (_pageService.GetPageType(pageKey) == sourcePageType) && (s == (string)menuItem.Tag);
             }
-
         }
 
         return result;
     }
-
-    //private bool IsMenuItemForPageType2(NavigationViewItem menuItem, Type sourcePageType, object? parameter = null)
-    //{
-    //    // it always picks the first
-
-    //    if (menuItem.GetValue(NavigationHelper.NavigateToProperty) is string pageKey)
-    //    {
-    //        if (parameter is int p)
-    //        {
-    //            return (_pageService.GetPageType(pageKey) == sourcePageType) && (p == (int)menuItem.Tag);
-    //        }
-    //        else if (parameter is string s)
-    //        {
-    //            return (_pageService.GetPageType(pageKey) == sourcePageType) && (s == (string)menuItem.Tag);
-    //        }
-
-    //    }
-
-    //    return false;
-    //}
 }
