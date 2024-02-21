@@ -151,7 +151,7 @@
                 Margin="8,0"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
-                PlaceholderText="Search for a first name or last name"
+                PlaceholderText="Search for first name or last name"
                 QueryIcon="Find"
                 Text="{x:Bind ViewModel.SearchText, Mode=TwoWay}" />
             <SemanticZoom x:Name="ContactSemanticZoom" Grid.Row="1">
