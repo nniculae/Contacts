@@ -98,7 +98,6 @@
                     </ListBox.ItemContainerStyle>
 
                 </ListBox>
-                <!--  https://learn.microsoft.com/en-us/answers/questions/972618/winui-3-listview-selecteditems-in-mvvm  -->
             </Grid>
         </DataTemplate>
         <CollectionViewSource

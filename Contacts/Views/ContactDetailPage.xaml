@@ -59,7 +59,6 @@
             RelativePanel.Below="PageTitle"
             VerticalScrollBarVisibility="Auto"
             VerticalScrollMode="Auto">
-
             <StackPanel Margin="0,8,4,0">
                 <StackPanel.Resources>
                     <Style TargetType="Expander">
@@ -147,7 +146,6 @@
                             <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Address" />
                         </Grid>
                     </Expander.Header>
-
                     <RelativePanel Margin="8,0,0,12">
                         <TextBox
                             x:Name="Street"
@@ -190,7 +188,6 @@
                             RelativePanel.RightOf="ZipCode"
                             Text="{x:Bind ViewModel.Contact.Address.City, Mode=TwoWay}" />
                     </RelativePanel>
-
                 </Expander>
                 <Expander Name="Labels" IsExpanded="True">
                     <Expander.Header>
@@ -266,8 +263,6 @@
                                 <controls:WrapPanel x:Name="WrapPanelControl" />
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
-                        <!--  Disable selection  -->
-
                     </ListBox>
                 </Expander>
             </StackPanel>

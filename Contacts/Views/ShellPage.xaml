@@ -47,7 +47,6 @@
             Loaded="NavigationViewControl_Loaded"
             MenuItemsSource="{x:Bind ViewModel.MenuItems, Mode=OneTime}"
             SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}">
-
             <NavigationView.HeaderTemplate>
                 <DataTemplate>
                     <Grid>
@@ -55,7 +54,6 @@
                     </Grid>
                 </DataTemplate>
             </NavigationView.HeaderTemplate>
-
             <i:Interaction.Behaviors>
                 <behaviors:NavigationViewHeaderBehavior DefaultHeader="{x:Bind ((ContentControl)ViewModel.Selected).Content, Mode=OneWay}">
                     <behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
@@ -67,7 +65,6 @@
                     </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
                 </behaviors:NavigationViewHeaderBehavior>
             </i:Interaction.Behaviors>
-
             <Grid Margin="{StaticResource NavigationViewPageContentMargin}">
                 <Frame x:Name="NavigationFrame" />
             </Grid>
