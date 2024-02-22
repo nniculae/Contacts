@@ -13,8 +13,15 @@
 	<Nullable>enable</Nullable>
 	<UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
+    <!--For unpackaged set WindowsAppSDKSelfContained to true-->
+    <WindowsAppSDKSelfContained>false</WindowsAppSDKSelfContained>
+    <!--https://stackoverflow.com/questions/76020847/right-way-to-publish-winui3-app-in-single-exe-file-->
+    <!--https://github.com/microsoft/WindowsAppSDK/issues/2597-->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Assets\contacts.sqlite" />
+  </ItemGroup>
 
   <ItemGroup>
     <Manifest Include="$(ApplicationManifest)" />
@@ -45,6 +52,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Contacts.Core\Contacts.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Assets\contacts.sqlite">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\WindowIcon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   
   <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">

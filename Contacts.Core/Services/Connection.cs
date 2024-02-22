@@ -6,11 +6,17 @@ public static class Connection
     public static SqliteConnection GetSqliteConnection()
     {
         var local = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        var db = Path.Combine(local, "contacts.sqlite");
-        // var DB_PATH = @"C:\projects\winui_apps\Contacts\Contacts\Db\contacts.sqlite";
+        var databasePath = Path.Combine(local, "contacts.sqlite");
+        var demoDatabasePath = AppDomain.CurrentDomain.BaseDirectory + @"\Assets\contacts.sqlite";
+
+        if (!File.Exists(databasePath))
+        {
+            File.Copy(demoDatabasePath, databasePath);
+        }
+
         var connectionStringBuilder = new SqliteConnectionStringBuilder()
         {
-            DataSource = db
+            DataSource = databasePath
         }
          .ToString();
 
