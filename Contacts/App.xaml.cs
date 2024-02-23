@@ -80,6 +80,8 @@ public partial class App : Application
             services.AddTransient<ILabelService, LabelService>();
 
             // Views and ViewModels
+            services.AddTransient<BackupViewModel>();
+            services.AddTransient<BackupPage>();
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<SettingsPage>();
             services.AddTransient<ContactDetailPageViewModel>();
