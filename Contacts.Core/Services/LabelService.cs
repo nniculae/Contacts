@@ -39,7 +39,7 @@ public class LabelService(IDbContextFactory<ContactsDbContext> contextFactory) :
             .ToListAsync();
     }
 
-    public async Task<Label> Upsert(Label label)
+    public async Task<Label> UpsertAsync(Label label)
     {
         await using var context = await contextFactory.CreateDbContextAsync();
 

@@ -133,7 +133,7 @@ public partial class ShellViewModel : ObservableRecipient
         if (string.IsNullOrEmpty(labelName))
             return;
         label.Name = labelName;
-        await labelService.Upsert(label);
+        await labelService.UpsertAsync(label);
 
         NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
     }

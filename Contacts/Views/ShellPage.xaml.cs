@@ -87,4 +87,6 @@ public sealed partial class ShellPage : Page
             NavigationViewControl.SelectedItem = items?.FirstOrDefault();
         }
     }
+
+  
 }

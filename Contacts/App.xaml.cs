@@ -1,5 +1,6 @@
 ﻿using Contacts.Activation;
 using Contacts.Contracts.Services;
+using Contacts.Controls;
 using Contacts.Core.Contracts.Services;
 using Contacts.Core.Services;
 using Contacts.Helpers;
@@ -87,6 +88,8 @@ public partial class App : Application
             services.AddTransient<ContactListPage>();
             services.AddTransient<ShellPage>();
             services.AddTransient<ShellViewModel>();
+            services.AddTransient<LabelCreator>();
+            services.AddTransient<LaberCreatorViewModel>();
 
             // Configuration
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));

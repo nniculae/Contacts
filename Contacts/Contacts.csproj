@@ -21,6 +21,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\contacts.sqlite" />
+    <None Remove="LabelCreator.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +31,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Update="LabelCreator.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
@@ -61,6 +65,10 @@
     <Content Update="Assets\WindowIcon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controls\" />
   </ItemGroup>
   
   <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">

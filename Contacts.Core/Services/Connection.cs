@@ -1,6 +1,10 @@
 ﻿using Microsoft.Data.Sqlite;
+using System.Diagnostics;
 
 namespace Contacts.Core.Services;
+
+
+
 public static class Connection
 {
     public static SqliteConnection GetSqliteConnection()
@@ -20,6 +24,21 @@ public static class Connection
         }
          .ToString();
 
-        return new SqliteConnection(connectionStringBuilder);
+        var connection = new SqliteConnection(connectionStringBuilder);
+        
+        connection.Disposed += Connection_Disposed;
+        connection.StateChange += Connection_StateChange;
+
+        return connection;
+    }
+
+    private static void Connection_StateChange(object sender, System.Data.StateChangeEventArgs e)
+    {
+       Debug.Write("Connection state: " +  e.CurrentState.ToString() + Environment.NewLine);
+    }
+
+    private static void Connection_Disposed(object? sender, EventArgs e)
+    {
+        Debug.WriteLine("SqliteConnection Disposed");
     }
 }
