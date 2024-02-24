@@ -59,7 +59,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Assets\contacts.sqlite">
+    <Content Update="Assets\Database\contacts.sqlite">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Assets\WindowIcon.ico">

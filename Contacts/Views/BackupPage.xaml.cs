@@ -1,4 +1,5 @@
-﻿using Contacts.ViewModels;
+﻿using Contacts.Behaviors;
+using Contacts.ViewModels;
 
 using Microsoft.UI.Xaml.Controls;
 
@@ -15,5 +16,6 @@ public sealed partial class BackupPage : Page
     {
         ViewModel = App.GetService<BackupViewModel>();
         InitializeComponent();
+        NavigationViewHeaderBehavior.SetHeaderMode(this, NavigationViewHeaderMode.Never);
     }
 }

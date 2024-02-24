@@ -3,15 +3,11 @@ using Contacts.Contracts.Services;
 using Contacts.Controls;
 using Contacts.Core.Contracts.Services;
 using Contacts.Core.Services;
-using Contacts.Helpers;
 using Contacts.Models;
 using Contacts.Services;
-using Contacts.ViewModels;
 using Contacts.Views;
 
 using DesignPatternsUI.Core.Services;
-
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -63,6 +59,7 @@ public partial class App : Application
 
             // Services
             services.AddSingleton<ILocalSettingsService, LocalSettingsService>();
+            services.AddSingleton<IDatabaseFileService, DatabaseFileService>();
             services.AddSingleton<IThemeSelectorService, ThemeSelectorService>();
             services.AddTransient<INavigationViewService, NavigationViewService>();
 

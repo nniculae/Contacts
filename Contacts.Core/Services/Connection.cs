@@ -9,9 +9,17 @@ public static class Connection
 {
     public static SqliteConnection GetSqliteConnection()
     {
-        var local = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        var databasePath = Path.Combine(local, "contacts.sqlite");
-        var demoDatabasePath = AppDomain.CurrentDomain.BaseDirectory + @"\Assets\contacts.sqlite";
+
+        var localApplicationdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        var databaseFolderPath = Path.Combine(localApplicationdata, "Contacts/ApplicationData/Database");
+
+        if (!Directory.Exists(databaseFolderPath))
+        {
+            Directory.CreateDirectory(databaseFolderPath);
+        }
+
+        var databasePath = Path.Combine(databaseFolderPath, "contacts.sqlite");
+        var demoDatabasePath = AppDomain.CurrentDomain.BaseDirectory + @"\Assets\Database\contacts.sqlite";
 
         if (!File.Exists(databasePath))
         {

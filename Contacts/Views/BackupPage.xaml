@@ -2,11 +2,35 @@
     x:Class="Contacts.Views.BackupPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Model="using:Contacts.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="ThisPage"
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea">
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Backup/Restore" />
+        <Button Grid.Row="1" Click="{x:Bind ViewModel.Backup}">Start Backup</Button>
+        <ListView Grid.Row="2" ItemsSource="{x:Bind ViewModel.BackupFiles}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="Model:BackupFile">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Bind CreatedAt}" />
+                        <Button Command="{Binding ElementName=ThisPage, Path=ViewModel.RestoreCommand, Mode=OneTime}" CommandParameter="{x:Bind FullFileName}">
+                            Restore
+                        </Button>
+                        <Button Command="{Binding ElementName=ThisPage, Path=ViewModel.DeleteBackupCommand, Mode=OneTime}" CommandParameter="{x:Bind FullFileName}">
+                            Delete
+                        </Button>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>

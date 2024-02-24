@@ -62,10 +62,16 @@
             </NavigationView.PaneFooter>
 
             <NavigationView.FooterMenuItems>
+                <NavigationViewItem x:Uid="Shell_Backup" helpers:NavigationHelper.NavigateTo="Contacts.ViewModels.BackupViewModel">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe777;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <NavigationViewItem
                     Content="Help (not yet implemented)"
                     Icon="Help"
                     IsEnabled="False" />
+                
             </NavigationView.FooterMenuItems>
             <i:Interaction.Behaviors>
                 <behaviors:NavigationViewHeaderBehavior DefaultHeader="{x:Bind ((ContentControl)ViewModel.Selected).Content, Mode=OneWay}">
