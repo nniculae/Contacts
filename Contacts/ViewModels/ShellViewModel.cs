@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using Contacts.Contracts.Services;
 using Contacts.Core.Contracts.Services;
 using Contacts.Core.Dto;
@@ -13,19 +15,33 @@ using System.Collections.ObjectModel;
 
 namespace Contacts.ViewModels;
 
-public partial class ShellViewModel : ObservableRecipient
+public partial class ShellViewModel : ObservableRecipient, IRecipient<ValueChangedMessage<string>>, IRecipient<ValueChangedMessage<bool>>
 {
     [ObservableProperty]
     private bool isBackEnabled;
-
     [ObservableProperty]
     private object? selected;
+    [ObservableProperty]
+    private bool _isInfoBarOpen;
+    [ObservableProperty]
+    private string? _infoBarTitle;
+    [ObservableProperty]
+    private string? _infoBarMessage;
+    [ObservableProperty]
+    private InfoBarSeverity _infoBarSeverity = InfoBarSeverity.Success;
+
+    [ObservableProperty]
+    private bool _showOverlay;
+    [ObservableProperty]
+    private double _opacityOverlay = 0.0;
+
     private readonly ILabelService labelService;
 
     public INavigationService NavigationService { get; }
     public INavigationViewService NavigationViewService { get; }
 
     public ObservableCollection<NavigationViewItemBase> MenuItems { get; set; } = [];
+
 
     public ShellViewModel(INavigationService navigationService,
         INavigationViewService navigationViewService, ILabelService _labelService)
@@ -34,10 +50,12 @@ public partial class ShellViewModel : ObservableRecipient
         NavigationService.Navigated += OnNavigated;
         NavigationViewService = navigationViewService;
         labelService = _labelService;
+        IsActive = true;
     }
 
     private async void OnNavigated(object sender, NavigationEventArgs e)
     {
+        
         var labelsFromDb = await labelService.GetLabelsWithContactsCountAsync();
         List<Label> labelsNotAssociated = await labelService.GetNotAssociatedLabels();
         SetMenuItems(labelsFromDb, labelsNotAssociated);
@@ -135,6 +153,9 @@ public partial class ShellViewModel : ObservableRecipient
         label.Name = labelName;
         await labelService.UpsertAsync(label);
 
+        var message = $"The label '{labelName}' was updated successfully";
+        WeakReferenceMessenger.Default.Send(new ValueChangedMessage<string>(message));
+
         NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
     }
 
@@ -148,6 +169,37 @@ public partial class ShellViewModel : ObservableRecipient
         var label = (Label)labelObj;
         await labelService.RemoveAsync(label);
 
+
+        var message = $"The label '{label.Name}' was removed successfully";
+        WeakReferenceMessenger.Default.Send(new ValueChangedMessage<string>(message));
+
         NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
+    }
+
+    private async Task DisplayInfoMsgAsync(InfoBarSeverity infoBarSeverity, string? title, string? message,
+       int delayMs = 6000)
+    {
+        if (title is null && message is null)
+        {
+            IsInfoBarOpen = false;
+            return;
+        }
+
+        InfoBarSeverity = infoBarSeverity;
+        InfoBarTitle = title;
+        InfoBarMessage = message;
+        IsInfoBarOpen = true;
+        await Task.Delay(delayMs);
+        IsInfoBarOpen = false;
+    }
+
+    public async void Receive(ValueChangedMessage<string> message)
+    {
+        await DisplayInfoMsgAsync(InfoBarSeverity, "Info", message.Value);
+    }
+
+    public void Receive(ValueChangedMessage<bool> message)
+    {
+        ShowOverlay = message.Value;
     }
 }

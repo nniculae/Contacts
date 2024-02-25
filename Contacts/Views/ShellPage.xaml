@@ -19,6 +19,7 @@
         </Grid.RowDefinitions>
         <Grid
             x:Name="AppTitleBar"
+            Grid.Row="0"
             Height="{Binding ElementName=NavigationViewControl, Path=CompactPaneLength}"
             VerticalAlignment="Top"
             Canvas.ZIndex="1"
@@ -64,14 +65,14 @@
             <NavigationView.FooterMenuItems>
                 <NavigationViewItem x:Uid="Shell_Backup" helpers:NavigationHelper.NavigateTo="Contacts.ViewModels.BackupViewModel">
                     <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe777;"/>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe777;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem
                     Content="Help (not yet implemented)"
                     Icon="Help"
                     IsEnabled="False" />
-                
+
             </NavigationView.FooterMenuItems>
             <i:Interaction.Behaviors>
                 <behaviors:NavigationViewHeaderBehavior DefaultHeader="{x:Bind ((ContentControl)ViewModel.Selected).Content, Mode=OneWay}">
@@ -85,9 +86,34 @@
                 </behaviors:NavigationViewHeaderBehavior>
             </i:Interaction.Behaviors>
             <Grid Margin="{StaticResource NavigationViewPageContentMargin}">
-                <Frame x:Name="NavigationFrame" />
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Frame x:Name="NavigationFrame" Grid.Row="0" />
+                <InfoBar
+                    Title="{x:Bind ViewModel.InfoBarTitle, Mode=OneWay}"
+                    Grid.Row="1"
+                    IsOpen="{x:Bind ViewModel.IsInfoBarOpen, Mode=OneWay}"
+                    Message="{x:Bind ViewModel.InfoBarMessage, Mode=OneWay}"
+                    Severity="{x:Bind ViewModel.InfoBarSeverity, Mode=OneWay}" />
             </Grid>
         </NavigationView>
+        <Grid
+            x:Name="OverlayGrid"
+            Grid.Row="1"
+            Background="{StaticResource AccentAAFillColorTertiaryBrush}"
+            Canvas.ZIndex="1"
+            Opacity="0.4"
+            Visibility="{x:Bind ViewModel.ShowOverlay, Mode=OneWay}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ProgressRing IsActive="True" />
+                <TextBlock
+                    Style="{StaticResource HeaderTextBlockStyle}"
+                    Text="Please wait! Don't close the app!"
+                    TextWrapping="WrapWholeWords" />
+            </StackPanel>
+        </Grid>
 
     </Grid>
 </Page>

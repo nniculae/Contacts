@@ -8,29 +8,80 @@
     x:Name="ThisPage"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <DataTemplate x:Key="BackupListDataTemplate" x:DataType="Model:BackupFile">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{x:Bind CreatedAt}" />
+                <Button Command="{Binding ElementName=ThisPage, Path=ViewModel.RestoreCommand, Mode=OneTime}" CommandParameter="{x:Bind FullFileName}">
+                    Restore
+                </Button>
+                <Button Command="{Binding ElementName=ThisPage, Path=ViewModel.DeleteBackupCommand, Mode=OneTime}" CommandParameter="{x:Bind FullFileName}">
+                    Delete
+                </Button>
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+
     <Grid x:Name="ContentArea">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
-        <TextBlock Grid.Row="0" Text="Backup/Restore" />
-        <Button Grid.Row="1" Click="{x:Bind ViewModel.Backup}">Start Backup</Button>
+        <TextBlock
+            Grid.Row="0"
+            Style="{StaticResource PageTitleStyle}"
+            Text="Backup/Restore" />
+        <Button
+            Grid.Row="0"
+            Margin="200,0,0,0"
+            Click="{x:Bind ViewModel.Backup}"
+            IsEnabled="{x:Bind ViewModel.IsNotRunning, Mode=OneWay}">
+            Start Backup
+        </Button>
         <ListView Grid.Row="2" ItemsSource="{x:Bind ViewModel.BackupFiles}">
-            <ItemsControl.ItemTemplate>
+
+            <ListView.Header>
+                <Grid Margin="4,16,8,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Backup created at" />
+                    <TextBlock Grid.Column="1" Text="Actions" />
+                </Grid>
+
+
+            </ListView.Header>
+            <ListView.ItemTemplate>
                 <DataTemplate x:DataType="Model:BackupFile">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{x:Bind CreatedAt}" />
-                        <Button Command="{Binding ElementName=ThisPage, Path=ViewModel.RestoreCommand, Mode=OneTime}" CommandParameter="{x:Bind FullFileName}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{x:Bind CreatedAt}" />
+                        <Button
+                            Grid.Column="1"
+                            Command="{Binding ElementName=ThisPage, Path=ViewModel.RestoreCommand, Mode=OneTime}"
+                            CommandParameter="{x:Bind FullFileName}"
+                            IsEnabled="{Binding ElementName=ThisPage, Path=ViewModel.IsNotRunning, Mode=OneWay}">
                             Restore
                         </Button>
-                        <Button Command="{Binding ElementName=ThisPage, Path=ViewModel.DeleteBackupCommand, Mode=OneTime}" CommandParameter="{x:Bind FullFileName}">
+                        <Button
+                            Grid.Column="2"
+                            Command="{Binding ElementName=ThisPage, Path=ViewModel.DeleteBackupCommand, Mode=OneTime}"
+                            CommandParameter="{x:Bind FullFileName}"
+                            IsEnabled="{Binding ElementName=ThisPage, Path=ViewModel.IsNotRunning, Mode=OneWay}">
                             Delete
                         </Button>
-                    </StackPanel>
+                    </Grid>
+
+
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
+            </ListView.ItemTemplate>
         </ListView>
+
     </Grid>
 </Page>

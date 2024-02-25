@@ -47,7 +47,7 @@ public class DatabaseFileService : IDatabaseFileService
 
         DirectoryInfo info = new DirectoryInfo(_backupsFolder);
 
-        FileInfo[] files = info.GetFiles().OrderBy(p => p.CreationTime).ToArray();
+        FileInfo[] files = info.GetFiles().OrderByDescending(p => p.CreationTime).ToArray();
         for (int i = 0; i < files.Length; i++)
         {
             backupFiles.Add(new BackupFile() {

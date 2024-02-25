@@ -14,8 +14,8 @@ public partial class LaberCreatorViewModel(ILabelService labelService, INavigati
     public async Task CreateLabelAync(string labelName)
     {
         await labelService.UpsertAsync(new Label() { Name = labelName });
-        //var message = $"The label {labelName} was created successfully";
-        //WeakReferenceMessenger.Default.Send(new ValueChangedMessage<string>(message));
+        var message = $"The label '{labelName}' was created successfully";
+        WeakReferenceMessenger.Default.Send(new ValueChangedMessage<string>(message));
     }
 
     public void RefreshPage()
