@@ -9,7 +9,10 @@ using System.Collections.ObjectModel;
 
 namespace Contacts.ViewModels;
 
-public partial class BackupViewModel(IDatabaseFileService databaseFileService, INavigationService navigation) : ObservableRecipient, INavigationAware
+public partial class BackupViewModel(
+    IDatabaseFileService databaseFileService, 
+    IMessenger messenger,
+    INavigationService navigation) : ObservableRecipient, INavigationAware
 {
 
     public ObservableCollection<BackupFile> BackupFiles { get; set; } = [];
@@ -41,7 +44,7 @@ public partial class BackupViewModel(IDatabaseFileService databaseFileService, I
 
     private void ShowOverlay(bool show)
     {
-        WeakReferenceMessenger.Default.Send(new ValueChangedMessage<bool>(show));
+        messenger.Send(new ValueChangedMessage<bool>(show));
     }
 
     public async Task Backup()
@@ -53,7 +56,7 @@ public partial class BackupViewModel(IDatabaseFileService databaseFileService, I
         ShowOverlay(false);
         SetBackupCollection();
         var message = "Database was backed up successfully";
-        WeakReferenceMessenger.Default.Send(new ValueChangedMessage<string>(message));
+        messenger.Send(new ValueChangedMessage<string>(message));
 
         IsRunning = false;
     }
@@ -69,7 +72,7 @@ public partial class BackupViewModel(IDatabaseFileService databaseFileService, I
         await Task.Run(() => databaseFileService.Restore(backupFullFileName));
         ShowOverlay(false);
         var message = "Database was restored successfully";
-        WeakReferenceMessenger.Default.Send(new ValueChangedMessage<string>(message));
+        messenger.Send(new ValueChangedMessage<string>(message));
 
         IsRunning = false;
         navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
@@ -85,7 +88,7 @@ public partial class BackupViewModel(IDatabaseFileService databaseFileService, I
         ShowOverlay(false);
         SetBackupCollection();
         var message = "The backup was removed successfully";
-        WeakReferenceMessenger.Default.Send(new ValueChangedMessage<string>(message));
+        messenger.Send(new ValueChangedMessage<string>(message));
         IsRunning = false;
 
     }

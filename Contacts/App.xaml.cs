@@ -1,4 +1,5 @@
-﻿using Contacts.Activation;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Contacts.Activation;
 using Contacts.Contracts.Services;
 using Contacts.Controls;
 using Contacts.Core.Contracts.Services;
@@ -66,6 +67,7 @@ public partial class App : Application
             services.AddSingleton<IActivationService, ActivationService>();
             services.AddSingleton<IPageService, PageService>();
             services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
             // Core Services
             services.AddSingleton<IFileService, FileService>();
