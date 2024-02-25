@@ -10,8 +10,7 @@ using System.Collections.ObjectModel;
 namespace Contacts.ViewModels;
 
 public partial class BackupViewModel(
-    IDatabaseFileService databaseFileService, 
-    IMessenger messenger,
+    IDatabaseFileService databaseFileService,
     INavigationService navigation) : ObservableRecipient, INavigationAware
 {
 
@@ -44,7 +43,7 @@ public partial class BackupViewModel(
 
     private void ShowOverlay(bool show)
     {
-        messenger.Send(new ValueChangedMessage<bool>(show));
+        Messenger.Send(new ValueChangedMessage<bool>(show));
     }
 
     public async Task Backup()
@@ -56,7 +55,7 @@ public partial class BackupViewModel(
         ShowOverlay(false);
         SetBackupCollection();
         var message = "Database was backed up successfully";
-        messenger.Send(new ValueChangedMessage<string>(message));
+        Messenger.Send(new ValueChangedMessage<string>(message));
 
         IsRunning = false;
     }
@@ -72,7 +71,7 @@ public partial class BackupViewModel(
         await Task.Run(() => databaseFileService.Restore(backupFullFileName));
         ShowOverlay(false);
         var message = "Database was restored successfully";
-        messenger.Send(new ValueChangedMessage<string>(message));
+        Messenger.Send(new ValueChangedMessage<string>(message));
 
         IsRunning = false;
         navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
@@ -88,7 +87,7 @@ public partial class BackupViewModel(
         ShowOverlay(false);
         SetBackupCollection();
         var message = "The backup was removed successfully";
-        messenger.Send(new ValueChangedMessage<string>(message));
+        Messenger.Send(new ValueChangedMessage<string>(message));
         IsRunning = false;
 
     }

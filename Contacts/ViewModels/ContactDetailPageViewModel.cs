@@ -84,7 +84,7 @@ public partial class ContactDetailPageViewModel(
     {
         contactService.Dispose();
         var message = new ContactChangedMessage(Contact!.Id, CrudStringMessage.FormatMessage(Contact.Name, crud));
-        ((WeakReferenceMessenger)Messenger).Send(message);
+        Messenger.Send(message);
     }
 
     public void GoBack()
