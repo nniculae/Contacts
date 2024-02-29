@@ -35,12 +35,10 @@
         <Button
             Grid.Row="0"
             Margin="200,0,0,0"
-            Click="{x:Bind ViewModel.Backup}"
-            IsEnabled="{x:Bind ViewModel.IsNotRunning, Mode=OneWay}">
+            Click="{x:Bind ViewModel.Backup}">
             Start Backup
         </Button>
         <ListView Grid.Row="2" ItemsSource="{x:Bind ViewModel.BackupFiles}">
-
             <ListView.Header>
                 <Grid Margin="4,16,8,8">
                     <Grid.ColumnDefinitions>
@@ -50,8 +48,6 @@
                     <TextBlock Grid.Column="0" Text="Backup created at" />
                     <TextBlock Grid.Column="1" Text="Actions" />
                 </Grid>
-
-
             </ListView.Header>
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="Model:BackupFile">
@@ -65,15 +61,13 @@
                         <Button
                             Grid.Column="1"
                             Command="{Binding ElementName=ThisPage, Path=ViewModel.RestoreCommand, Mode=OneTime}"
-                            CommandParameter="{x:Bind FullFileName}"
-                            IsEnabled="{Binding ElementName=ThisPage, Path=ViewModel.IsNotRunning, Mode=OneWay}">
+                            CommandParameter="{x:Bind FullFileName}">
                             Restore
                         </Button>
                         <Button
                             Grid.Column="2"
                             Command="{Binding ElementName=ThisPage, Path=ViewModel.DeleteBackupCommand, Mode=OneTime}"
-                            CommandParameter="{x:Bind FullFileName}"
-                            IsEnabled="{Binding ElementName=ThisPage, Path=ViewModel.IsNotRunning, Mode=OneWay}">
+                            CommandParameter="{x:Bind FullFileName}">
                             Delete
                         </Button>
                     </Grid>

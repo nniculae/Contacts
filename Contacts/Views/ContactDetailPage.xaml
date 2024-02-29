@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Model="using:Contacts.Core.Models"
+    xmlns:cc="using:Contacts.Controls"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:h="using:Contacts.Helpers"
@@ -22,7 +23,7 @@
             DefaultLabelPosition="Right"
             RelativePanel.AlignRightWithPanel="True">
             <AppBarButton
-                Click="{x:Bind ViewModel.GoBack}"
+                Command="{x:Bind ViewModel.GoBackCommand}"
                 Icon="Back"
                 Label="Back" />
             <AppBarButton
@@ -34,13 +35,13 @@
                 Label="Save"
                 Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
             <AppBarButton
-                Click="{x:Bind ViewModel.GoBack}"
+                Command="{x:Bind ViewModel.GoBackCommand}"
                 Icon="Cancel"
                 Label="Cancel"
                 Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
             <AppBarSeparator Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
             <AppBarButton
-                Click="{x:Bind ViewModel.StartEdit}"
+                Command="{x:Bind ViewModel.StartEditCommand}"
                 Icon="Edit"
                 IsEnabled="{x:Bind ViewModel.IsInEdit.Equals(x:False), Mode=OneWay}"
                 Label="Edit"
@@ -77,9 +78,18 @@
                             x:Name="FirstName"
                             Orientation="Vertical"
                             RelativePanel.AlignLeftWithPanel="True">
-                            <TextBox
+                            <cc:TextBoxEx
                                 MinWidth="300"
                                 Margin="0,8,16,8"
+                                Errors="{x:Bind ViewModel.ContactValidator.FirstNameErrors, Mode=OneWay}"
+                                ErrorsVisibility="{x:Bind h:Converters.CollapsedIfNullOrEmpty(ViewModel.ContactValidator.FirstNameErrors), Mode=OneWay}"
+                                Header="First name"
+                                IsReadOnly="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
+                                Text="{x:Bind ViewModel.ContactValidator.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Visibility="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" />
+                            <!--<TextBox
+                                MinWidth="300"
+                                Margin="0,8,16,8"   
                                 Header="First name"
                                 IsReadOnly="{x:Bind h:Converters.Not(ViewModel.IsInEdit), Mode=OneWay}"
                                 Text="{x:Bind ViewModel.ContactValidator.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -93,8 +103,10 @@
                                     Foreground="Red"
                                     Glyph="&#xE783;" />
                                 <TextBlock Foreground="Red" Text="{x:Bind ViewModel.ContactValidator.FirstNameErrors, Mode=OneWay}" />
-                            </StackPanel>
+                            </StackPanel>-->
+
                         </StackPanel>
+
                         <TextBox
                             x:Name="LastName"
                             MinWidth="300"

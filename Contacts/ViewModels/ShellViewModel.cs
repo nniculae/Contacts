@@ -36,6 +36,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<ValueChang
     private double _opacityOverlay = 0.0;
 
     private readonly ILabelService labelService;
+    private readonly IDialogService _dialogService;
 
     public INavigationService NavigationService { get; }
     public INavigationViewService NavigationViewService { get; }
@@ -44,20 +45,22 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<ValueChang
 
 
     public ShellViewModel(INavigationService navigationService,
-        INavigationViewService navigationViewService, ILabelService _labelService)
+        INavigationViewService navigationViewService, ILabelService _labelService, IDialogService dialogService)
     {
         NavigationService = navigationService;
         NavigationService.Navigated += OnNavigated;
         NavigationViewService = navigationViewService;
         labelService = _labelService;
+        _dialogService = dialogService;
+
         IsActive = true;
     }
 
     private async void OnNavigated(object sender, NavigationEventArgs e)
     {
-        
+
         var labelsFromDb = await labelService.GetLabelsWithContactsCountAsync();
-        List<Label> labelsNotAssociated = await labelService.GetNotAssociatedLabels();
+        List<Label> labelsNotAssociated = await labelService.GetNotAssociatedLabelsAsync();
         SetMenuItems(labelsFromDb, labelsNotAssociated);
 
         IsBackEnabled = NavigationService.CanGoBack;
@@ -140,30 +143,70 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<ValueChang
         }
     }
 
+    private Label _label;
+
+    public async Task<string> SaveToDataBaseAsync(string labelName)
+    {
+        if (string.IsNullOrEmpty(labelName))
+        {
+            return "The label name is required";
+        }
+
+        var labelFromDb = await labelService.GetLabelByNameAsync(labelName);
+
+
+        if (labelFromDb != null)
+        {
+            return $"The label '{labelName}' already exists";
+        }
+
+        _label.Name = labelName;
+
+        _label = await labelService.UpsertAsync(_label);
+
+        return string.Empty;
+    }
+
+
     [RelayCommand]
     public async Task UpdateLabelAsync(object labelObj)
     {
-        var label = (Label)labelObj;
-        var element = (FrameworkElement)App.MainWindow.Content;
-        var labelName = await element.InputStringDialogAsync(
-                "Change label name",
-                label.Name);
-        if (string.IsNullOrEmpty(labelName))
+        _label = (Label)labelObj;
+        
+        var result = await _dialogService.InputTextDialogAsync(SaveToDataBaseAsync, "Change label name", _label.Name);
+        if (string.IsNullOrEmpty(result))
+        {
             return;
-        label.Name = labelName;
-        await labelService.UpsertAsync(label);
-
-        var message = $"The label '{labelName}' was updated successfully";
-        WeakReferenceMessenger.Default.Send(new ValueChangedMessage<string>(message));
+        }
+        var message = $"The label '{_label.Name}' was updated successfully";
+        Messenger.Send(new ValueChangedMessage<string>(message));
 
         NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
     }
 
     [RelayCommand]
+    public async Task CreateLabelAsync()
+    {
+        _label = new Label();
+        
+        var result = await _dialogService.InputTextDialogAsync(SaveToDataBaseAsync, "Create new label", string.Empty);
+        if (string.IsNullOrEmpty(result))
+        {
+            return;
+        }
+
+        var message = $"The label '{_label.Name}' was created successfully";
+        Messenger.Send(new ValueChangedMessage<string>(message));
+
+        NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
+
+    }
+
+    [RelayCommand]
     public async Task RemoveLabelAsync(object labelObj)
     {
-        var element = (FrameworkElement)App.MainWindow.Content;
-        bool? ok = await element.ConfirmationDialogAsync("Are you sure?");
+        //var element = (FrameworkElement)App.MainWindow.Content;
+        bool? ok = await _dialogService.ConfirmationDialogAsync("Are you sure?");
         if (ok == null) return;
 
         var label = (Label)labelObj;
@@ -171,7 +214,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<ValueChang
 
 
         var message = $"The label '{label.Name}' was removed successfully";
-        WeakReferenceMessenger.Default.Send(new ValueChangedMessage<string>(message));
+        Messenger.Send(new ValueChangedMessage<string>(message));
 
         NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
     }

@@ -4,7 +4,9 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
+using Contacts.Extensions;
 using Contacts.Models;
+using Microsoft.UI.Dispatching;
 using System.Collections.ObjectModel;
 
 namespace Contacts.ViewModels;
@@ -13,31 +15,27 @@ public partial class BackupViewModel(
     IDatabaseFileService databaseFileService,
     INavigationService navigation) : ObservableRecipient, INavigationAware
 {
-
+    private readonly DispatcherQueue dispatcherQueue = DispatcherQueue.GetForCurrentThread();
     public ObservableCollection<BackupFile> BackupFiles { get; set; } = [];
 
-    public void OnNavigatedTo(object parameter)
+    public async Task OnNavigatedTo(object parameter)
     {
-        SetBackupCollection();
+        await SetBackupCollection();
+        
     }
 
-    // TODO: IsRunning is not needed anymore because of using Overlay, so remove it. 
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsNotRunning))]
-    private bool _isRunning = false;
-
-    public bool IsNotRunning => !IsRunning;
-
-
-    private void SetBackupCollection()
+    private async Task SetBackupCollection()
     {
-        BackupFiles.Clear();
-        var backups = databaseFileService.GetAllBackups();
-        foreach (var fileBackup in backups)
+        await dispatcherQueue.EnqueueCustomAsync(() =>
         {
-            BackupFiles.Add(fileBackup);
-        }
+            BackupFiles.Clear();
+            var backups = databaseFileService.GetAllBackups();
+            foreach (var fileBackup in backups)
+            {
+                BackupFiles.Add(fileBackup);
+            }
+
+        });
     }
 
 
@@ -48,52 +46,43 @@ public partial class BackupViewModel(
 
     public async Task Backup()
     {
-        IsRunning = true;
         ShowOverlay(true);
-
         await Task.Run(() => databaseFileService.Backup());
         ShowOverlay(false);
-        SetBackupCollection();
+        await SetBackupCollection();
         var message = "Database was backed up successfully";
         Messenger.Send(new ValueChangedMessage<string>(message));
-
-        IsRunning = false;
     }
-
 
 
     [RelayCommand]
     public async Task RestoreAsync(string backupFullFileName)
     {
-        IsRunning = true;
+        
         ShowOverlay(true);
 
         await Task.Run(() => databaseFileService.Restore(backupFullFileName));
         ShowOverlay(false);
         var message = "Database was restored successfully";
         Messenger.Send(new ValueChangedMessage<string>(message));
-
-        IsRunning = false;
         navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
     }
 
     [RelayCommand]
     public async Task DeleteBackupAsync(string backupFullFileName)
     {
-        IsRunning = true;
+        
         ShowOverlay(true);
-        await Task.Delay(5000);
         await Task.Run(() => databaseFileService.Delete(backupFullFileName));
         ShowOverlay(false);
-        SetBackupCollection();
+        await SetBackupCollection();
         var message = "The backup was removed successfully";
         Messenger.Send(new ValueChangedMessage<string>(message));
-        IsRunning = false;
 
     }
-    public void OnNavigatedFrom()
+    public Task OnNavigatedFrom()
     {
-        //throw new NotImplementedException();
+        return Task.FromResult(true);
     }
 
 }

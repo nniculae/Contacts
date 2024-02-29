@@ -14,7 +14,7 @@ using Microsoft.UI.Xaml.Media.Animation;
 namespace Contacts.ViewModels;
 
 public partial class ContactListPageViewModel(IContactService contactsService, INavigationService navigation)
-    : ObservableRecipient, INavigationAware, IRecipient<ContactChangedMessage>, IRecipient<ValueChangedMessage<string>>
+    : ObservableRecipient, INavigationAware, IRecipient<ContactChangedMessage>
 {
     [ObservableProperty]
     private string _searchText = string.Empty;
@@ -30,7 +30,7 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     private IList<Contact> _contacts = [];
     private readonly DispatcherQueue dispatcherQueue = DispatcherQueue.GetForCurrentThread();
 
-    public async void OnNavigatedTo(object parameter)
+    public async Task OnNavigatedTo(object parameter)
     {
 
         await dispatcherQueue.EnqueueCustomAsync(() =>
@@ -63,10 +63,14 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
         });
     }
 
-    public void OnNavigatedFrom()
+    public async Task OnNavigatedFrom()
     {
-        contactsService.Dispose();
-        IsActive = false;
+        await dispatcherQueue.EnqueueCustomAsync(() =>
+        {
+            contactsService.Dispose();
+            IsActive = false;
+        });
+        
     }
 
     [RelayCommand]
@@ -140,8 +144,4 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
         });
     }
 
-    public void Receive(ValueChangedMessage<string> message)
-    {
-       // InfoBarMessage = message.Value;
-    }
 }

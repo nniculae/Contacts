@@ -6,3 +6,4 @@ with the potential for further expansion to include features such as categorizat
 reminders, exporting contacts, integration with email clients, and more.
 With its user-friendly interface and essential contact management features,
 the app aims to streamline contact organization and communication for individuals and businesses alike.
+

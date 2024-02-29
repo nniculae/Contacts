@@ -67,6 +67,7 @@ public partial class App : Application
             services.AddSingleton<IActivationService, ActivationService>();
             services.AddSingleton<IPageService, PageService>();
             services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<IDialogService, DialogService>();
             
 
             // Core Services
@@ -89,8 +90,7 @@ public partial class App : Application
             services.AddTransient<ContactListPage>();
             services.AddTransient<ShellPage>();
             services.AddTransient<ShellViewModel>();
-            services.AddTransient<LabelCreator>();
-            services.AddTransient<LaberCreatorViewModel>();
+            
 
             // Configuration
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));

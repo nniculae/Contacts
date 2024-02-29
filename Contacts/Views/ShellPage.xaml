@@ -58,7 +58,17 @@
             </NavigationView.HeaderTemplate>
             <NavigationView.PaneFooter>
                 <StackPanel HorizontalAlignment="Stretch">
-                    <c:LabelCreator />
+                    <Button
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Command="{x:Bind ViewModel.CreateLabelCommand}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Margin="0,0,12,0" Glyph="&#xE710;" />
+                                <TextBlock Text="Create label" />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
                 </StackPanel>
             </NavigationView.PaneFooter>
 
@@ -102,9 +112,8 @@
         <Grid
             x:Name="OverlayGrid"
             Grid.Row="1"
-            Background="{StaticResource AccentAAFillColorTertiaryBrush}"
+            Background="{StaticResource ContentDialogDimmingThemeBrush}"
             Canvas.ZIndex="1"
-            Opacity="0.4"
             Visibility="{x:Bind ViewModel.ShowOverlay, Mode=OneWay}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <ProgressRing IsActive="True" />

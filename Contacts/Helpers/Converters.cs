@@ -24,6 +24,8 @@ public static class Converters
     /// </summary>
     public static Visibility CollapsedIf(bool value) =>
         value ? Visibility.Collapsed : Visibility.Visible;
+    public static Visibility CollapsedIfNot(bool value) =>
+        value ? Visibility.Visible : Visibility.Collapsed;
 
     public static Visibility ToggleVisibility(Visibility visibility) =>
         visibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
@@ -39,6 +41,8 @@ public static class Converters
     public static Visibility CollapsedIfNullOrEmpty(string value) =>
         string.IsNullOrEmpty(value) ? Visibility.Collapsed : Visibility.Visible;
 
+   
+
     public static Brush StringToBrush(string value)
     {
         int hue = GenerateHue(value);
@@ -50,4 +54,6 @@ public static class Converters
     {
         return Math.Abs(name.GetHashCode()) % 360;
     }
+
+    public static bool ToBool(Visibility visibility) => visibility == Visibility.Visible;
 }

@@ -28,7 +28,7 @@ public class LabelService(IDbContextFactory<ContactsDbContext> contextFactory) :
             .ToListAsync();
     }
 
-    public async Task<List<Label>> GetNotAssociatedLabels()
+    public async Task<List<Label>> GetNotAssociatedLabelsAsync()
     {
         await using var context = await contextFactory.CreateDbContextAsync();
 
@@ -58,7 +58,7 @@ public class LabelService(IDbContextFactory<ContactsDbContext> contextFactory) :
         return label;
     }
 
-    public async Task<List<Label>> GetLabelsByContactId(int contactId)
+    public async Task<List<Label>> GetLabelsByContactIdAsync(int contactId)
     {
         await using var context = contextFactory.CreateDbContext();
 
@@ -68,5 +68,19 @@ public class LabelService(IDbContextFactory<ContactsDbContext> contextFactory) :
             .OrderBy(l => l.Name)
             .AsNoTracking()
             .ToListAsync();
+    }
+
+    public async Task<Label?> GetLabelByNameAsync(string name)
+    {
+        await using var context = contextFactory.CreateDbContext();
+
+        return await context
+            .Labels
+            .Where(l => l.Name == name)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+
+
+
     }
 }

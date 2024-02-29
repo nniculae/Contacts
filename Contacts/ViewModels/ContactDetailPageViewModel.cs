@@ -4,7 +4,9 @@ using CommunityToolkit.Mvvm.Messaging;
 using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
+using Contacts.Extensions;
 using Contacts.Validators;
+using Microsoft.UI.Dispatching;
 using System.Collections.ObjectModel;
 
 namespace Contacts.ViewModels;
@@ -31,8 +33,9 @@ public partial class ContactDetailPageViewModel(
     public ObservableCollection<Label> ContactLabels = [];
     private Crud crud = Crud.Read;
     public ContactValidator ContactValidator { get; set; } = null!;
+    private readonly DispatcherQueue dispatcherQueue = DispatcherQueue.GetForCurrentThread();
 
-    public async void OnNavigatedTo(object parameter)
+    public async Task OnNavigatedTo(object parameter)
     {
         if (parameter is int id)
         {
@@ -61,7 +64,7 @@ public partial class ContactDetailPageViewModel(
     private async Task SetContactLabels()
     {
         ContactLabels.Clear();
-        var contactLabels = await labelService.GetLabelsByContactId(Contact.Id);
+        var contactLabels = await labelService.GetLabelsByContactIdAsync(Contact.Id);
 
         foreach (var label in contactLabels)
         {
@@ -80,21 +83,34 @@ public partial class ContactDetailPageViewModel(
         }
     }
 
-    public void OnNavigatedFrom()
+    public async Task OnNavigatedFrom()
     {
-        contactService.Dispose();
-        var message = new ContactChangedMessage(Contact!.Id, CrudStringMessage.FormatMessage(Contact.Name, crud));
-        Messenger.Send(message);
+        await dispatcherQueue.EnqueueCustomAsync(() =>
+        {
+            contactService.Dispose();
+            var message = new ContactChangedMessage(Contact!.Id, CrudStringMessage.FormatMessage(Contact.Name, crud));
+            Messenger.Send(message);
+        });
+        
     }
 
-    public void GoBack()
+    [RelayCommand]
+    public async Task GoBackAsync()
     {
-        navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
+        await dispatcherQueue.EnqueueCustomAsync(() =>
+        {
+            navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
+        });
     }
 
-    public void StartEdit()
+
+    [RelayCommand]
+    public async Task StartEditAsync()
     {
-        IsInEdit = true;
+        await dispatcherQueue.EnqueueCustomAsync(() =>
+        {
+            IsInEdit = true;
+        });
     }
 
     [RelayCommand]
@@ -102,7 +118,7 @@ public partial class ContactDetailPageViewModel(
     {
         await contactService.RemoveAsync(Contact!);
         crud = Crud.Deleted;
-        GoBack();
+        await GoBackAsync();
     }
 
     public Label CreateLabelInMemory(string labelName)
@@ -141,6 +157,6 @@ public partial class ContactDetailPageViewModel(
             crud = Crud.Updated;
         }
 
-        GoBack();
+        await GoBackAsync();
     }
 }
