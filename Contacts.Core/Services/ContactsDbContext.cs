@@ -19,10 +19,10 @@ public class ContactsDbContext(DbContextOptions<ContactsDbContext> options) : Db
        .WithMany(e => e.Contacts)
        .UsingEntity<ContactLabel>();
 
-        ContactGenerator.Init();
-        modelBuilder.Entity<Contact>().HasData(ContactGenerator.Contacts);
-        modelBuilder.Entity<Address>().HasData(ContactGenerator.Addresses);
-        modelBuilder.Entity<Label>().HasData(ContactGenerator.Labels);
-        modelBuilder.Entity<ContactLabel>().HasData(ContactGenerator.ContactLabels);
+        //ContactGenerator.Init();
+        //modelBuilder.Entity<Contact>().HasData(ContactGenerator.Contacts);
+        //modelBuilder.Entity<Address>().HasData(ContactGenerator.Addresses);
+        //modelBuilder.Entity<Label>().HasData(ContactGenerator.Labels);
+        //modelBuilder.Entity<ContactLabel>().HasData(ContactGenerator.ContactLabels);
     }
 }
