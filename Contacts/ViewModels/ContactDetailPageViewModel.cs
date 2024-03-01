@@ -6,10 +6,8 @@ using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
 using Contacts.Extensions;
-using Contacts.Services;
 using Contacts.Validators;
 using Microsoft.UI.Dispatching;
-using Microsoft.UI.Xaml;
 using System.Collections.ObjectModel;
 
 namespace Contacts.ViewModels;
@@ -96,7 +94,7 @@ public partial class ContactDetailPageViewModel(
             var message = new ContactChangedMessage(Contact!.Id, CrudStringMessage.FormatMessage(Contact.Name, crud));
             Messenger.Send(message);
         });
-        
+
     }
 
     [RelayCommand]
@@ -107,7 +105,6 @@ public partial class ContactDetailPageViewModel(
             navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
         });
     }
-
 
     [RelayCommand]
     public async Task StartEditAsync()
@@ -126,9 +123,6 @@ public partial class ContactDetailPageViewModel(
         await GoBackAsync();
     }
 
-
-    
-
     public async Task<string> ValidateLabelName(string labelName)
     {
         if (string.IsNullOrEmpty(labelName))
@@ -144,42 +138,35 @@ public partial class ContactDetailPageViewModel(
             return $"The label '{labelName}' already exists";
         }
 
-
         if (ContactLabels.FirstOrDefault(l => l.Name == labelName) != null)
         {
             return $"The label '{labelName}' already exists";
         }
 
-
         return string.Empty;
     }
 
-    
     public async Task<Label?> CreateLabelAsync()
     {
-
         var labelName = await dialogService.InputTextDialogAsync(ValidateLabelName, "Create new label", string.Empty);
 
-        if (string.IsNullOrEmpty(labelName))
+        if (string.IsNullOrWhiteSpace(labelName))
         {
             return null;
         }
 
-        var label = new Label
+        var newLabel = new Label
         {
             Name = labelName
         };
-               
-       
-        ContactLabels.Add(label);
-        AllLabels.Add(label);
 
+        ContactLabels.Add(newLabel);
+        AllLabels.Add(newLabel);
 
-        var message = $"The label '{label.Name}' was created successfully";
-        Messenger.Send(new ValueChangedMessage<string>(message));
+        var successMessage = $"The label '{newLabel.Name}' was created successfully";
+        Messenger.Send(new ValueChangedMessage<string>(successMessage));
 
-        return label;
-
+        return newLabel;
     }
 
     [RelayCommand]

@@ -6,16 +6,17 @@ using Contacts.Contracts.Services;
 using Contacts.Core.Contracts.Services;
 using Contacts.Core.Dto;
 using Contacts.Helpers;
-using Contacts.Services;
 using Contacts.Views;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
 
 namespace Contacts.ViewModels;
 
-public partial class ShellViewModel : ObservableRecipient, IRecipient<ValueChangedMessage<string>>, IRecipient<ValueChangedMessage<bool>>
+public partial class ShellViewModel :
+    ObservableRecipient,
+    IRecipient<ValueChangedMessage<string>>,
+    IRecipient<ValueChangedMessage<bool>>
 {
     [ObservableProperty]
     private bool isBackEnabled;
@@ -43,7 +44,6 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<ValueChang
 
     public ObservableCollection<NavigationViewItemBase> MenuItems { get; set; } = [];
 
-
     public ShellViewModel(INavigationService navigationService,
         INavigationViewService navigationViewService, ILabelService _labelService, IDialogService dialogService)
     {
@@ -58,7 +58,6 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<ValueChang
 
     private async void OnNavigated(object sender, NavigationEventArgs e)
     {
-
         var labelsFromDb = await labelService.GetLabelsWithContactsCountAsync();
         List<Label> labelsNotAssociated = await labelService.GetNotAssociatedLabelsAsync();
         SetMenuItems(labelsFromDb, labelsNotAssociated);
@@ -95,10 +94,8 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<ValueChang
         var labelHeader = new NavigationViewItemHeader() { Content = "Labels" };
         MenuItems.Add(labelHeader);
 
-
         foreach (var labelWithContactCount in labelsFromDb)
         {
-
             var item = new NavigationViewItem
             {
                 Content = labelWithContactCount.Label.Name,
@@ -106,7 +103,6 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<ValueChang
                 Icon = new SymbolIcon((Symbol)0xE8EC), // Do not extract local variable beacause an expetion will be raised
                 InfoBadge = new InfoBadge() { Value = labelWithContactCount.ContactsCount }
             };
-
 
             NavigationHelper.SetNavigateTo(item, typeof(ContactListPageViewModel).FullName!);
 
@@ -143,7 +139,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<ValueChang
         }
     }
 
-    private Label _label;
+    private Label _label = null!;
 
     public async Task<string> SaveToDataBaseAsync(string labelName)
     {
@@ -153,7 +149,6 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<ValueChang
         }
 
         var labelFromDb = await labelService.GetLabelByNameAsync(labelName);
-
 
         if (labelFromDb != null)
         {
@@ -167,12 +162,11 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<ValueChang
         return string.Empty;
     }
 
-
     [RelayCommand]
     public async Task UpdateLabelAsync(object labelObj)
     {
         _label = (Label)labelObj;
-        
+
         var result = await _dialogService.InputTextDialogAsync(SaveToDataBaseAsync, "Change label name", _label.Name);
         if (string.IsNullOrEmpty(result))
         {
@@ -188,7 +182,7 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<ValueChang
     public async Task CreateLabelAsync()
     {
         _label = new Label();
-        
+
         var result = await _dialogService.InputTextDialogAsync(SaveToDataBaseAsync, "Create new label", string.Empty);
         if (string.IsNullOrEmpty(result))
         {
@@ -199,7 +193,6 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<ValueChang
         Messenger.Send(new ValueChangedMessage<string>(message));
 
         NavigationService.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
-
     }
 
     [RelayCommand]
@@ -211,7 +204,6 @@ public partial class ShellViewModel : ObservableRecipient, IRecipient<ValueChang
 
         var label = (Label)labelObj;
         await labelService.RemoveAsync(label);
-
 
         var message = $"The label '{label.Name}' was removed successfully";
         Messenger.Send(new ValueChangedMessage<string>(message));
