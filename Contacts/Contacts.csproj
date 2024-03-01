@@ -14,7 +14,7 @@
 	<UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <!--For unpackaged set WindowsAppSDKSelfContained to true-->
-    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <WindowsAppSDKSelfContained>false</WindowsAppSDKSelfContained>
     <!--https://stackoverflow.com/questions/76020847/right-way-to-publish-winui3-app-in-single-exe-file-->
     <!--https://github.com/microsoft/WindowsAppSDK/issues/2597-->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
