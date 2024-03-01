@@ -1,8 +1,8 @@
 ﻿using Contacts.ViewModels;
 
-namespace Contacts.Tests;
+namespace Contacts.Tests.ViewModels;
 [TestClass]
-internal class HelpViewModelTest
+public class HelpViewModelTest
 {
 
     [TestMethod]

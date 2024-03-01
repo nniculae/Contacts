@@ -2,12 +2,10 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.Mvvm.Messaging.Messages;
 using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
 using Contacts.Extensions;
-using Microsoft.Data.Sqlite;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml.Media.Animation;
 
@@ -48,7 +46,7 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
             _contacts = await contactsService.GetContactsAsync();
         }
 
-        
+
 
         await dispatcherQueue.EnqueueCustomAsync(() =>
         {
@@ -70,7 +68,7 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
             contactsService.Dispose();
             IsActive = false;
         });
-        
+
     }
 
     [RelayCommand]
