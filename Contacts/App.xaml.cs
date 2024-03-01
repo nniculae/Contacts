@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
+
 using Contacts.Activation;
 using Contacts.Contracts.Services;
 using Contacts.Controls;
@@ -9,6 +10,7 @@ using Contacts.Services;
 using Contacts.Views;
 
 using DesignPatternsUI.Core.Services;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -80,6 +82,8 @@ public partial class App : Application
             services.AddTransient<ILabelService, LabelService>();
 
             // Views and ViewModels
+            services.AddTransient<HelpViewModel>();
+            services.AddTransient<HelpPage>();
             services.AddTransient<BackupViewModel>();
             services.AddTransient<BackupPage>();
             services.AddTransient<SettingsViewModel>();

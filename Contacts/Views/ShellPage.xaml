@@ -78,10 +78,11 @@
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe777;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem
-                    Content="Help (not yet implemented)"
+                <NavigationViewItem 
+                    x:Uid="Shell_Help"
+                    helpers:NavigationHelper.NavigateTo="Contacts.ViewModels.HelpViewModel"
                     Icon="Help"
-                    IsEnabled="False" />
+                    />
 
             </NavigationView.FooterMenuItems>
             <i:Interaction.Behaviors>

@@ -17,6 +17,7 @@ public class PageService : IPageService
         Configure<ContactDetailPageViewModel, ContactDetailPage>();
         Configure<SettingsViewModel, SettingsPage>();
         Configure<BackupViewModel, BackupPage>();
+        Configure<HelpViewModel, HelpPage>();
     }
 
     public Type GetPageType(string key)

@@ -164,4 +164,7 @@
 store, and manage their contact information. Users can add new contacts, 
 edit existing contact details, and search for specific contacts within the application.</value>
   </data>
+  <data name="Shell_Help.Content" xml:space="preserve">
+    <value>Help</value>
+  </data>
 </root>
