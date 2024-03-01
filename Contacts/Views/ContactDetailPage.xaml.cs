@@ -43,17 +43,16 @@ public sealed partial class ContactDetailPage : Page
     private async void CreateLabelButton_Click(object sender, RoutedEventArgs e)
     {
         ContactLabelFlyout.Hide();
-        var element = (FrameworkElement)App.MainWindow.Content;
-        var labelName = await element.InputStringDialogAsync(
-                "Create new label",
-                "");
-        if (string.IsNullOrEmpty(labelName))
-            return;
 
-        Label l = ViewModel.CreateLabelInMemory(labelName);
-        AllLabelsListView.SelectedItems.Add(l);
+        Label? l = await  ViewModel.CreateLabelAsync();
 
-        ToggleCreateAndApplyButtons();
+        if(l != null)
+        {
+            AllLabelsListView.SelectedItems.Add(l);
+            ToggleCreateAndApplyButtons();
+        }
+
+        
     }
     public void ApplyLabelChanges_Click(object sender, RoutedEventArgs e)
     {

@@ -1,12 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
 using Contacts.Extensions;
+using Contacts.Services;
 using Contacts.Validators;
 using Microsoft.UI.Dispatching;
+using Microsoft.UI.Xaml;
 using System.Collections.ObjectModel;
 
 namespace Contacts.ViewModels;
@@ -14,7 +17,9 @@ namespace Contacts.ViewModels;
 public partial class ContactDetailPageViewModel(
     IContactService contactService,
     ILabelService labelService,
-    INavigationService navigation) : ObservableRecipient, INavigationAware
+    INavigationService navigation,
+    IDialogService dialogService
+    ) : ObservableRecipient, INavigationAware
 {
     [ObservableProperty]
     private Contact _contact = null!;
@@ -121,14 +126,62 @@ public partial class ContactDetailPageViewModel(
         await GoBackAsync();
     }
 
-    public Label CreateLabelInMemory(string labelName)
-    {
-        Label newLabel = new() { Name = labelName };
-        ContactLabels.Add(newLabel);
-        AllLabels.Add(newLabel);
 
-        return newLabel;
+    
+
+    public async Task<string> ValidateLabelName(string labelName)
+    {
+        if (string.IsNullOrEmpty(labelName))
+        {
+            return "The label name is required";
+        }
+
+        var labelFromDb = await labelService.GetLabelByNameAsync(labelName);
+
+
+        if (labelFromDb != null)
+        {
+            return $"The label '{labelName}' already exists";
+        }
+
+
+        if (ContactLabels.FirstOrDefault(l => l.Name == labelName) != null)
+        {
+            return $"The label '{labelName}' already exists";
+        }
+
+
+        return string.Empty;
     }
+
+    
+    public async Task<Label?> CreateLabelAsync()
+    {
+
+        var labelName = await dialogService.InputTextDialogAsync(ValidateLabelName, "Create new label", string.Empty);
+
+        if (string.IsNullOrEmpty(labelName))
+        {
+            return null;
+        }
+
+        var label = new Label
+        {
+            Name = labelName
+        };
+               
+       
+        ContactLabels.Add(label);
+        AllLabels.Add(label);
+
+
+        var message = $"The label '{label.Name}' was created successfully";
+        Messenger.Send(new ValueChangedMessage<string>(message));
+
+        return label;
+
+    }
+
     [RelayCommand]
     public async Task UpdateContactLabelsAsync()
     {
