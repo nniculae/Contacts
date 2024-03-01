@@ -2,13 +2,11 @@
 using Contacts.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
-using System.Collections.ObjectModel;
 
 namespace Contacts.Services;
 public class DatabaseFileService : IDatabaseFileService
 {
     private const string _defaultApplicationDataFolder = "Contacts/ApplicationData";
-    
     private readonly string _localApplicationData =
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
     private readonly string _applicationDataFolder;
@@ -28,21 +26,17 @@ public class DatabaseFileService : IDatabaseFileService
         _databaseFileName = _options.DatabaseFileName;
 
         // This is created by sql connection
-        _databaseFolder =Path.Combine(_applicationDataFolder,  _options.DatabaseFolder);
+        _databaseFolder = Path.Combine(_applicationDataFolder, _options.DatabaseFolder);
 
         _backupsFolder = Path.Combine(_applicationDataFolder, _options.BackupsFolder);
         if (!Directory.Exists(_backupsFolder))
         {
             Directory.CreateDirectory(_backupsFolder);
         }
-
     }
-
 
     public List<BackupFile> GetAllBackups()
     {
-
-
         List<BackupFile> backupFiles = [];
 
         DirectoryInfo info = new DirectoryInfo(_backupsFolder);
@@ -50,10 +44,12 @@ public class DatabaseFileService : IDatabaseFileService
         FileInfo[] files = info.GetFiles().OrderByDescending(p => p.CreationTime).ToArray();
         for (int i = 0; i < files.Length; i++)
         {
-            backupFiles.Add(new BackupFile() {
+            backupFiles.Add(new BackupFile()
+            {
                 Id = i,
                 CreatedAt = files[i].CreationTime,
-                FullFileName = files[i].FullName });
+                FullFileName = files[i].FullName
+            });
         }
 
         return backupFiles;
@@ -72,7 +68,7 @@ public class DatabaseFileService : IDatabaseFileService
     public void Delete(string backupFullFileName)
     {
         SqliteConnection.ClearAllPools();
-        File.Delete(backupFullFileName );
+        File.Delete(backupFullFileName);
     }
 
     public void Backup()
@@ -81,9 +77,8 @@ public class DatabaseFileService : IDatabaseFileService
         var dbFileNameWithDateAppended = _databaseFileName + "_" + DateTime.Now.Ticks;
 
         File.Copy(
-            Path.Combine( _databaseFolder, _databaseFileName),
+            Path.Combine(_databaseFolder, _databaseFileName),
             Path.Combine(_backupsFolder, dbFileNameWithDateAppended)
             );
     }
-
 }

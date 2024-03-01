@@ -13,16 +13,13 @@ public class DialogService : IDialogService
         var textBoxEx = new TextBoxEx()
         {
             Text = defaultText,
-
         };
 
         textBoxEx.GotFocus += (sender, e) =>
         {
-                        
             textBoxEx.Errors = "";
             textBoxEx.ErrorsVisibility = Visibility.Collapsed;
         };
-
 
         var dialog = new ContentDialog()
         {
@@ -32,7 +29,6 @@ public class DialogService : IDialogService
             SecondaryButtonText = "Cancel",
             XamlRoot = xamlRoot,
             RequestedTheme = ((FrameworkElement) App.MainWindow.Content).ActualTheme,
-            
         };
 
         dialog.PrimaryButtonClick += async (sender, args) =>
@@ -46,7 +42,6 @@ public class DialogService : IDialogService
                 args.Cancel = true;
             }
         };
-
 
         if (await dialog.ShowAsync() == ContentDialogResult.Primary)
         {
