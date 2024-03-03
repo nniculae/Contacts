@@ -40,7 +40,7 @@ public class ContactDetailsPageViewModelTest
             new(){Name ="Friend"},
         };
 
-        labelServiceMock.Setup(ls => ls.GetAllLabelsAsync().Result).Returns(allLabels);
+        labelServiceMock.Setup(ls => ls.GetAllOtherLabelsAsync(0).Result).Returns(allLabels);
 
         var vm = new ContactDetailPageViewModel(
             contactServiceMock.Object,
@@ -69,7 +69,7 @@ public class ContactDetailsPageViewModelTest
         };
 
         labelServiceMock.Setup(ls => ls.GetLabelsByContactIdAsync(1).Result).Returns(labels);
-        labelServiceMock.Setup(ls => ls.GetAllLabelsAsync().Result).Returns(labels);
+        labelServiceMock.Setup(ls => ls.GetAllOtherLabelsAsync(1).Result).Returns(labels);
 
         var contact = new Contact()
         {
@@ -92,34 +92,20 @@ public class ContactDetailsPageViewModelTest
         Assert.IsNotNull(vm.Contact);
         Assert.IsFalse(vm.IsInEdit);
         Assert.IsFalse(vm.IsNewContact);
-        Assert.AreEqual(2, vm.ContactLabels.Count);
+        Assert.AreEqual(0, vm.ContactLabels.Count);
         Assert.AreEqual(2, vm.AllLabels.Count);
     }
 
     [TestMethod]
     public void OnNavigatedFromShouldDisposeContactServiceAndSendAMessage()
     {
-
         contactServiceMock.Setup(x => x.Dispose());
 
-        // cannot mock extension methods
-        //https://methodpoet.com/mock-extension-method-with-moq/
-        //https://adventuresdotnet.blogspot.com/2011/03/mocking-static-methods-for-unit-testing.html
-        //https://stackoverflow.com/questions/2295960/mocking-extension-methods-with-moq
-        //https://www.rhyous.com/2016/08/11/unit-testing-calls-to-complex-extension-methods/
-
-        var vm = new ContactDetailPageViewModel(
-           contactServiceMock.Object,
-           labelServiceMock.Object,
-           navigationServiceMock.Object,
-           dialogServiceMock.Object
-           )
+        var vm = CreateViewModel();
+        vm.Contact = new Contact()
         {
-            Contact = new Contact()
-            {
-                Id = 1,
-                FirstName = "Jimi",
-            }
+            Id = 1,
+            FirstName = "Jimi",
         };
 
         WeakReferenceMessenger.Default.Register<ContactChangedMessage>(
@@ -132,31 +118,19 @@ public class ContactDetailsPageViewModelTest
     [TestMethod]
     public async Task ValidateLabelName_WhenLabelNameIsEmptyItReturnsRequired()
     {
-        var vm = new ContactDetailPageViewModel(
-          contactServiceMock.Object,
-          labelServiceMock.Object,
-          navigationServiceMock.Object,
-          dialogServiceMock.Object
-          );
+        var vm = CreateViewModel();
 
         var result = await vm.ValidateLabelName(string.Empty);
 
         Assert.AreEqual<string>("The label name is required", result);
     }
 
-
     [TestMethod]
     public async Task ValidateLabelName_WhenLabelNameExistsInDatabaseItReturnsExists()
     {
-
         labelServiceMock.Setup(l => l.GetLabelByNameAsync("Jimi")).ReturnsAsync(new Label());
 
-        var vm = new ContactDetailPageViewModel(
-          contactServiceMock.Object,
-          labelServiceMock.Object,
-          navigationServiceMock.Object,
-          dialogServiceMock.Object
-          );
+        var vm = CreateViewModel();
 
         var result = await vm.ValidateLabelName("Jimi");
 
@@ -169,12 +143,7 @@ public class ContactDetailsPageViewModelTest
         const string labelName = "Jimi";
         labelServiceMock.Setup(l => l.GetLabelByNameAsync(labelName)).ReturnsAsync(() => null);
 
-        var vm = new ContactDetailPageViewModel(
-          contactServiceMock.Object,
-          labelServiceMock.Object,
-          navigationServiceMock.Object,
-          dialogServiceMock.Object
-          );
+        var vm = CreateViewModel();
 
         vm.ContactLabels.Add(new Label() { Name = labelName });
 
@@ -188,12 +157,7 @@ public class ContactDetailsPageViewModelTest
         const string labelName = "Jimi";
         labelServiceMock.Setup(l => l.GetLabelByNameAsync(labelName)).ReturnsAsync(() => null);
 
-        var vm = new ContactDetailPageViewModel(
-          contactServiceMock.Object,
-          labelServiceMock.Object,
-          navigationServiceMock.Object,
-          dialogServiceMock.Object
-          );
+        var vm = CreateViewModel();
 
         var result = await vm.ValidateLabelName(labelName);
 
@@ -209,12 +173,7 @@ public class ContactDetailsPageViewModelTest
             It.IsAny<string>()
         )).ReturnsAsync(string.Empty);
 
-        var vm = new ContactDetailPageViewModel(
-          contactServiceMock.Object,
-          labelServiceMock.Object,
-          navigationServiceMock.Object,
-          dialogServiceMock.Object
-          );
+        var vm = CreateViewModel();
 
         var result = await vm.CreateLabelAsync();
 
@@ -232,12 +191,7 @@ public class ContactDetailsPageViewModelTest
                         It.IsAny<string>()
                     )).ReturnsAsync(labelName);
 
-        var vm = new ContactDetailPageViewModel(
-          contactServiceMock.Object,
-          labelServiceMock.Object,
-          navigationServiceMock.Object,
-          dialogServiceMock.Object
-          );
+        var vm = CreateViewModel();
 
         WeakReferenceMessenger.Default.Register<ValueChangedMessage<string>>(
            this,
@@ -246,5 +200,47 @@ public class ContactDetailsPageViewModelTest
         var label = await vm.CreateLabelAsync();
 
         Assert.AreEqual(labelName, label!.Name);
+    }
+
+    [TestMethod]
+    public async Task UpsertContactAsyncCallsAddAsyncWithContact()
+    {
+        var contact = new Contact() { FirstName = "Bob" };
+        contactServiceMock.Setup(cs => cs.AddAsync(contact)).ReturnsAsync(contact);
+
+        ContactDetailPageViewModel vm = CreateViewModel();
+
+        vm.Contact = contact;
+        vm.IsNewContact = true;
+
+        await vm.UpsertContactAsync();
+
+        contactServiceMock.Verify(cs => cs.AddAsync(contact), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task UpsertContactAsyncCallsSaveAsync()
+    {
+
+        var contact = new Contact() { FirstName = "Bob" };
+        contactServiceMock.Setup(cs => cs.SaveAsync()).ReturnsAsync(1);
+
+        ContactDetailPageViewModel vm = CreateViewModel();
+        vm.Contact = contact;
+        vm.IsNewContact = false;
+
+        await vm.UpsertContactAsync();
+
+        contactServiceMock.Verify(cs => cs.SaveAsync(), Times.Once);
+    }
+
+    private ContactDetailPageViewModel CreateViewModel()
+    {
+        return new ContactDetailPageViewModel(
+          contactServiceMock.Object,
+          labelServiceMock.Object,
+          navigationServiceMock.Object,
+          dialogServiceMock.Object
+          );
     }
 }

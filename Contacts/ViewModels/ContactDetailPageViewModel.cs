@@ -35,7 +35,6 @@ public partial class ContactDetailPageViewModel(
     private Crud crud = Crud.Read;
     public ContactValidator ContactValidator { get; set; } = null!;
 
-
     public async Task OnNavigatedTo(object parameter)
     {
         if (parameter is int id)
@@ -56,16 +55,16 @@ public partial class ContactDetailPageViewModel(
             IsInEdit = true;
         }
 
-        await SetContactLabels();
+        SetContactLabels();
         await SetAllLabelsAsync();
 
         ContactValidator = new ContactValidator(Contact!);
     }
 
-    private async Task SetContactLabels()
+    private void SetContactLabels()
     {
         ContactLabels.Clear();
-        var contactLabels = await labelService.GetLabelsByContactIdAsync(Contact.Id);
+        var contactLabels = Contact.Labels;
 
         foreach (var label in contactLabels)
         {
@@ -76,9 +75,13 @@ public partial class ContactDetailPageViewModel(
     [RelayCommand]
     public async Task SetAllLabelsAsync()
     {
-        var labels = await labelService.GetAllLabelsAsync();
+        var labels = await labelService.GetAllOtherLabelsAsync(Contact.Id);
+
         AllLabels.Clear();
-        foreach (var label in labels)
+
+        var allLabels = labels.Concat(Contact.Labels).OrderBy(l => l.Name);
+
+        foreach (var label in allLabels)
         {
             AllLabels.Add(label);
         }
@@ -86,7 +89,6 @@ public partial class ContactDetailPageViewModel(
 
     public void OnNavigatedFrom()
     {
-
         contactService.Dispose();
         var message = new ContactChangedMessage(Contact!.Id, CrudStringMessage.FormatMessage(Contact.Name, crud));
         Messenger.Send(message);
@@ -161,8 +163,9 @@ public partial class ContactDetailPageViewModel(
     }
 
     [RelayCommand]
-    public async Task UpdateContactLabelsAsync()
+    public async Task UpsertContactAsync()
     {
+        Contact.Labels = [.. ContactLabels];
 
         if (IsNewContact)
         {
@@ -171,20 +174,6 @@ public partial class ContactDetailPageViewModel(
         }
         else
         {
-            var labelsToRemove = Contact.Labels.Where(label => !ContactLabels.Contains(label, EqualityComparer<Label>.Create(
-            (left, right) => left!.Id.CompareTo(right!.Id) == 0))).ToList();
-
-            var labelsToAdd = ContactLabels.Where(label => !Contact.Labels.Contains(label, EqualityComparer<Label>.Create(
-                (left, right) => left!.Id.CompareTo(right!.Id) == 0))).ToList();
-
-
-            foreach (var label in labelsToRemove)
-            {
-                Contact.Labels.Remove(label);
-            }
-
-            Contact.Labels.AddRange(labelsToAdd);
-
             await contactService.SaveAsync();
             crud = Crud.Updated;
         }

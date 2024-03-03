@@ -29,7 +29,7 @@
             <AppBarButton
                 x:Name="SaveButton"
                 AllowFocusOnInteraction="True"
-                Command="{x:Bind ViewModel.UpdateContactLabelsCommand}"
+                Command="{x:Bind ViewModel.UpsertContactCommand}"
                 Icon="Save"
                 IsEnabled="{x:Bind h:Converters.Not(ViewModel.ContactValidator.HasErrors), Mode=OneWay}"
                 Label="Save"

@@ -1,0 +1,10 @@
+﻿ // cannot mock extension methods
+https://methodpoet.com/mock-extension-method-with-moq/
+https://adventuresdotnet.blogspot.com/2011/03/mocking-static-methods-for-unit-testing.html
+https://stackoverflow.com/questions/2295960/mocking-extension-methods-with-moq
+https://www.rhyous.com/2016/08/11/unit-testing-calls-to-complex-extension-methods/
+
+// async
+https://learn.microsoft.com/en-us/archive/msdn-magazine/2014/november/async-programming-unit-testing-asynchronous-code
+https://code-maze.com/csharp-mock-asynchronous-methods-using-moq/
+https://github.dev/Capnode/Algoloop/

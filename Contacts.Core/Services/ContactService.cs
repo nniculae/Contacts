@@ -37,14 +37,19 @@ public class ContactService(IDbContextFactory<ContactsDbContext> contextFactory)
             .Contacts
             .Include(c => c.Labels.OrderBy(l => l.Name))
             .Include(c => c.Address)
+            .Include(c => c.Labels)
             .Include(c => c.ContactLabels)
             .FirstAsync(c => c.Id == id);
     }
 
     public async Task<Contact> AddAsync(Contact contact)
     {
-        _context.Update(contact);
 
+        //_context.ChangeTracker.DetectChanges();
+        //var dbg = _context.ChangeTracker.DebugView.LongView;
+
+        _context.Update(contact);
+      
         await _context.SaveChangesAsync();
         return contact;
     }
