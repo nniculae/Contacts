@@ -5,9 +5,7 @@ using CommunityToolkit.Mvvm.Messaging.Messages;
 using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
-using Contacts.Extensions;
 using Contacts.Validators;
-using Microsoft.UI.Dispatching;
 using System.Collections.ObjectModel;
 
 namespace Contacts.ViewModels;
@@ -36,7 +34,7 @@ public partial class ContactDetailPageViewModel(
     public ObservableCollection<Label> ContactLabels = [];
     private Crud crud = Crud.Read;
     public ContactValidator ContactValidator { get; set; } = null!;
-    private readonly DispatcherQueue dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+
 
     public async Task OnNavigatedTo(object parameter)
     {
@@ -86,33 +84,24 @@ public partial class ContactDetailPageViewModel(
         }
     }
 
-    public async Task OnNavigatedFrom()
+    public void OnNavigatedFrom()
     {
-        await dispatcherQueue.EnqueueCustomAsync(() =>
-        {
-            contactService.Dispose();
-            var message = new ContactChangedMessage(Contact!.Id, CrudStringMessage.FormatMessage(Contact.Name, crud));
-            Messenger.Send(message);
-        });
 
+        contactService.Dispose();
+        var message = new ContactChangedMessage(Contact!.Id, CrudStringMessage.FormatMessage(Contact.Name, crud));
+        Messenger.Send(message);
     }
 
     [RelayCommand]
-    public async Task GoBackAsync()
+    public void GoBack()
     {
-        await dispatcherQueue.EnqueueCustomAsync(() =>
-        {
-            navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
-        });
+        navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, "ListContactsInit");
     }
 
     [RelayCommand]
-    public async Task StartEditAsync()
+    public void StartEdit()
     {
-        await dispatcherQueue.EnqueueCustomAsync(() =>
-        {
-            IsInEdit = true;
-        });
+        IsInEdit = true;
     }
 
     [RelayCommand]
@@ -120,9 +109,10 @@ public partial class ContactDetailPageViewModel(
     {
         await contactService.RemoveAsync(Contact!);
         crud = Crud.Deleted;
-        await GoBackAsync();
+        GoBack();
     }
 
+    //TODO: use ObservableValidator??
     public async Task<string> ValidateLabelName(string labelName)
     {
         if (string.IsNullOrEmpty(labelName))
@@ -132,15 +122,16 @@ public partial class ContactDetailPageViewModel(
 
         var labelFromDb = await labelService.GetLabelByNameAsync(labelName);
 
+        string labelExists = $"The label '{labelName}' already exists";
 
         if (labelFromDb != null)
         {
-            return $"The label '{labelName}' already exists";
+            return labelExists;
         }
 
-        if (ContactLabels.FirstOrDefault(l => l.Name == labelName) != null)
+        if (ContactLabels.Any(l => l.Name == labelName))
         {
-            return $"The label '{labelName}' already exists";
+            return labelExists;
         }
 
         return string.Empty;
@@ -172,19 +163,6 @@ public partial class ContactDetailPageViewModel(
     [RelayCommand]
     public async Task UpdateContactLabelsAsync()
     {
-        var labelsToRemove = Contact.Labels.Where(label => !ContactLabels.Contains(label, EqualityComparer<Label>.Create(
-        (left, right) => left!.Id.CompareTo(right!.Id) == 0))).ToList();
-
-        var labelsToAdd = ContactLabels.Where(label => !Contact.Labels.Contains(label, EqualityComparer<Label>.Create(
-            (left, right) => left!.Id.CompareTo(right!.Id) == 0))).ToList();
-
-
-        foreach (var label in labelsToRemove)
-        {
-            Contact.Labels.Remove(label);
-        }
-
-        Contact.Labels.AddRange(labelsToAdd);
 
         if (IsNewContact)
         {
@@ -193,10 +171,24 @@ public partial class ContactDetailPageViewModel(
         }
         else
         {
+            var labelsToRemove = Contact.Labels.Where(label => !ContactLabels.Contains(label, EqualityComparer<Label>.Create(
+            (left, right) => left!.Id.CompareTo(right!.Id) == 0))).ToList();
+
+            var labelsToAdd = ContactLabels.Where(label => !Contact.Labels.Contains(label, EqualityComparer<Label>.Create(
+                (left, right) => left!.Id.CompareTo(right!.Id) == 0))).ToList();
+
+
+            foreach (var label in labelsToRemove)
+            {
+                Contact.Labels.Remove(label);
+            }
+
+            Contact.Labels.AddRange(labelsToAdd);
+
             await contactService.SaveAsync();
             crud = Crud.Updated;
         }
 
-        await GoBackAsync();
+        GoBack();
     }
 }

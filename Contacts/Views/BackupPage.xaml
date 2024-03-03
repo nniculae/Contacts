@@ -35,9 +35,8 @@
         <Button
             Grid.Row="0"
             Margin="200,0,0,0"
-            Click="{x:Bind ViewModel.Backup}">
-            Start Backup
-        </Button>
+            Command="{x:Bind ViewModel.BackupCommand}"
+            Content="Start Backup" />
         <ListView Grid.Row="2" ItemsSource="{x:Bind ViewModel.BackupFiles}">
             <ListView.Header>
                 <Grid Margin="4,16,8,8">
@@ -71,8 +70,6 @@
                             Delete
                         </Button>
                     </Grid>
-
-
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

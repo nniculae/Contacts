@@ -26,17 +26,14 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     public string InfoBarMessage { get; set; } = string.Empty;
     public bool IsBackFromDetails { get; set; } = false;
     private IList<Contact> _contacts = [];
-    private readonly DispatcherQueue dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+    
 
     public async Task OnNavigatedTo(object parameter)
     {
+        IsActive = true;
+        ContactsDataSource.Clear();
 
-        await dispatcherQueue.EnqueueCustomAsync(() =>
-        {
-            IsActive = true;
-            ContactsDataSource.Clear();
-        });
-
+       
         if (parameter is int labelid)
         {
             _contacts = await contactsService.GetContactsByLabelIdAsync(labelid);
@@ -46,29 +43,22 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
             _contacts = await contactsService.GetContactsAsync();
         }
 
-
-
-        await dispatcherQueue.EnqueueCustomAsync(() =>
+        var groupings = _contacts.GroupBy(CreateKey).OrderBy(g => g.Key);
+        foreach (var item in groupings)
         {
-            var groupings = _contacts.GroupBy(CreateKey).OrderBy(g => g.Key);
-            foreach (var item in groupings)
-            {
-                ContactsDataSource.AddGroup(item);
-            }
+            ContactsDataSource.AddGroup(item);
+        }
 
-            Count = ContactsDataSource.CountItems();
-            EnsureItemSelected();
-        });
+        Count = ContactsDataSource.CountItems();
+        EnsureItemSelected();
+
+       
     }
 
-    public async Task OnNavigatedFrom()
+    public void OnNavigatedFrom()
     {
-        await dispatcherQueue.EnqueueCustomAsync(() =>
-        {
-            contactsService.Dispose();
-            IsActive = false;
-        });
-
+        contactsService.Dispose();
+        IsActive = false;
     }
 
     [RelayCommand]
@@ -95,19 +85,17 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
         navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, value.Id);
 
     }
-    async partial void OnSearchTextChanged(string value)
+    partial void OnSearchTextChanged(string value)
     {
-        await dispatcherQueue.EnqueueCustomAsync(() =>
-        {
-            IEnumerable<Contact> tempFiltered = _contacts.Where(contact => contact.ApplyFilter(value));
 
-            var keyComparer = Comparer<string>.Default;
-            var itemComparer = Comparer<Contact>.Create((left, right) =>
-                        keyComparer.Compare(left.Name, right.Name));
+        IEnumerable<Contact> tempFiltered = _contacts.Where(contact => contact.ApplyFilter(value));
 
-            ContactsDataSource.FilterItems(tempFiltered, keyComparer, itemComparer, CreateKey);
-            Count = ContactsDataSource.CountItems();
-        });
+        var keyComparer = Comparer<string>.Default;
+        var itemComparer = Comparer<Contact>.Create((left, right) =>
+                    keyComparer.Compare(left.Name, right.Name));
+
+        ContactsDataSource.FilterItems(tempFiltered, keyComparer, itemComparer, CreateKey);
+        Count = ContactsDataSource.CountItems();
 
     }
 
@@ -118,28 +106,25 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
 
     private void EnsureItemSelected() => SelectedItem ??= _contacts.FirstOrDefault();
 
-    public async void Receive(ContactChangedMessage message)
+    public  void Receive(ContactChangedMessage message)
     {
-        await dispatcherQueue.EnqueueCustomAsync(() =>
+        InfoBarMessage = message.StringMessage;
+
+        int contactId = message.Value;
+
+        if (contactId > 0)
         {
-            InfoBarMessage = message.StringMessage;
+            var ogcAsEnumerable = (IEnumerable<ObservableGroup<string, Contact>>)ContactsDataSource;
+            Contact? refreshedContact = ogcAsEnumerable.SelectMany(group => group)
+                      .FirstOrDefault(contact => contact.Id == contactId);
+            SelectedItem = refreshedContact;
+        }
+        else
+        {
+            EnsureItemSelected();
+        }
 
-            int contactId = message.Value;
-
-            if (contactId > 0)
-            {
-                var ogcAsEnumerable = (IEnumerable<ObservableGroup<string, Contact>>)ContactsDataSource;
-                Contact? refreshedContact = ogcAsEnumerable.SelectMany(group => group)
-                          .FirstOrDefault(contact => contact.Id == contactId);
-                SelectedItem = refreshedContact;
-            }
-            else
-            {
-                EnsureItemSelected();
-            }
-
-            IsBackFromDetails = true;
-        });
+        IsBackFromDetails = true;
     }
 
 }

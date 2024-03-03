@@ -70,7 +70,8 @@ public partial class App : Application
             services.AddSingleton<IPageService, PageService>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IDialogService, DialogService>();
-            
+            //services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
+
 
             // Core Services
             services.AddSingleton<IFileService, FileService>();

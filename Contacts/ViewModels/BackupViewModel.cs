@@ -4,9 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
-using Contacts.Extensions;
 using Contacts.Models;
-using Microsoft.UI.Dispatching;
 using System.Collections.ObjectModel;
 
 namespace Contacts.ViewModels;
@@ -15,27 +13,30 @@ public partial class BackupViewModel(
     IDatabaseFileService databaseFileService,
     INavigationService navigation) : ObservableRecipient, INavigationAware
 {
-    private readonly DispatcherQueue dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+
     public ObservableCollection<BackupFile> BackupFiles { get; set; } = [];
 
     public async Task OnNavigatedTo(object parameter)
     {
         await SetBackupCollection();
-        
+
     }
 
     private async Task SetBackupCollection()
     {
-        await dispatcherQueue.EnqueueCustomAsync(() =>
-        {
-            BackupFiles.Clear();
-            var backups = databaseFileService.GetAllBackups();
-            foreach (var fileBackup in backups)
-            {
-                BackupFiles.Add(fileBackup);
-            }
+        BackupFiles.Clear();
 
+        List<BackupFile> backups = [];
+
+        await Task.Run(() =>
+        {
+            backups = databaseFileService.GetAllBackups();
         });
+
+        foreach (var fileBackup in backups)
+        {
+            BackupFiles.Add(fileBackup);
+        }
     }
 
 
@@ -44,7 +45,8 @@ public partial class BackupViewModel(
         Messenger.Send(new ValueChangedMessage<bool>(show));
     }
 
-    public async Task Backup()
+    [RelayCommand]
+    public async Task BackupAsync()
     {
         ShowOverlay(true);
         await Task.Run(() => databaseFileService.Backup());
@@ -58,7 +60,7 @@ public partial class BackupViewModel(
     [RelayCommand]
     public async Task RestoreAsync(string backupFullFileName)
     {
-        
+
         ShowOverlay(true);
 
         await Task.Run(() => databaseFileService.Restore(backupFullFileName));
@@ -71,7 +73,7 @@ public partial class BackupViewModel(
     [RelayCommand]
     public async Task DeleteBackupAsync(string backupFullFileName)
     {
-        
+
         ShowOverlay(true);
         await Task.Run(() => databaseFileService.Delete(backupFullFileName));
         ShowOverlay(false);
@@ -80,9 +82,7 @@ public partial class BackupViewModel(
         Messenger.Send(new ValueChangedMessage<string>(message));
 
     }
-    public Task OnNavigatedFrom()
+    public void OnNavigatedFrom()
     {
-        return Task.FromResult(true);
     }
-
 }

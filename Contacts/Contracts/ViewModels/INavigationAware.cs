@@ -4,5 +4,5 @@ public interface INavigationAware
 {
     Task OnNavigatedTo(object parameter);
 
-    Task OnNavigatedFrom();
+    void OnNavigatedFrom();
 }

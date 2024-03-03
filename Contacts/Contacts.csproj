@@ -69,6 +69,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Contacts.Core.Models" />
+    <Using Include="Contacts.ViewModels" />
+    <Using Include="WinUIEx" />
+  </ItemGroup>
   
   <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
