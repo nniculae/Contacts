@@ -6,7 +6,6 @@ using Contacts.Contracts.Services;
 using Contacts.Contracts.ViewModels;
 using Contacts.Core.Contracts.Services;
 using Contacts.Extensions;
-using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml.Media.Animation;
 
 namespace Contacts.ViewModels;
@@ -26,14 +25,14 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
     public string InfoBarMessage { get; set; } = string.Empty;
     public bool IsBackFromDetails { get; set; } = false;
     private IList<Contact> _contacts = [];
-    
+
 
     public async Task OnNavigatedTo(object parameter)
     {
         IsActive = true;
         ContactsDataSource.Clear();
 
-       
+
         if (parameter is int labelid)
         {
             _contacts = await contactsService.GetContactsByLabelIdAsync(labelid);
@@ -52,7 +51,7 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
         Count = ContactsDataSource.CountItems();
         EnsureItemSelected();
 
-       
+
     }
 
     public void OnNavigatedFrom()
@@ -79,11 +78,8 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
 
     partial void OnSelectedLabelChanged(Label value)
     {
-        // nu e bine stop bubbling, use an event, studiza problema
-        // nici linkurile nu-s bune, se vede tooltip, 
         if (value == null) return;
         navigation.NavigateTo(typeof(ContactListPageViewModel).FullName!, value.Id);
-
     }
     partial void OnSearchTextChanged(string value)
     {
@@ -106,7 +102,7 @@ public partial class ContactListPageViewModel(IContactService contactsService, I
 
     private void EnsureItemSelected() => SelectedItem ??= _contacts.FirstOrDefault();
 
-    public  void Receive(ContactChangedMessage message)
+    public void Receive(ContactChangedMessage message)
     {
         InfoBarMessage = message.StringMessage;
 

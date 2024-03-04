@@ -8,3 +8,6 @@ https://www.rhyous.com/2016/08/11/unit-testing-calls-to-complex-extension-method
 https://learn.microsoft.com/en-us/archive/msdn-magazine/2014/november/async-programming-unit-testing-asynchronous-code
 https://code-maze.com/csharp-mock-asynchronous-methods-using-moq/
 https://github.dev/Capnode/Algoloop/
+
+Unit testing in C#
+https://docs.educationsmediagroup.com/unit-testing-csharp/

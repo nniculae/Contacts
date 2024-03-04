@@ -19,12 +19,7 @@ public class ContactDetailsPageViewModelTest
     [TestMethod]
     public void ShouldBeCreated()
     {
-        var vm = new ContactDetailPageViewModel(
-            contactServiceMock.Object,
-            labelServiceMock.Object,
-            navigationServiceMock.Object,
-            dialogServiceMock.Object
-            );
+        var vm = CreateViewModel();
 
         Assert.IsNotNull(vm);
     }
@@ -32,13 +27,12 @@ public class ContactDetailsPageViewModelTest
     [TestMethod]
     public async Task OnNavigatedToShouldCreateNewContact()
     {
-        labelServiceMock.Setup(ls => ls.GetLabelsByContactIdAsync(0).Result).Returns([]);
+        labelServiceMock.Setup(ls => ls.GetLabelsByContactIdAsync(0));
 
-        var allLabels = new List<Label>()
-        {
+        List<Label> allLabels  = [
             new(){Name ="Client"},
             new(){Name ="Friend"},
-        };
+        ];
 
         labelServiceMock.Setup(ls => ls.GetAllOtherLabelsAsync(0).Result).Returns(allLabels);
 
